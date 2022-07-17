@@ -15,12 +15,18 @@ export default {
   },
   data() {
     return {
-      bets: [] as Bet[],
+      bets: [] as typeof Bet[],
     };
   },
   methods: {
     displayBet(name: string, amount: number) {
-      this.bets.push({ name: name, amount: amount });
+      const bet = this.bets.find(b => b.name === name);
+
+      if (bet) {
+        bet.amount += amount;
+      } else {
+        this.bets.push({ name, amount });
+      }
     },
   },
   components: {
