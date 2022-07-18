@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import axios from 'axios';
+
 import Bets, { Color } from "../components/Bets.vue";
 import AmountButton from "../components/AmountButton.vue";
 
@@ -39,7 +41,13 @@ export default {
         return;
       }
 
+      axios.post("http://localhost:8000/api/bets", {
+        user: this.user.name,
+        amount: this.balance,
+      });
+
       bets.displayBet(this.user.name, this.balance);
+
       this.balance = 0;
     },
   },

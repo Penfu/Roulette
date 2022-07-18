@@ -10,6 +10,9 @@ export enum Color {
 }
 
 export default {
+  components: {
+    Bet,
+  },
   props: {
     color: Color,
   },
@@ -20,7 +23,7 @@ export default {
   },
   methods: {
     displayBet(name: string, amount: number) {
-      const bet = this.bets.find(b => b.name === name);
+      const bet = this.bets.find((b) => b.name === name);
 
       if (bet) {
         bet.amount += amount;
@@ -28,9 +31,6 @@ export default {
         this.bets.push({ name, amount });
       }
     },
-  },
-  components: {
-    Bet,
   },
 };
 </script>
