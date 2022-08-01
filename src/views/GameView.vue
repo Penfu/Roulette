@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import axios from 'axios';
+import axios from "axios";
 
-import Bets, { Color } from "../components/Bets.vue";
+import Bets from "../components/Bets.vue";
 import AmountButton from "../components/AmountButton.vue";
 
 import IconCross from "../components/icons/IconCross.vue";
@@ -17,6 +17,18 @@ export default {
       },
       balance: 0 as number,
     };
+  },
+  components: {
+    AmountButton,
+    IconCross,
+    Bets,
+  },
+  mounted() {
+    this.$refs.child.displayBet();
+
+    window.Echo.channel("roulette").listen("Bet", (e: any) => {
+      this.$refs.child.displayBet();
+    });
   },
   methods: {
     addBalance(amount: number) {
@@ -50,11 +62,6 @@ export default {
 
       this.balance = 0;
     },
-  },
-  components: {
-    AmountButton,
-    IconCross,
-    Bets,
   },
 };
 </script>
@@ -106,9 +113,9 @@ export default {
     </div>
 
     <div class="flex w-full space-x-4 text-center text-white text-2xl">
-      <Bets @add-bet="addBet" :color="Color.red" />
-      <Bets @add-bet="addBet" :color="Color.green" />
-      <Bets @add-bet="addBet" :color="Color.black" />
+      <Bets ref="child" @add-bet="addBet" />
+      <Bets @add-bet="addBet" />
+      <Bets @add-bet="addBet" />
     </div>
   </main>
 </template>

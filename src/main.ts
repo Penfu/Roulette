@@ -10,6 +10,7 @@ import "./assets/main.css";
 const app = createApp(App);
 
 window.Pusher = Pusher;
+// Pusher.logToConsole = true;
 
 window.Echo = new Echo({
   broadcaster: "pusher",

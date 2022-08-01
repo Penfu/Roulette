@@ -1,9 +1,14 @@
-<script setup lang="ts">
+<script lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import { default as auth, isAuth } from "@/stores/auth";
 
-window.Echo.channel("channel").listen("Hello", (e: any) => {
-  console.log(e);
-});
+export default {
+  name: "App",
+  computed: {
+    auth,
+    isAuth,
+  },
+};
 </script>
 
 <template>
@@ -21,7 +26,7 @@ window.Echo.channel("channel").listen("Hello", (e: any) => {
             </div>
           </div>
           <div class="flex items-center">
-            <div class="relative inline-block text-left">
+            <div v-if="isAuth" class="relative inline-block text-left">
               <button
                 type="button"
                 class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-2 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
@@ -29,7 +34,7 @@ window.Echo.channel("channel").listen("Hello", (e: any) => {
                 aria-expanded="true"
                 aria-haspopup="true"
               >
-                Penfu
+                {{ auth.user.name }}
                 <svg
                   class="-mr-1 ml-2 h-5 w-5"
                   xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +68,14 @@ window.Echo.channel("channel").listen("Hello", (e: any) => {
                   </a>
                 </div>
               </div>
+            </div>
+            <div v-else>
+              <RouterLink
+                to="/login"
+                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-2 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+              >
+                Login
+              </RouterLink>
             </div>
           </div>
         </div>
