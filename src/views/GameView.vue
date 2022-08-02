@@ -6,14 +6,16 @@ import Bets from "../components/Bets.vue";
 import AmountButton from "../components/AmountButton.vue";
 
 import IconCross from "../components/icons/IconCross.vue";
+import Histories from "../components/Histories.vue";
 
 export default {
   name: "GameView",
   components: {
+    Histories,
     AmountButton,
     IconCross,
     Bets,
-  },
+},
   data() {
     return {
       user: {
@@ -25,19 +27,45 @@ export default {
         red: [] as Array<{ user: string; value: number }>,
         black: [] as Array<{ user: string; value: number }>,
         green: [] as Array<{ user: string; value: number }>,
-      }
+      },
+      histories: [] as Array<{ color: string, value: number }>,
     };
   },
   mounted() {
-    window.Echo.channel("roulette").listen("BetEvent", (b: any) => {
-      const bet = this.bets[b.color].find((_b) => b.user === _b.user);
+    this.getHistories();
+
+    /*
+    [
+      { color: "black", value: 1 },
+      { color: "red", value: 20 },
+      { color: "red", value: 10 },
+      { color: "red", value: 8 },
+      { color: "green", value: 13 },
+      { color: "black", value: 11 },
+      { color: "black", value: 13 },
+    ];
+    */
+
+    window.Echo.channel("roll").listen("RollEvent", (e: any) => {
+      this.histories.unshift({
+        color: e.color,
+        value: e.value,
+      });
+
+      if (this.histories.length > 10) {
+        this.histories.pop();
+      }
+    });
+
+    window.Echo.channel("roulette").listen("BetEvent", (e: any) => {
+      const bet = this.bets[e.color].find((b) => e.user === b.user);
 
       if (bet) {
-        bet.value += b.value;
+        bet.value += e.value;
       } else {
-        this.bets[b.color].push({
-          user: b.user,
-          value: b.value,
+        this.bets[e.color].push({
+          user: e.user,
+          value: e.value,
         });
       }
     });
@@ -86,16 +114,25 @@ export default {
       // this.$refs.betsRed.displayBet(this.user.name, this.balance);
       this.balance = 0;
     },
+
+    async getHistories() {
+      this.histories = await (await axios.get("http://localhost:8000/api/rolls")).data;
+    },
   },
 };
 </script>
 
 <template>
   <main class="mx-4 sm:mx-8 md:mx-32">
-    <div class="h-80 bg-gray-100 rounded shadow shadow-gray-300">
-      <span class="absolute">User: {{ user.name }} Balance: {{ user.balance }}</span>
-      <div class="py-2 h-full">
-        <img src="@/assets/roulette.png" alt="Roulette" class="h-full w-full object-contain" />
+    <span class="absolute">User: {{ user.name }} Balance: {{ user.balance }}</span>
+
+    <div class="bg-gray-100 rounded shadow shadow-gray-300">
+      <div class="flex flex-col lg:flex-row justify-center items-center lg:items-end">
+        <div class="grow py-2 h-80">
+          <img src="@/assets/roulette.png" alt="Roulette" class="h-full w-full object-contain" />
+        </div>
+
+        <Histories :histories="this.histories" />
       </div>
     </div>
 
