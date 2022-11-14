@@ -128,11 +128,8 @@ export default {
 
     <div class="bg-gray-100 rounded shadow shadow-gray-300">
       <div class="flex flex-col lg:flex-row justify-center items-center lg:items-end">
-        <div class="grow py-2 h-80">
-          <img src="@/assets/roulette.png" alt="Roulette" class="h-full w-full object-contain" />
-        </div>
-
-        <Histories :histories="this.histories" />
+        <img src="@/assets/roulette.png" alt="Roulette" class="py-2 basis-2/3 h-80 w-80 object-contain" />
+        <Histories class="basis-1/3" :histories="this.histories" />
       </div>
     </div>
 
@@ -151,7 +148,7 @@ export default {
           </div>
           <div class="grow flex justify-end">
             <button @click="resetBalance"
-              class="h-12 px-12 xl:px-4 mx-2 bg-red-500 hover:bg-red-600 text-white rounded shadow shadow-red-300">
+              class="h-12 px-12 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow shadow-red-300">
               <IconCross />
             </button>
           </div>
