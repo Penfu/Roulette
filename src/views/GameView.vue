@@ -15,7 +15,7 @@ export default {
     AmountButton,
     IconCross,
     Bets,
-},
+  },
   data() {
     return {
       user: {
@@ -94,10 +94,16 @@ export default {
       }
 
       // await axios.get("http://localhost:8000/sanctum/csrf-cookie");
-      axios.post("http://localhost:8000/api/bets", {
+      axios.post("http://localhost:8000/api/bets",
+      {
         user: this.user.name,
         color: color,
         value: this.balance,
+      },
+      {
+        headers: {
+          "X-Socket-ID": window.Echo.socketId(),
+        },
       });
 
       const bet = this.bets[color].find((b) => b.user === this.user.name);
@@ -111,7 +117,6 @@ export default {
         });
       }
 
-      // this.$refs.betsRed.displayBet(this.user.name, this.balance);
       this.balance = 0;
     },
 
