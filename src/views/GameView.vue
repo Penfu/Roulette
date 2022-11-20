@@ -153,7 +153,7 @@ export default {
 </script>
 
 <template>
-  <main class="mx-4 sm:mx-8 md:mx-32">
+  <main class="mx-4 sm:mx-8 md:mx-16 lg:mx-32">
     <div class="bg-gray-100 rounded shadow shadow-gray-300">
       <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
           <img src="@/assets/roulette.png" alt="Roulette" class="py-2 basis-2/3 h-80 w-80 object-contain" />
