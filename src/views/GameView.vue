@@ -1,5 +1,6 @@
 <script lang="ts">
 import axios from "axios";
+import { useUserStore } from "../stores/user";
 
 import Color from "./../enums/Color";
 import RollStatus from "./../enums/RollStatus";
@@ -22,13 +23,10 @@ export default {
   },
   data() {
     return {
+      auth: useUserStore(),
       ColorHelper,
       Color,
       RollStatus,
-      user: {
-        name: "Penfu" as string,
-        balance: 3000 as number,
-      },
       status: RollStatus.LOADING,
       result : {
         color: "" as string,
@@ -103,18 +101,18 @@ export default {
     },
 
     addBalance(value: number) {
-      if (isNaN(value)) value = this.user.balance;
+      if (isNaN(value)) value = this.auth.user.balance;
 
-      if (this.user.balance < value) {
+      if (this.auth.user.balance < value) {
         console.log("You don't have enough money!");
         return;
       }
 
       this.balance += value;
-      this.user.balance -= value;
+      this.auth.user.balance -= value;
     },
     resetBalance() {
-      this.user.balance += this.balance;
+      this.auth.user.balance += this.balance;
       this.balance = 0;
     },
 
@@ -127,7 +125,7 @@ export default {
       // await axios.get("http://localhost:8000/sanctum/csrf-cookie");
       axios.post("http://localhost:8000/api/bets",
       {
-        user: this.user.name,
+        user: this.auth.user.name,
         color: color,
         value: this.balance,
       },
@@ -137,13 +135,13 @@ export default {
         },
       });
 
-      const bet = this.bets[color].find((b: { user: string; }) => b.user === this.user.name);
+      const bet = this.bets[color].find((b: { user: string; }) => b.user === this.auth.user.name);
 
       if (bet) {
         bet.value += this.balance;
       } else {
         this.bets[color].push({
-          user: this.user.name,
+          user: this.auth.user.name,
           value: this.balance,
         });
       }
@@ -156,8 +154,6 @@ export default {
 
 <template>
   <main class="mx-4 sm:mx-8 md:mx-32">
-    <span class="absolute">User: {{ user.name }} Balance: {{ user.balance }}</span>
-
     <div class="bg-gray-100 rounded shadow shadow-gray-300">
       <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
           <img src="@/assets/roulette.png" alt="Roulette" class="py-2 basis-2/3 h-80 w-80 object-contain" />
