@@ -1,5 +1,6 @@
 <script lang="ts">
 import Bet from "../components/Bet.vue";
+import Color from "./../enums/Color";
 
 export default {
   components: {
@@ -7,6 +8,7 @@ export default {
   },
   emits: ["add-bet"],
   props: {
+    active: Boolean,
     color: {
       type: String,
       required: true,
@@ -22,8 +24,16 @@ export default {
   },
   data() {
     return {
+      Color,
       bet: Bet,
     };
+  },
+  methods: {
+    addBet() {
+      if (this.active) {
+        this.$emit("add-bet", this.color);
+      }
+    },
   },
 };
 </script>
@@ -31,12 +41,13 @@ export default {
 <template>
   <div class="basis-1/3 flex flex-col space-y-4">
     <button
-      @click="$emit('add-bet', color)"
+      :disable="() => !active"
+      @click="addBet"
       class="py-4 font-semibold rounded shadow"
       :class="{
-        'bg-red-500 hover:bg-red-600 shadow-red-300': color == 'red',
-        'bg-green-500 hover:bg-green-600 shadow-green-300': color == 'green',
-        'bg-gray-900 hover:bg-black shadow-gray-500': color == 'black',
+        'bg-red-500 hover:bg-red-600 shadow-red-300': color == Color.RED,
+        'bg-green-500 hover:bg-green-600 shadow-green-300': color == Color.GREEN,
+        'bg-gray-900 hover:bg-black shadow-gray-500': color == Color.BLACK,
       }"
     >
       x {{ value}}

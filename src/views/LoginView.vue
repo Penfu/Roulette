@@ -1,10 +1,6 @@
-<script setup lang="ts">
+<script lang="ts">
 import axios from "axios";
 axios.defaults.withCredentials = true;
-</script>
-
-<script lang="ts">
-import setAuth from "@/stores/auth.js";
 
 export default {
   data() {

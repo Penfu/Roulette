@@ -1,8 +1,17 @@
 <script lang="ts">
+import Color from "./../enums/Color";
+import Helper from "./../helpers/Color";
+
 export default {
   props: {
     color: String,
     value: Number,
+  },
+  data() {
+    return {
+      Helper,
+      Color,
+    };
   },
 };
 </script>
@@ -10,11 +19,8 @@ export default {
 <template>
   <div
     class="flex justify-center items-center text-center h-12 w-12 bg-red-500 text-white font-semibold text-xl rounded shadow"
-    :class="{
-    'bg-red-500 shadow-red-300': color == 'red',
-    'bg-green-500 shadow-green-300': color == 'green',
-    'bg-gray-900 shadow-gray-500': color == 'black'
-  }">
+    :class="Helper.getClassFromColor(color)"
+  >
     <label>{{ value }}</label>
   </div>
 </template>
