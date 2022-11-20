@@ -7,6 +7,7 @@ export default {
   data() {
     return {
       auth: useUserStore(),
+      show: false,
     };
   },
 };
@@ -26,30 +27,27 @@ export default {
           </div>
 
           <!-- Balance -->
-          <label v-show="auth.isAuth" class>{{ auth.user.balance}}</label>
+          <label v-show="auth.isAuth" class>{{ auth.user.balance }}</label>
 
           <div class="flex items-center">
-            <div v-if="auth.isAuth" class="relative inline-block text-left">
-              <button type="button"
-                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-2 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
-                id="menu-button" aria-expanded="true" aria-haspopup="true">
-                {{ auth.user.name }}
-                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                  fill="currentColor" aria-hidden="true">
-                  <path fillRule="evenodd"
+            <div v-if="auth.isAuth" class="relative">
+              <!-- Dropdown toggle button -->
+              <button @click="show = !show" class="p-2 flex items-center rounded border border-gray-300 shadow-sm bg-white hover:bg-gray-50 text-gray-800">
+                <span class="mr-4">{{ auth.user.name }}</span>
+                <svg class="w-5 h-5 text-gray-800" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd"
                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd" />
+                    clip-rule="evenodd" />
                 </svg>
               </button>
-              <div
-                class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-                role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
-                <div class="py-1" role="none">
-                  <a href="/logout" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabIndex="-1"
-                    id="menu-item-0">
-                    Logout
-                  </a>
-                </div>
+
+              <!-- Dropdown menu -->
+              <div v-show="show" class="absolute right-0 py-2 mt-2 w-44 bg-white rounded border border-gray-300 shadow">
+                <button @click="auth.logout"
+                  class="w-full px-4 py-2 hover:bg-blue-400 text-sm text-left text-gray-800 hover:text-gray-50 border-t-2">
+                  Logout
+                </button>
               </div>
             </div>
             <div v-else>

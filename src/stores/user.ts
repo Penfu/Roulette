@@ -8,18 +8,19 @@ export const useUserStore = defineStore("user", () => {
     email: "" as string,
     balance: 0 as number,
   });
-  const token = ref("" as string);
-  const isAuth = computed(() => token.value != "");
+  const token = ref(null as string | null);
+  const isAuth = computed(() => token.value != null);
 
   if (localStorage.getItem("token")) {
-    token.value = localStorage.getItem("token") as string;
-    loginFromToken(token.value);
+    token.value = localStorage.getItem("token");
+    loginFromToken(token.value as string);
   }
 
   watch(
     token,
     (newToken) => {
-      localStorage.setItem("token", JSON.stringify(newToken));
+      if (newToken == null) localStorage.removeItem("token");
+      else localStorage.setItem("token", JSON.stringify(newToken));
     },
     {
       deep: true,
@@ -33,6 +34,7 @@ export const useUserStore = defineStore("user", () => {
   async function loginFromToken(token: string) {
     await getCsrfToken();
 
+    console.log("toke ddn", token);
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
     const response = await axios.get("/users/me");
 
@@ -56,5 +58,14 @@ export const useUserStore = defineStore("user", () => {
       });
   }
 
-  return { user, token, isAuth, login };
+  function logout() {
+    user.value = {
+      name: "",
+      email: "",
+      balance: 0,
+    };
+    token.value = null;
+  }
+
+  return { user, token, isAuth, login, logout };
 });
