@@ -2,9 +2,18 @@
 import { ref } from 'vue';
 import { RouterLink, RouterView } from "vue-router";
 import { useUserStore } from "./stores/user";
+import Dropdown from './components/Dropdown.vue';
 
 export default {
   name: "App",
+  components: {
+    Dropdown,
+  },
+  watch: {
+    '$route'() {
+      this.showMenu = false;
+    }
+  },
   setup() {
     let showMenu = ref(false);
     const toggleNav = () => (showMenu.value = !showMenu.value);
@@ -13,7 +22,6 @@ export default {
   data() {
     return {
       auth: useUserStore(),
-      show: false,
     };
   },
 };
@@ -21,7 +29,7 @@ export default {
 
 <template>
   <div class="bg-gray-100">
-    <nav class="py-4 mx-4 sm:mx-8 md:mx-16 lg:mx-32 md:flex md:justify-start md:items-end md:space-x-6">
+    <nav class="py-4 mx-4 md:mx-8 lg:mx-16 xl:mx-32 md:flex md:justify-start md:items-end md:space-x-6">
       <!-- Menu -->
       <div :class="showMenu ? 'flex' : 'hidden'" class="w-full hidden md:flex items-end space-x-4">
         <!-- Title -->
@@ -30,9 +38,9 @@ export default {
         </router-link>
 
         <!-- Links -->
-        <div class="grow space-x-4">
+        <div class="px-8 grow space-x-8">
           <RouterLink to="/" class="text-lg">Home</RouterLink>
-          <RouterLink to="/about" class="text-lg">Leaderboard</RouterLink>
+          <RouterLink to="/leaderboard" class="text-lg">Leaderboard</RouterLink>
         </div>
 
         <!-- Balance -->
@@ -47,25 +55,17 @@ export default {
 
         <!-- User Dropdown -->
         <div v-if="auth.isAuth" class="relative">
-          <!-- Dropdown toggle button -->
-          <button @click="show = !show"
-            class="p-2 flex items-center rounded border border-gray-300 shadow-sm bg-white hover:bg-gray-50 text-gray-800">
-            <span class="mr-4">{{ auth.user.name }}</span>
-            <svg class="w-5 h-5 text-gray-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-              fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-            </svg>
-          </button>
-
-          <!-- Dropdown menu -->
-          <div v-show="show" class="absolute right-0 py-2 mt-2 w-44 bg-white rounded border border-gray-300 shadow">
-            <button @click="auth.logout"
-              class="w-full px-4 py-2 hover:bg-blue-400 text-sm text-left text-gray-800 hover:text-gray-50 border-t-2">
-              Logout
-            </button>
-          </div>
+          <Dropdown>
+            <template #header>
+              <span class="mr-4">{{ auth.user.name }}</span>
+            </template>
+            <template #body>
+              <button @click="auth.logout"
+                class="w-full px-4 py-2 hover:bg-blue-400 text-sm text-left text-gray-800 hover:text-gray-50 border-t-2">
+                Logout
+              </button>
+            </template>
+          </Dropdown>
         </div>
         <div v-else>
           <RouterLink to="/login"
@@ -79,7 +79,8 @@ export default {
       <div class="flex flex-col md:hidden items-center">
         <div class="w-full flex">
           <div class="grow flex items-center space-x-2">
-            <button @click="toggleNav" type="button" class="text-gray-800 hover:text-gray-900 focus:outline-none focus:text-gray-9 00">
+            <button @click="toggleNav" type="button"
+              class="text-gray-800 hover:text-gray-900 focus:outline-none focus:text-gray-9 00">
               <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
                 <path fill-rule="evenodd"
                   d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z">
@@ -107,7 +108,7 @@ export default {
         <div :class="showMenu ? 'flex' : 'hidden'" class="w-full md:hidden grow flex-col mt-8 space-y-4">
           <div class="flex flex-col space-y-2">
             <RouterLink to="/" class="px-8 py-2 text-lg hover:bg-gray-200 rounded">Home</RouterLink>
-            <RouterLink to="/about" class="px-8 py-2 text-lg hover:bg-gray-200 rounded">Leaderboard</RouterLink>
+            <RouterLink to="/leaderboard" class="px-8 py-2 text-lg hover:bg-gray-200 rounded">Leaderboard</RouterLink>
           </div>
 
           <div class="py-4 border-t-2 border-gray-300">

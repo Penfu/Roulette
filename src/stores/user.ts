@@ -34,7 +34,6 @@ export const useUserStore = defineStore("user", () => {
   async function loginFromToken(token: string) {
     await getCsrfToken();
 
-    console.log("toke ddn", token);
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
     const response = await axios.get("/users/me");
 
