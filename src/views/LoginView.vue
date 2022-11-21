@@ -1,8 +1,6 @@
 <script lang="ts">
 import { useUserStore } from "../stores/user";
 
-// axios.defaults.withCredentials = true;
-
 export default {
   setup() {
     const userStore = useUserStore();
@@ -29,7 +27,7 @@ export default {
 </script>
 
 <template>
-  <main class="mx-4 sm:mx-8 md:mx-32">
+  <main class="mx-4 sm:mx-8 md:mx-16 lg:mx-32">
     <div class="py-16 w-full flex items-center justify-center flex-col space-y-4">
       <h2 class="text-3xl font-semibold uppercase">Login</h2>
 
