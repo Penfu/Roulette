@@ -28,7 +28,7 @@ export default {
       Color,
       RollStatus,
       status: RollStatus.LOADING,
-      result : {
+      result: {
         color: "" as string,
         value: 0 as number,
       },
@@ -39,7 +39,12 @@ export default {
         black: [] as Array<{ user: string; value: number }>,
         green: [] as Array<{ user: string; value: number }>,
       },
-      histories: [] as Array<{ color: string, value: number }>,
+      myBets: {
+        red: [] as Array<{ value: number }>,
+        black: [] as Array<{ value: number }>,
+        green: [] as Array<{ value: number }>,
+      },
+      histories: [] as Array<{ color: string; value: number }>,
     };
   },
   mounted() {
@@ -50,17 +55,20 @@ export default {
         case "OPEN":
           this.status = RollStatus.OPEN;
           this.infoMessage = Math.round(e.timer / 1000) + " seconds left";
+
+          this.bets = e.bets;
           break;
         case "CLOSE":
-          if (this.status = RollStatus.CLOSE)
-          return;
+          // For late bets
+          this.bets = e.bets;
+
+          if (this.status = RollStatus.CLOSE) return;
 
           this.status = RollStatus.CLOSE;
           this.infoMessage = "Rolling";
           break;
         case "RESULT":
-          if (this.status == RollStatus.RESULT)
-          return;
+          if (this.status == RollStatus.RESULT) return;
 
           this.status = RollStatus.RESULT;
           this.result = e.result;
@@ -79,19 +87,6 @@ export default {
             this.histories.pop();
           }
           break;
-      }
-    });
-
-    window.Echo.channel("roulette").listen("BetEvent", (e: any) => {
-      const bet = this.bets[e.color].find((b: { user: any; }) => e.user === b.user);
-
-      if (bet) {
-        bet.value += e.value;
-      } else {
-        this.bets[e.color].push({
-          user: e.user,
-          value: e.value,
-        });
       }
     });
   },
@@ -122,19 +117,22 @@ export default {
         return;
       }
 
-      // await axios.get("http://localhost:8000/sanctum/csrf-cookie");
-      axios.post("http://localhost:8000/api/bets",
-      {
-        user: this.auth.user.name,
-        color: color,
-        value: this.balance,
-      },
-      {
-        headers: {
-          "X-Socket-ID": window.Echo.socketId(),
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      axios.post("/bets",
+        {
+          user: this.auth.user.name,
+          color: color,
+          value: this.balance,
         },
-      });
+        {
+          headers: {
+            "X-Socket-ID": window.Echo.socketId(),
+          },
+        });
 
+      this.myBets[color].push({ value: this.balance });
+
+      /*
       const bet = this.bets[color].find((b: { user: string; }) => b.user === this.auth.user.name);
 
       if (bet) {
@@ -142,9 +140,11 @@ export default {
       } else {
         this.bets[color].push({
           user: this.auth.user.name,
+          color: color,
           value: this.balance,
         });
       }
+      */
 
       this.balance = 0;
     },
@@ -153,23 +153,23 @@ export default {
 </script>
 
 <template>
-  <main class="mx-4 sm:mx-8 md:mx-16 lg:mx-32">
+  <main class="mx-4 md:mx-8 lg:mx-16 xl:mx-32">
     <div class="bg-gray-100 rounded shadow shadow-gray-300">
       <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
-          <img src="@/assets/roulette.png" alt="Roulette" class="py-2 basis-2/3 h-80 w-80 object-contain" />
-          <div class="flex flex-col justify-end">
-            <div class="h-20 my-8 flex grow justify-center items-center text-center text-2xl font-semibold uppercase">
-              <p v-show="status === RollStatus.OPEN">{{ infoMessage }}</p>
-              <p v-show="status === RollStatus.CLOSE">ROLLING...</p>
-              <div v-show="status === RollStatus.RESULT" class="flex items-center justify-center space-x-4">
-                <p>Result</p>
-                <span class="block px-3 py-1 text-white bg-red-500 rounded text-center"
-                      :class="ColorHelper.getClassFromColor(result.color)">{{ result.value }}</span>
-              </div>
+        <img src="@/assets/roulette.png" alt="Roulette" class="py-2 basis-2/3 h-80 w-80 object-contain" />
+        <div class="flex flex-col justify-end">
+          <div class="h-20 my-8 flex grow justify-center items-center text-center text-2xl font-semibold uppercase">
+            <p v-show="status === RollStatus.OPEN">{{ infoMessage }}</p>
+            <p v-show="status === RollStatus.CLOSE">ROLLING...</p>
+            <div v-show="status === RollStatus.RESULT" class="flex items-center justify-center space-x-4">
+              <p>Result</p>
+              <span class="block px-3 py-1 text-white bg-red-500 rounded text-center"
+                :class="ColorHelper.getClassFromColor(result.color)">{{ result.value }}</span>
             </div>
-            <div class="justify-center items-center xl:items-end">
-              <Histories class="basis-1/3" :histories = "histories" />
-            </div>
+          </div>
+          <div class="justify-end items-center xl:items-end">
+            <Histories class="basis-1/3" :histories="histories" />
+          </div>
         </div>
       </div>
     </div>
@@ -198,9 +198,12 @@ export default {
     </div>
 
     <div class="flex w-full space-x-4 text-center text-white text-2xl">
-      <Bets ref="betsRed"   color="red"   :value="2"  :bets = "bets[Color.RED]"   :active="status === RollStatus.OPEN" @add-bet="addBet" />
-      <Bets ref="betsGreen" color="green" :value="13" :bets = "bets[Color.GREEN]" :active="status === RollStatus.OPEN" @add-bet="addBet" />
-      <Bets ref="betsBlack" color="black" :value="2"  :bets = "bets[Color.BLACK]" :active="status === RollStatus.OPEN" @add-bet="addBet" />
+      <Bets ref="betsRed" color="red" :value="2" :bets="bets[Color.RED]" :active="status === RollStatus.OPEN"
+        @add-bet="addBet" />
+      <Bets ref="betsGreen" color="green" :value="13" :bets="bets[Color.GREEN]" :active="status === RollStatus.OPEN"
+        @add-bet="addBet" />
+      <Bets ref="betsBlack" color="black" :value="2" :bets="bets[Color.BLACK]" :active="status === RollStatus.OPEN"
+        @add-bet="addBet" />
     </div>
   </main>
 </template>
