@@ -31,6 +31,21 @@ export const useUserStore = defineStore("user", () => {
     await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");
   }
 
+  async function register(name: string, email: string, password: string) {
+    await getCsrfToken();
+
+    const response = await axios.post("/register", {
+      name,
+      email,
+      password,
+    });
+
+    user.value = response.data.user;
+    token.value = response.data.token;
+
+    // await loginFromToken(token.value as string);
+  }
+
   async function loginFromToken(token: string) {
     await getCsrfToken();
 
@@ -43,18 +58,13 @@ export const useUserStore = defineStore("user", () => {
   async function login(email: string, password: string) {
     await getCsrfToken();
 
-    await axios
-      .post("/login", {
-        email,
-        password,
-      })
-      .then((response) => {
-        user.value = response.data.user;
-        token.value = response.data.token;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const response = await axios.post("/login", {
+      email,
+      password,
+    });
+
+    user.value = response.data.user;
+    token.value = response.data.token;
   }
 
   function logout() {
@@ -66,5 +76,5 @@ export const useUserStore = defineStore("user", () => {
     token.value = null;
   }
 
-  return { user, token, isAuth, login, logout };
+  return { user, token, isAuth, register, login, logout };
 });

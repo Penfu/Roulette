@@ -53,8 +53,12 @@ export default {
           <label class="block">Password</label>
           <input type="password" v-model="password" class="w-full px-4 py-3 bg-gray-200 rounded text-lg" />
         </div>
-        <button type="submit" class="w-full px-4 py-3 bg-gray-800 rounded text-white">Login</button>
+        <button type="submit" class="w-full px-4 py-3 bg-gray-800 hover:bg-gray-900 rounded text-white">Login</button>
       </form>
+
+      <router-link to="/register" class="text-gray-600 hover:text-gray-800">
+        Not already register ?
+      </router-link>
     </div>
   </main>
 </template>
