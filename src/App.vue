@@ -1,22 +1,33 @@
 <script lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 import { useUserStore } from "./stores/user";
-import Dropdown from './components/Dropdown.vue';
+
+import {
+  HomeIcon,
+  RectangleStackIcon,
+  BanknotesIcon,
+  ArrowRightOnRectangleIcon,
+} from "@heroicons/vue/24/outline";
+import OpenSidebarIcon from "./components/icons/OpenSidebarIcon.vue";
+import CloseSidebarIcon from "./components/icons/CloseSidebarIcon.vue";
 
 export default {
   name: "App",
   components: {
-    Dropdown,
+    HomeIcon,
+    RectangleStackIcon,
+    BanknotesIcon,
+    ArrowRightOnRectangleIcon,
+    OpenSidebarIcon,
+    CloseSidebarIcon,
   },
   watch: {
-    '$route'() {
-      this.showMenu = false;
-    }
+    $route() {},
   },
   setup() {
-    let showMenu = ref(false);
-    const toggleNav = () => (showMenu.value = !showMenu.value);
-    return { showMenu, toggleNav };
+    let showSideBar = ref(false);
+    const toggleSideBar = () => (showSideBar.value = !showSideBar.value);
+    return { showSideBar, toggleSideBar };
   },
   data() {
     return {
@@ -27,114 +38,160 @@ export default {
 </script>
 
 <template>
-  <div>
-    <div class="bg-gray-100">
-      <nav class="py-4 mx-4 md:mx-8 lg:mx-16 xl:mx-32 md:flex md:justify-start md:items-end md:space-x-6">
-        <!-- Menu -->
-        <div :class="showMenu ? 'flex' : 'hidden'" class="w-full hidden md:flex items-end space-x-4">
+  <div
+    class="min-h-screen flex flex-col sm:flex-row space-y-4 sm:space-y-0 bg-gray-100"
+  >
+    <!-- Sidebar -->
+    <aside
+      class="px-4 py-4 sticky top-0 sm:h-screen bg-gray-100"
+      :class="{ 'lg:w-56': showSideBar }"
+    >
+      <div
+        class="py-4 px-2 sm:py-2 w-full h-full flex flex-row sm:flex-col justify-center items-center space-x-4 sm:space-x-0 overflow-hidden text-gray-700 bg-white rounded-lg shadow shadow-gray-300"
+      >
+        <div
+          class="lg:py-4 my-2 px-4 sm:w-full flex"
+          :class="{ 'flex-col-reverse': !showSideBar }"
+        >
           <!-- Title -->
-          <router-link to="/" class="text-xl font-bold text-gray-800 md:text-2xl hover:text-gray-900">
-            Rolls
-          </router-link>
-
-          <!-- Links -->
-          <div class="px-8 grow space-x-8">
-            <RouterLink to="/" class="text-lg">Home</RouterLink>
-            <RouterLink to="/leaderboard" class="text-lg">Leaderboard</RouterLink>
-          </div>
-
-          <!-- Balance -->
-          <label v-show="auth.isAuth"
-            class="px-4 py-2 flex space-x-2 bg-white border border-gray-300 shadow-sm rounded">
-            <svg class="w-6 h-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+          <RouterLink
+            to="/"
+            class="sm:w-full flex justify-center items-center space-x-2 text-lg"
+            :class="{ 'lg:my-6': !showSideBar }"
+          >
+            <svg
+              class="w-6 h-6 sm:w-8 sm:h-8 fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"
+              />
             </svg>
-            <span>{{ auth.user.balance }}</span>
-          </label>
+            <span
+              class="hidden text-lg font-bold"
+              :class="{ 'lg:block': showSideBar }"
+              >Roll</span
+            >
+          </RouterLink>
 
-          <!-- User Dropdown -->
-          <div v-if="auth.isAuth" class="relative">
-            <Dropdown>
-              <template #header>
-                <span class="mr-4">{{ auth.user.name }}</span>
-              </template>
-              <template #body>
-                <button @click="auth.logout"
-                  class="w-full px-4 py-2 hover:bg-blue-400 text-sm text-left text-gray-800 hover:text-gray-50 border-t-2">
-                  Logout
-                </button>
-              </template>
-            </Dropdown>
-          </div>
-          <div v-else>
-            <RouterLink to="/login"
-              class="inline-flex justify-center px-6 py-2 rounded-md border border-gray-300 shadow-sm bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-              Login
+          <!-- Toggle button -->
+          <button
+            class="px-2 hidden lg:flex items-center space-x-2 rounded group"
+            @click="toggleSideBar"
+          >
+            <OpenSidebarIcon
+              v-if="!showSideBar"
+              class="w-7 h-7 text-gray-600 group-hover:text-gray-800"
+            />
+            <CloseSidebarIcon
+              v-else
+              class="w-7 h-7 text-gray-600 group-hover:text-gray-800"
+            />
+          </button>
+        </div>
+
+        <!-- Links -->
+        <div class="grow w-full">
+          <div
+            class="px-4 sm:px-0 sm:pt-8 w-full flex flex-row sm:flex-col sm:justify-center lg:justify-left items-center space-x-4 sm:space-x-0 sm:space-y-8 border-l sm:border-l-0 sm:border-t border-gray-300"
+          >
+            <RouterLink
+              to="/"
+              class="p-3 sm:w-full flex justify-center items-center text-lg hover:bg-gray-200 rounded"
+            >
+              <HomeIcon class="lg:mx-2 w-6 h-6" />
+              <span
+                class="hidden grow font-medium"
+                :class="{ 'lg:block': showSideBar }"
+                >Roulette</span
+              >
+            </RouterLink>
+
+            <RouterLink
+              to="/leaderboard"
+              class="p-3 sm:w-full flex justify-center items-center text-lg hover:bg-gray-200 rounded"
+            >
+              <RectangleStackIcon class="lg:mx-2 w-6 h-6" />
+              <span
+                class="hidden grow font-medium"
+                :class="{ 'lg:block': showSideBar }"
+                >Leaderboard</span
+              >
             </RouterLink>
           </div>
         </div>
 
-        <!-- Mobile menu -->
-        <div class="flex flex-col md:hidden items-center">
-          <div class="w-full flex">
-            <div class="grow flex items-center space-x-2">
-              <button @click="toggleNav" type="button"
-                class="text-gray-800 hover:text-gray-900 focus:outline-none focus:text-gray-9 00">
-                <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
-                  <path fill-rule="evenodd"
-                    d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z">
-                  </path>
-                </svg>
-              </button>
-              <router-link to="/" class="text-xl font-bold text-gray-800 md:text-2xl hover:text-gray-900">
-                Rolls
-              </router-link>
-            </div>
+        <!-- Bottom -->
+        <div class="sm:w-full">
+          <!-- Balance -->
+          <label
+            v-show="auth.isAuth"
+            class="hidden my-4 px-4 py-2 items-center justify-center space-x-2 bg-white border border-gray-300 shadow-sm rounded"
+            :class="{ 'lg:flex': showSideBar }"
+          >
+            <BanknotesIcon class="h-6 w-6 text-green-500" />
+            <span>{{ auth.user.balance }}</span>
+          </label>
 
-            <!-- Balance -->
-            <label v-show="auth.isAuth"
-              class="px-4 py-2 flex space-x-2 bg-white border border-gray-300 shadow-sm rounded">
-              <svg class="w-6 h-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
-              </svg>
-              <span>{{ auth.user.balance }}</span>
-            </label>
-          </div>
+          <!-- User Profile -->
+          <RouterLink
+            v-if="auth.isAuth"
+            to="/"
+            class="p-3 flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded"
+          >
+            <svg
+              class="w-6 h-6 stroke-current"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span
+              class="hidden font-medium"
+              :class="{ 'lg:block': showSideBar }"
+              >{{ auth.user.name }}</span
+            >
+          </RouterLink>
 
-          <!-- Links -->
-          <div :class="showMenu ? 'flex' : 'hidden'" class="w-full md:hidden grow flex-col mt-8 space-y-4">
-            <div class="flex flex-col space-y-2">
-              <RouterLink to="/" class="px-8 py-2 text-lg hover:bg-gray-200 rounded">Home</RouterLink>
-              <RouterLink to="/leaderboard" class="px-8 py-2 text-lg hover:bg-gray-200 rounded">Leaderboard</RouterLink>
-            </div>
-
-            <div class="py-4 border-t-2 border-gray-300">
-              <div v-if="auth.isAuth">
-                <div class="mb-6">
-                  <span>{{ auth.user.name }}</span>
-                </div>
-
-                <button @click="auth.logout"
-                  class="w-full px-4 py-2 bg-gray-800 hover:bg-gray-900 rounded text-left text-white hover:text-gray-50">
-                  Logout
-                </button>
-              </div>
-              <div v-else class="flex">
-                <RouterLink to="/login"
-                  class="grow w-full px-4 py-2 bg-gray-800 hover:bg-gray-900 rounded text-left text-white hover:text-gray-50">
-                  Login
-                </RouterLink>
-              </div>
-            </div>
-          </div>
+          <!-- Login btn -->
+          <RouterLink
+            v-else
+            to="/login"
+            class="w-full flex items-center text-lg hover:bg-gray-200 rounded"
+          >
+            <svg
+              class="w-6 h-6 stroke-current"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span
+              class="hidden font-medium"
+              :class="{ 'lg:block': showSideBar }"
+              >Login</span
+            >
+          </RouterLink>
         </div>
-      </nav>
-    </div>
+      </div>
+    </aside>
 
-    <RouterView class="my-8" />
+    <RouterView class="px-4 pb-4 sm:pt-4 grow" />
   </div>
 </template>

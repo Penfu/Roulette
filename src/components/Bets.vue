@@ -18,7 +18,7 @@ export default {
       required: true,
     },
     bets: {
-      type: Array as () => Array<{ user: string, color: string; value: number }>,
+      type: Array,
       required: true,
     },
   },
@@ -48,8 +48,8 @@ export default {
       x {{ value }}
     </button>
     <div
-      class="p-2 h-64 overflow-y-hidden space-y-2 bg-gray-100 text-left text-xl text-gray-800 rounded shadow shadow-gray-300">
-      <Bet v-for="(bet, index) in bets" :key="index" :name="bet.user" :color="bet.color" :value="bet.value" />
+      class="p-2 h-64 overflow-y-hidden space-y-2 bg-white text-left text-xl text-gray-800 rounded shadow shadow-gray-300">
+      <Bet v-for="(bet, index) in bets" :key="index" :name="bet.user" :value="bet.value" />
     </div>
   </div>
 </template>

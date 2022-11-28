@@ -3,7 +3,6 @@ export default {
   name: "Bet",
   props: {
     name: String,
-    color: String,
     value: Number,
   },
 };
