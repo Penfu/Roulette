@@ -38,13 +38,16 @@ export default {
 </script>
 
 <template>
-  <main class="mx-4 md:mx-8 lg:mx-16 xl:mx-32">
+  <main class="flex flex-col space-y-8">
     <!-- Podium -->
-    <div class="flex flex-col lg:flex-row">
+    <div class="flex flex-col lg:flex-row bg-white rounded-lg shadow shadow-gray-300">
       <div
         v-for="user in podium"
         :key="user.name"
-        class="w-full py-10 flex items-center justify-center bg-gray-100 first:bg-yellow-400"
+        class="w-full py-4 sm:py-8 lg:py-10 flex items-center justify-center bg-white first:bg-yellow-400
+        first:rounded-t-lg last:rounded-b-lg
+        lg:first:rounded-none lg:last:rounded-none
+        lg:first:rounded-l-lg lg:last:rounded-r-lg"
       >
         <div class="basis-1/2 flex items-center space-x-16">
           <span class="w-full basis-1/3 text-5xl font-bold">{{
@@ -59,11 +62,11 @@ export default {
     </div>
 
     <!-- Scoring -->
-    <div class="mt-10 mx-4 flex flex-col space-y-2 items-center">
+    <div class="px-4 py-4 flex flex-col space-y-2 items-center bg-white rounded-lg shadow shadow-gray-300">
       <div
         v-for="user in others"
         :key="user.name"
-        class="w-full flex space-x-8"
+        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
       >
         <span class="w-6">{{ others.indexOf(user) + 4 }}</span>
         <span class="grow">{{ user.name }}</span>
