@@ -1,5 +1,7 @@
 <script lang="ts">
 import axios from "axios";
+import anime from "animejs";
+
 import { useUserStore } from "../stores/user";
 
 import Color from "./../enums/Color";
@@ -23,10 +25,10 @@ export default {
   },
   data() {
     return {
-      auth: useUserStore(),
       ColorHelper,
       Color,
       RollStatus,
+      auth: useUserStore(),
       status: RollStatus.LOADING,
       result: {
         color: "" as string,
@@ -34,6 +36,7 @@ export default {
       },
       infoMessage: "" as string,
       balance: 0 as number,
+      tweenedBalance: 0 as number,
       bets: {
         red: [] as Array<{ user: string; value: number }>,
         black: [] as Array<{ user: string; value: number }>,
@@ -102,9 +105,19 @@ export default {
         return;
       }
 
+      let _balance = this.balance;
       this.balance += value;
       this.auth.user.balance -= value;
+
+      anime({
+        targets: this.$refs.balanceInput,
+        value: [_balance, this.balance],
+        round: 1,
+        easing: "linear",
+        duration: 500,
+      });
     },
+
     resetBalance() {
       this.auth.user.balance += this.balance;
       this.balance = 0;
@@ -130,20 +143,6 @@ export default {
           },
         }
       );
-
-      /*
-      const bet = this.bets[color].find((b: { user: string; }) => b.user === this.auth.user.name);
-
-      if (bet) {
-        bet.value += this.balance;
-      } else {
-        this.bets[color].push({
-          user: this.auth.user.name,
-          color: color,
-          value: this.balance,
-        });
-      }
-      */
 
       this.balance = 0;
     },
@@ -201,6 +200,7 @@ export default {
             <AmountButton @add-balance="addBalance" />
             <input
               v-bind="{ value: balance }"
+              ref="balanceInput"
               type="number"
               readonly
               class="px-4 h-12 w-full lg:w-32 outline outline-2 outline-gray-200 rounded shadow shadow-gray-300"
