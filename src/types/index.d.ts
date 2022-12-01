@@ -6,3 +6,7 @@ declare global {
     Echo: any;
   }
 }
+
+declare module 'animejs' {
+  export default anime;
+}

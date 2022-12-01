@@ -10,5 +10,6 @@
 		{
 			"path": "./tsconfig.vitest.json"
 		}
-	]
+	],
+	"typeRoots": ["./types", "./node_modules/@types/"]
 }
