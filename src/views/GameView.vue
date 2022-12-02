@@ -1,6 +1,6 @@
 <script lang="ts">
 import axios from "axios";
-import anime from "animejs";
+import anime, { type AnimeParams } from "animejs";
 
 import { useUserStore } from "../stores/user";
 
@@ -46,29 +46,52 @@ export default {
     };
   },
   mounted() {
+    let wheelSpin = anime({
+      targets: this.$refs.wheel as HTMLElement,
+      rotate: 360 * 5,
+      duration: 6000,
+      easing: "linear",
+      autoplay: false,
+    });
+
     this.getHistories();
 
     window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
       switch (e.status) {
         case "OPEN":
-          this.status = RollStatus.OPEN;
           this.infoMessage = Math.round(e.timer / 1000) + " seconds left";
-
-          console.log(e.bets);
-
           this.bets = e.bets;
+
+          if (this.status == RollStatus.OPEN) return;
+
+          console.log("Bets are open");
+
+          // Reset the wheel
+          anime({
+            targets: this.$refs.wheel as HTMLElement,
+            rotate: 0,
+            duration: 0,
+          });
+
+          this.status = RollStatus.OPEN;
           break;
         case "CLOSE":
           // For late bets
           this.bets = e.bets;
 
-          if ((this.status = RollStatus.CLOSE)) return;
+          if (this.status == RollStatus.CLOSE) return;
+
+          console.log("Rolling...");
+          wheelSpin.restart();
 
           this.status = RollStatus.CLOSE;
           this.infoMessage = "Rolling";
           break;
         case "RESULT":
           if (this.status == RollStatus.RESULT) return;
+
+          console.log("Result: " + e.result.color + " " + e.result.value);
+          wheelSpin.pause();
 
           this.status = RollStatus.RESULT;
           this.result = e.result;
@@ -156,6 +179,7 @@ export default {
     <div class="py-4 bg-white rounded-lg shadow shadow-gray-300">
       <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
         <img
+          ref="wheel"
           src="@/assets/roulette.png"
           alt="Roulette"
           class="py-2 basis-2/3 h-80 w-80 object-contain"
@@ -219,7 +243,10 @@ export default {
     </div>
 
     <!-- Bet buttons -->
-    <div class="flex w-full space-x-4 text-center text-white text-2xl">
+    <div
+      class="flex w-full space-x-4 text-center text-white text-2xl transition-all duration-300"
+      :class="{ 'scale-95': status !== RollStatus.OPEN }"
+    >
       <Bets
         ref="betsRed"
         color="red"
