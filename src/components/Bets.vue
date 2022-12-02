@@ -46,13 +46,15 @@ export default {
       @click="addBet"
       @mouseover="hovered = true"
       @mouseout="hovered = false"
-      class="py-4 font-semibold rounded shadow transition-transform duration-300 ease-in-out"
+      class="py-4 font-semibold rounded shadow transition-transform duration-300 ease-in-out cursor-default"
       :class="{
-        'hover:scale-105': active,
-        'bg-red-500 hover:bg-red-600 shadow-red-300': color == Color.RED,
-        'bg-green-500 hover:bg-green-600 shadow-green-300':
-          color == Color.GREEN,
-        'bg-gray-900 hover:bg-black shadow-gray-500': color == Color.BLACK,
+        'bg-red-500 shadow-red-300': color == Color.RED,
+        'bg-green-500 shadow-green-300': color == Color.GREEN,
+        'bg-gray-900 shadow-gray-500': color == Color.BLACK,
+        'hover:bg-red-600': active && color == Color.RED,
+        'hover:bg-green-600': active && color == Color.GREEN,
+        'hover:bg-black': active && color == Color.BLACK,
+        'hover:scale-105 hover:cursor-pointer': active,
       }"
     >
       x {{ value }}
