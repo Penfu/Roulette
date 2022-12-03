@@ -3,10 +3,11 @@ import { ref } from "vue";
 import { useUserStore } from "./stores/user";
 
 import {
+  CubeIcon,
   HomeIcon,
-  RectangleStackIcon,
+  TrophyIcon,
   BanknotesIcon,
-  ArrowRightOnRectangleIcon,
+  UserIcon,
 } from "@heroicons/vue/24/outline";
 import OpenSidebarIcon from "./components/icons/OpenSidebarIcon.vue";
 import CloseSidebarIcon from "./components/icons/CloseSidebarIcon.vue";
@@ -14,10 +15,11 @@ import CloseSidebarIcon from "./components/icons/CloseSidebarIcon.vue";
 export default {
   name: "App",
   components: {
+    CubeIcon,
     HomeIcon,
-    RectangleStackIcon,
+    TrophyIcon,
     BanknotesIcon,
-    ArrowRightOnRectangleIcon,
+    UserIcon,
     OpenSidebarIcon,
     CloseSidebarIcon,
   },
@@ -43,7 +45,7 @@ export default {
   >
     <!-- Sidebar -->
     <aside
-      class="px-4 py-4 sticky top-0 sm:h-screen bg-gray-100"
+      class="px-4 py-4 sticky top-0 sm:h-screen bg-gray-100 transition-all duration-1000"
       :class="{ 'lg:w-56': showSideBar }"
     >
       <div
@@ -59,16 +61,7 @@ export default {
             class="sm:w-full flex justify-center items-center space-x-2 text-lg"
             :class="{ 'lg:my-6': !showSideBar }"
           >
-            <svg
-              class="w-6 h-6 sm:w-8 sm:h-8 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"
-              />
-            </svg>
+            <CubeIcon class="w-6 h-6" />
             <span
               class="hidden text-lg font-bold"
               :class="{ 'lg:block': showSideBar }"
@@ -113,7 +106,7 @@ export default {
               to="/leaderboard"
               class="p-3 sm:w-full flex justify-center items-center text-lg hover:bg-gray-200 rounded"
             >
-              <RectangleStackIcon class="lg:mx-2 w-6 h-6" />
+              <TrophyIcon class="lg:mx-2 w-6 h-6" />
               <span
                 class="hidden grow font-medium"
                 :class="{ 'lg:block': showSideBar }"
@@ -138,23 +131,10 @@ export default {
           <!-- User Profile -->
           <RouterLink
             v-if="auth.isAuth"
-            to="/"
+            to="/profile"
             class="p-3 flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded"
           >
-            <svg
-              class="w-6 h-6 stroke-current"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <UserIcon class="w-6 h-6" />
             <span
               class="hidden font-medium"
               :class="{ 'lg:block': showSideBar }"

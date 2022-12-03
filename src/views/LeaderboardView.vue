@@ -3,9 +3,6 @@ import axios from "axios";
 
 export default {
   name: "LeaderboardView",
-  setup() {
-    return {};
-  },
   data() {
     return {
       search: "" as string,
