@@ -8,6 +8,7 @@ import {
   TrophyIcon,
   BanknotesIcon,
   UserIcon,
+  ArrowRightOnRectangleIcon,
 } from "@heroicons/vue/24/outline";
 import OpenSidebarIcon from "./components/icons/OpenSidebarIcon.vue";
 import CloseSidebarIcon from "./components/icons/CloseSidebarIcon.vue";
@@ -20,6 +21,7 @@ export default {
     TrophyIcon,
     BanknotesIcon,
     UserIcon,
+    ArrowRightOnRectangleIcon,
     OpenSidebarIcon,
     CloseSidebarIcon,
   },
@@ -34,6 +36,7 @@ export default {
   data() {
     return {
       auth: useUserStore(),
+      userMenuIsOpen: false,
     };
   },
 };
@@ -45,7 +48,7 @@ export default {
   >
     <!-- Sidebar -->
     <aside
-      class="px-4 py-4 sticky top-0 sm:h-screen bg-gray-100 transition-all duration-1000"
+      class="z-20 px-4 py-4 sticky top-0 sm:w-32 sm:h-screen bg-gray-100 transition-width transition-slowest duration-500 ease"
       :class="{ 'lg:w-56': showSideBar }"
     >
       <div
@@ -117,7 +120,7 @@ export default {
         </div>
 
         <!-- Bottom -->
-        <div class="sm:w-full">
+        <div class="w-auto sm:w-full">
           <!-- Balance -->
           <label
             v-show="auth.isAuth"
@@ -129,39 +132,38 @@ export default {
           </label>
 
           <!-- User Profile -->
-          <RouterLink
-            v-if="auth.isAuth"
-            to="/profile"
-            class="p-3 flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded"
-          >
-            <UserIcon class="w-6 h-6" />
-            <span
-              class="hidden font-medium"
-              :class="{ 'lg:block': showSideBar }"
-              >{{ auth.user.name }}</span
+          <div v-if="auth.isAuth"
+          class="flex">
+            <button
+              @click="userMenuIsOpen = !userMenuIsOpen"
+              class="p-3 sm:w-full flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded"
             >
-          </RouterLink>
+              <UserIcon class="w-6 h-6" />
+              <span
+                class="hidden font-medium"
+                :class="{ 'lg:block': showSideBar }"
+                >{{ auth.user.name }}</span
+              >
+            </button>
+
+            <div v-show="userMenuIsOpen" class="relative w-36 flex flex-col bg-blue-500 rounded-lg shadow shadow-gray-300">
+              <RouterLink to="/profile" class="py-2 hover:bg-gray-100 rounded text-left">
+                <span class="ml-4">Profile</span>
+              </RouterLink>
+              <button @click="auth.logout" class="py-2 hover:bg-gray-100 rounded text-left">
+                <span class="ml-4">Logout</span>
+              </button>
+            </div>
+
+          </div>
 
           <!-- Login btn -->
           <RouterLink
             v-else
             to="/login"
-            class="w-full flex items-center text-lg hover:bg-gray-200 rounded"
+            class="p-3 flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded"
           >
-            <svg
-              class="w-6 h-6 stroke-current"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <ArrowRightOnRectangleIcon class="w-6 h-6" />
             <span
               class="hidden font-medium"
               :class="{ 'lg:block': showSideBar }"
@@ -172,6 +174,6 @@ export default {
       </div>
     </aside>
 
-    <RouterView class="px-4 pb-4 sm:pt-4 grow" />
+    <RouterView class="z-10 px-4 pb-4 sm:pt-4 grow" />
   </div>
 </template>

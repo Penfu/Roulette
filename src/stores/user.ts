@@ -19,8 +19,10 @@ export const useUserStore = defineStore("user", () => {
   watch(
     token,
     (newToken) => {
-      if (newToken == null) localStorage.removeItem("token");
-      else localStorage.setItem("token", JSON.stringify(newToken));
+      if (newToken == null)
+        localStorage.removeItem("token");
+      else
+        localStorage.setItem("token", JSON.stringify(newToken));
     },
     {
       deep: true,
