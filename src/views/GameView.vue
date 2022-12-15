@@ -133,7 +133,7 @@ export default {
       this.auth.user.balance -= value;
 
       anime({
-        targets: this.$refs.balanceInput,
+        targets: this.$refs.balanceInput as HTMLElement,
         value: [_balance, this.balance],
         round: 1,
         easing: "linear",

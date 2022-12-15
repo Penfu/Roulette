@@ -20,27 +20,6 @@ export default {
         ];
       else return this.users.slice(0, 3);
     },
-  },
-  async mounted() {
-    this.users = await this.getUsers();
-
-    this.loading = false;
-  },
-  methods: {
-    async getUsers() {
-      const response = await axios.get("http://localhost:8000/api/users");
-
-      return response.data
-        .sort((a: any, b: any) => b.balance - a.balance)
-        .map((user: any, index: number) => {
-          return {
-            name: user.name,
-            balance: user.balance,
-            rank: index + 1,
-          };
-        });
-    },
-
     filteredLeaderboard() {
       return this.users
         .slice(3)
@@ -48,6 +27,21 @@ export default {
           user.name.toLowerCase().includes(this.search.toLowerCase())
         );
     },
+  },
+  async mounted() {
+    const response = await axios.get("http://localhost:8000/api/users");
+
+    this.users = response.data
+      .sort((a: any, b: any) => b.balance - a.balance)
+      .map((user: any, index: number) => {
+        return {
+          name: user.name,
+          balance: user.balance,
+          rank: index + 1,
+        };
+      });
+
+    this.loading = false;
   },
 };
 </script>
@@ -89,8 +83,8 @@ export default {
       />
       <div class="p-4 w-24 bg-gray-200 rounded-r-lg text-center">
         <span v-if="loading" class="text-xl animate-pulse">...</span>
-        <span v-else class="text-lg">
-          {{ filteredLeaderboard().length }} / {{ users.length - 3 }}
+        <span v-else class="text-lg font-semibold">
+          {{ filteredLeaderboard.length }} / {{ users.length - 3 }}
         </span>
       </div>
     </div>
@@ -114,7 +108,7 @@ export default {
       class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-white rounded-lg shadow shadow-gray-300 overflow-y-auto"
     >
       <div
-        v-for="user in filteredLeaderboard()"
+        v-for="user in filteredLeaderboard"
         :key="user.name"
         class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
       >
@@ -124,7 +118,7 @@ export default {
       </div>
 
       <div
-        v-if="search && !filteredLeaderboard().length"
+        v-if="search && !filteredLeaderboard.length"
         class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
       >
         <p>No users found</p>

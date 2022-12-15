@@ -23,9 +23,10 @@ const router = createRouter({
       component: () => import("../views/LeaderboardView.vue"),
     },
     {
-      path: "/profile",
+      path: "/profile/:username?",
       name: "profile",
       component: ProfileView,
+      props: true,
     },
     {
       path: "/login",

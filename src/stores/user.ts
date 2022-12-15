@@ -45,7 +45,7 @@ export const useUserStore = defineStore("user", () => {
     user.value = response.data.user;
     token.value = response.data.token;
 
-    // await loginFromToken(token.value as string);
+    await loginFromToken(token.value as string);
   }
 
   async function loginFromToken(token: string) {
