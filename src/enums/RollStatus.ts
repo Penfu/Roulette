@@ -1,8 +1,6 @@
-const RollStatus = Object.freeze({
-  LOADING: "loading",
-  OPEN: "open",
-  CLOSE: "close",
-  RESULT: "result",
-});
-
-export default RollStatus;
+export enum RollStatus {
+  LOADING = "loading",
+  OPEN = "open",
+  CLOSE = "close",
+  RESULT = "result",
+}

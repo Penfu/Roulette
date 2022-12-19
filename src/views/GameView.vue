@@ -1,175 +1,163 @@
-<script lang="ts">
+<script setup lang="ts">
 import axios from "axios";
 import anime, { type AnimeParams } from "animejs";
 
-import { useUserStore } from "../stores/user";
+import { useUserStore } from "@/stores/user";
 
-import Color from "./../enums/Color";
-import RollStatus from "./../enums/RollStatus";
+import Color from "@/enums/Color";
+import { RollStatus } from "@/enums/RollStatus";
 
-import ColorHelper from "./../helpers/Color";
+import ColorHelper from "@/helpers/Color";
 
-import Bets from "../components/Bets.vue";
-import AmountButton from "../components/AmountButton.vue";
+import Bets from "@/components/Bets.vue";
+import AmountButton from "@/components/AmountButton.vue";
 
-import IconCross from "../components/icons/IconCross.vue";
-import Histories from "../components/Histories.vue";
+import IconCross from "@/components/icons/IconCross.vue";
+import Histories from "@/components/Histories.vue";
+import { onMounted, ref } from "vue";
 
-export default {
-  name: "GameView",
-  components: {
-    Histories,
-    AmountButton,
-    IconCross,
-    Bets,
-  },
-  data() {
-    return {
-      ColorHelper,
-      Color,
-      RollStatus,
-      auth: useUserStore(),
-      status: RollStatus.LOADING,
-      result: {
-        color: "" as string,
-        value: 0 as number,
-      },
-      infoMessage: "" as string,
-      balance: 0 as number,
-      tweenedBalance: 0 as number,
-      bets: {
-        red: [] as Array<{ user: string; value: number }>,
-        black: [] as Array<{ user: string; value: number }>,
-        green: [] as Array<{ user: string; value: number }>,
-      },
-      histories: [] as Array<{ color: string; value: number }>,
-    };
-  },
-  mounted() {
-    let wheelSpin = anime({
-      targets: this.$refs.wheel as HTMLElement,
-      rotate: 360 * 5,
-      duration: 6000,
-      easing: "linear",
-      autoplay: false,
-    });
+const auth = useUserStore();
+const status = ref(RollStatus.OPEN);
+const result = ref({
+  color: "" as string,
+  value: 0 as number,
+});
+const infoMessage = ref("");
 
-    this.getHistories();
+const balance = ref(0 as number);
 
-    window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
-      switch (e.status) {
-        case "OPEN":
-          this.infoMessage = Math.round(e.timer / 1000) + " seconds left";
-          this.bets = e.bets;
+const bets = ref({
+  red: [] as Array<{ user: string; value: number }>,
+  black: [] as Array<{ user: string; value: number }>,
+  green: [] as Array<{ user: string; value: number }>,
+});
+const histories = ref([] as Array<{ color: string; value: number }>);
 
-          if (this.status == RollStatus.OPEN) return;
+const wheel = ref(HTMLInputElement);
+const balanceInput = ref(HTMLInputElement);
 
-          console.log("Bets are open");
+onMounted(async () => {
+  histories.value = (await axios.get("http://localhost:8000/api/rolls")).data;
 
-          // Reset the wheel
-          anime({
-            targets: this.$refs.wheel as HTMLElement,
-            rotate: 0,
-            duration: 0,
-          });
+  let wheelSpin: AnimeParams = anime({
+    targets: wheel.value,
+    rotate: 360 * 5,
+    duration: 6000,
+    easing: "linear",
+    autoplay: false,
+  });
 
-          this.status = RollStatus.OPEN;
-          break;
-        case "CLOSE":
-          // For late bets
-          this.bets = e.bets;
+  window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
+    switch (e.status) {
+      case "OPEN":
+        infoMessage.value = Math.round(e.timer / 1000) + " seconds left";
+        bets.value = e.bets;
 
-          if (this.status == RollStatus.CLOSE) return;
+        if (status.value == RollStatus.OPEN) return;
 
-          console.log("Rolling...");
-          wheelSpin.restart();
+        console.log("Bets are open");
 
-          this.status = RollStatus.CLOSE;
-          this.infoMessage = "Rolling";
-          break;
-        case "RESULT":
-          if (this.status == RollStatus.RESULT) return;
+        // Reset the wheel
+        anime({
+          targets: wheel.value,
+          rotate: 0,
+          duration: 0,
+        });
 
-          console.log("Result: " + e.result.color + " " + e.result.value);
-          wheelSpin.pause();
+        status.value = RollStatus.OPEN;
+        break;
+      case "CLOSE":
+        // For late bets
+        bets.value = e.bets;
 
-          this.status = RollStatus.RESULT;
-          this.result = e.result;
-          this.infoMessage = e.result.value + " " + e.result.color + " won";
+        if (status.value == RollStatus.CLOSE) return;
 
-          this.bets.red = [];
-          this.bets.black = [];
-          this.bets.green = [];
+        console.log("Rolling...");
+        wheelSpin.restart();
 
-          this.histories.unshift({
-            color: e.result.color,
-            value: e.result.value,
-          });
+        status.value = RollStatus.CLOSE;
+        infoMessage.value = "Rolling";
+        break;
+      case "RESULT":
+        if (status.value == RollStatus.RESULT) return;
 
-          if (this.histories.length > 10) {
-            this.histories.pop();
-          }
-          break;
-      }
-    });
-  },
-  methods: {
-    async getHistories() {
-      this.histories = await (
-        await axios.get("http://localhost:8000/api/rolls")
-      ).data;
-    },
+        console.log("Result: " + e.result.color + " " + e.result.value);
+        wheelSpin.pause();
 
-    addBalance(value: number) {
-      if (isNaN(value)) value = this.auth.user.balance;
+        status.value = RollStatus.RESULT;
+        result.value = e.result;
+        infoMessage.value = e.result.value + " " + e.result.color + " won";
 
-      if (this.auth.user.balance < value) {
-        console.log("You don't have enough money!");
-        return;
-      }
+        bets.value.red = [];
+        bets.value.black = [];
+        bets.value.green = [];
 
-      let _balance = this.balance;
-      this.balance += value;
-      this.auth.user.balance -= value;
+        histories.value.unshift({
+          color: e.result.color,
+          value: e.result.value,
+        });
 
-      anime({
-        targets: this.$refs.balanceInput as HTMLElement,
-        value: [_balance, this.balance],
-        round: 1,
-        easing: "linear",
-        duration: 500,
-      });
-    },
-
-    resetBalance() {
-      this.auth.user.balance += this.balance;
-      this.balance = 0;
-    },
-
-    async addBet(color: string) {
-      if (this.balance === 0) {
-        console.log("Select an amount to bet!");
-        return;
-      }
-
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie");
-      axios.post(
-        "/bets",
-        {
-          user: this.auth.user.name,
-          color: color,
-          value: this.balance,
-        },
-        {
-          headers: {
-            "X-Socket-ID": window.Echo.socketId(),
-          },
+        if (histories.value.length > 10) {
+          histories.value.pop();
         }
-      );
+        break;
+    }
+  });
+});
 
-      this.balance = 0;
+const addBalance = (value: number) => {
+  if (auth.user.balance < value) {
+    console.log("You don't have enough money!");
+    return;
+  }
+
+  auth.user.balance -= value;
+  balance.value += value;
+
+  if (value <= 1) {
+    return;
+  }
+
+  anime({
+    targets: balanceInput.value,
+    value: [balance.value - value, balance.value],
+    round: 1,
+    duration: 500,
+    easing: "linear",
+  });
+};
+
+const resetBalance = () => {
+  auth.user.balance += balance.value;
+  balance.value = 0;
+};
+
+const addBet = async (color: string) => {
+  if (status.value !== RollStatus.OPEN) {
+    console.log("Bets are closed!");
+    return;
+  }
+
+  if (balance.value === 0) {
+    console.log("Select an amount to bet!");
+    return;
+  }
+
+  await axios.get("http://localhost:8000/sanctum/csrf-cookie");
+  axios.post(
+    "/bets",
+    {
+      color: color,
+      value: balance.value,
     },
-  },
+    {
+      headers: {
+        "X-Socket-ID": window.Echo.socketId(),
+      },
+    }
+  );
+
+  balance.value = 0;
 };
 </script>
 
@@ -221,7 +209,7 @@ export default {
             <AmountButton @add-balance="addBalance" :value="10" />
             <AmountButton @add-balance="addBalance" :value="100" />
             <AmountButton @add-balance="addBalance" :value="1000" />
-            <AmountButton @add-balance="addBalance" />
+            <AmountButton @add-balance="addBalance(auth.user.balance)" />
             <input
               v-bind="{ value: balance }"
               ref="balanceInput"

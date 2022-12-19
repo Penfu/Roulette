@@ -1,41 +1,26 @@
-<script lang="ts">
-import Bet from "../components/Bet.vue";
-import Color from "./../enums/Color";
+<script setup lang="ts">
+import { ref } from "vue";
+import Bet from "@/components/Bet.vue";
+import Color from "@/enums/Color";
 
-export default {
-  components: {
-    Bet,
-  },
-  emits: ["add-bet"],
-  props: {
-    active: Boolean,
-    color: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: Number,
-      required: true,
-    },
-    bets: {
-      type: Array,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      Color,
-      bet: Bet,
-      hovered: false,
-    };
-  },
-  methods: {
-    addBet() {
-      if (this.active) {
-        this.$emit("add-bet", this.color);
-      }
-    },
-  },
+const props = defineProps<{
+  active: boolean;
+  color: any;
+  value: number;
+  bets: Array<{ user: string; value: number }>;
+}>();
+
+const emit = defineEmits<{
+  "add-bet": (color: any) => void;
+}>();
+
+const bet = ref({});
+const hovered = ref(false);
+
+const addBet = () => {
+  if (props.active) {
+    emit("add-bet", props.color);
+  }
 };
 </script>
 

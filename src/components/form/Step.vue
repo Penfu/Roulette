@@ -1,12 +1,10 @@
-<script lang="ts">
-export default {
-  name: "Step",
-  props: {
-    step: Number,
-    number: Number,
-    title: String,
-  },
-};
+<script setup lang="ts">
+
+defineProps<{
+  step: number;
+  number: number;
+  title: string;
+}>();
 </script>
 
 <template>

@@ -1,11 +1,9 @@
-<script lang="ts">
-export default {
-  name: "Bet",
-  props: {
-    name: String,
-    value: Number,
-  },
-};
+<script setup lang="ts">
+
+defineProps<{
+  name: string;
+  value: number;
+}>();
 </script>
 
 <template>

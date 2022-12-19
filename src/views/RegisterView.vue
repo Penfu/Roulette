@@ -1,51 +1,39 @@
-<script lang="ts">
+<script setup lang="ts">
 import { useUserStore } from "../stores/user";
-import step from "../components/form/Step.vue";
+import { ref } from "vue";
+import router from "@/router";
+import Step from "@/components/form/Step.vue";
 
-export default {
-  name: "RegisterView",
-  components: {
-    step,
-  },
-  setup() {
-    const userStore = useUserStore();
-    return { userStore };
-  },
-  data() {
-    return {
-      step: 1 as number,
-      csrfToken: "" as string,
-      username: "" as string,
-      email: "" as string,
-      password: "" as string,
-      passwordConfirmation: "" as string,
-      errors: {},
-    };
-  },
-  methods: {
-    previousStep() {
-      if (this.step > 1) this.step--;
-    },
-    nextStep(e: any) {
-      if (this.step < 3) {
-        e.preventDefault();
-        this.step++;
-      }
-    },
+const userStore = useUserStore();
+const step = ref(1);
+const username = ref("");
+const email = ref("");
+const password = ref("");
+const passwordConfirmation = ref("");
+const errors = ref({});
 
-    async register() {
-      if (this.password !== this.passwordConfirmation) {
-        this.errors = { password: ["Passwords do not match"] };
-        return;
-      }
+const previousStep = () => {
+  if (step.value > 1) step.value--;
+};
 
-      await this.userStore.register(this.username, this.email, this.password);
+const nextStep = (e: any) => {
+  if (step.value < 3) {
+    e.preventDefault();
+    step.value++;
+  }
+};
 
-      if (this.userStore.isAuth) {
-        this.$router.push("/");
-      }
-    },
-  },
+const register = async () => {
+  if (password.value !== passwordConfirmation.value) {
+    errors.value = { password: ["Passwords do not match"] };
+    return;
+  }
+
+  await userStore.register(username.value, email.value, password.value);
+
+  if (userStore.isAuth) {
+    router.push("/");
+  }
 };
 </script>
 

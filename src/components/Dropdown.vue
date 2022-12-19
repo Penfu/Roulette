@@ -1,30 +1,23 @@
-<script lang="ts">
-export default {
-  name: "Dropdown",
-  data() {
-    return {
-      open: false
-    };
-  },
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue';
 
-  created() {
-    window.addEventListener("click", this.close);
-  },
+const open = ref(false);
 
-  beforeDestroy() {
-    window.removeEventListener("click", this.close);
-  },
+onMounted(() => {
+  window.addEventListener('click', close);
+});
 
-  methods: {
-    toggle() {
-      this.open = !this.open;
-    },
+onUnmounted(() => {
+  window.removeEventListener('click', close);
+});
 
-    close(e: any) {
-      if (!this.$el.contains(e.target)) {
-        this.open = false;
-      }
-    }
+const toggle = () => {
+  open.value = !open.value;
+};
+
+const close = (e: any) => {
+  if (!e.target.closest('.dropdown')) {
+    open.value = false;
   }
 };
 </script>

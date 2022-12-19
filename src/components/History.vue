@@ -1,19 +1,11 @@
-<script lang="ts">
-import Color from "./../enums/Color";
+<script setup lang="ts">
+import type Color from "./../enums/Color";
 import Helper from "./../helpers/Color";
 
-export default {
-  props: {
-    color: String,
-    value: Number,
-  },
-  data() {
-    return {
-      Helper,
-      Color,
-    };
-  },
-};
+const props = defineProps<{
+  color: any;
+  value: number;
+}>();
 </script>
 
 <template>

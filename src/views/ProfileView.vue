@@ -1,29 +1,25 @@
-<script lang="ts">
+<script setup lang="ts">
 import axios from "axios";
+import { onMounted, ref } from "vue";
 import { useUserStore } from "../stores/user";
 
-export default {
-  name: "ProfileView",
-  props: {
-    username: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  username: {
+    type: String,
+    required: true,
   },
-  data() {
-    return {
-      auth: useUserStore(),
-      user: null as any,
-      bets: [] as Array<any>,
-    };
-  },
-  async mounted() {
-    this.user = await axios
-      .get(`http://localhost:8000/api/users/penfu`)
-      .then((res) => res.data);
-    this.bets = Array.from({ length: 10 });
-  },
-};
+});
+
+const auth = useUserStore();
+const user = ref(null as any);
+const bets = ref([] as Array<any>);
+
+onMounted(async () => {
+  user.value = await axios
+    .get(`http://localhost:8000/api/users/${props.username}`)
+    .then((res) => res.data);
+  bets.value = Array.from({ length: 10 });
+});
 </script>
 
 <template>

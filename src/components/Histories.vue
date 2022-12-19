@@ -1,17 +1,12 @@
-<script lang="ts">
-import History from "../components/History.vue";
+<script setup lang="ts">
+import History from "@/components/History.vue";
 
-export default {
-  components: {
-    History,
-  },
-  props: {
-    histories: {
-      type: Array as () => Array<{ color: string; value: number }>,
-      required: true,
-    },
-  },
-};
+const props = defineProps<{
+  histories: Array<{ color: string; value: number }>;
+}>();
+
+console.log("Histories: " + props.histories);
+
 </script>
 
 <template>

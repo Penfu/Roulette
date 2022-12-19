@@ -1,28 +1,19 @@
-<script lang="ts">
+<script setup lang="ts">
+import router from "@/router";
+import { ref } from "vue";
 import { useUserStore } from "../stores/user";
 
-export default {
-  setup() {
-    const userStore = useUserStore();
-    return { userStore };
-  },
-  data() {
-    return {
-      csrfToken: "" as string,
-      email: "" as string,
-      password: "" as string,
-      errors: {},
-    };
-  },
-  methods: {
-    async login() {
-      await this.userStore.login(this.email, this.password);
+const userStore = useUserStore();
 
-      if (this.userStore.isAuth) {
-        this.$router.push("/");
-      }
-    }
-  },
+const email = ref("");
+const password = ref("");
+
+const login = async () => {
+  await userStore.login(email.value, password.value);
+
+  if (userStore.isAuth) {
+    router.push("/");
+  }
 };
 </script>
 

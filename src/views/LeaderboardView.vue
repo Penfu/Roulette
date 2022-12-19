@@ -1,49 +1,44 @@
-<script lang="ts">
+<script setup lang="ts">
 import axios from "axios";
+import { computed, onMounted, ref } from "vue";
 
-export default {
-  name: "LeaderboardView",
-  data() {
-    return {
-      loading: true,
-      search: "" as string,
-      users: [] as Array<{ name: string; balance: number; rank: number }>,
-    };
-  },
-  computed: {
-    podium() {
-      if (this.loading)
-        return [
-          { name: "", balance: null, rank: 1 },
-          { name: "", balance: null, rank: 2 },
-          { name: "", balance: null, rank: 3 },
-        ];
-      else return this.users.slice(0, 3);
-    },
-    filteredLeaderboard() {
-      return this.users
-        .slice(3)
-        .filter((user) =>
-          user.name.toLowerCase().includes(this.search.toLowerCase())
-        );
-    },
-  },
-  async mounted() {
-    const response = await axios.get("http://localhost:8000/api/users");
+const loading = ref(true);
+const search = ref("");
+const users = ref([] as Array<{ name: string; balance: number; rank: number }>);
 
-    this.users = response.data
-      .sort((a: any, b: any) => b.balance - a.balance)
-      .map((user: any, index: number) => {
-        return {
-          name: user.name,
-          balance: user.balance,
-          rank: index + 1,
-        };
-      });
+const podium = computed(() => {
+  if (loading.value)
+    return [
+      { name: "", balance: null, rank: 1 },
+      { name: "", balance: null, rank: 2 },
+      { name: "", balance: null, rank: 3 },
+    ];
+  else return users.value.slice(0, 3);
+});
 
-    this.loading = false;
-  },
-};
+const filteredLeaderboard = computed(() => {
+  return users.value
+    .slice(3)
+    .filter((user) =>
+      user.name.toLowerCase().includes(search.value.toLowerCase())
+    );
+});
+
+onMounted(async () => {
+  const response = await axios.get("http://localhost:8000/api/users");
+
+  users.value = response.data
+    .sort((a: any, b: any) => b.balance - a.balance)
+    .map((user: any, index: number) => {
+      return {
+        name: user.name,
+        balance: user.balance,
+        rank: index + 1,
+      };
+    });
+
+  loading.value = false;
+});
 </script>
 
 <template>

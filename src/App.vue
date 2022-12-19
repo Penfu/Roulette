@@ -1,4 +1,4 @@
-<script lang="ts">
+<script setup lang="ts">
 import { ref } from "vue";
 import { useUserStore } from "./stores/user";
 
@@ -13,33 +13,11 @@ import {
 import OpenSidebarIcon from "./components/icons/OpenSidebarIcon.vue";
 import CloseSidebarIcon from "./components/icons/CloseSidebarIcon.vue";
 
-export default {
-  name: "App",
-  components: {
-    CubeIcon,
-    HomeIcon,
-    TrophyIcon,
-    BanknotesIcon,
-    UserIcon,
-    ArrowRightOnRectangleIcon,
-    OpenSidebarIcon,
-    CloseSidebarIcon,
-  },
-  watch: {
-    $route() {},
-  },
-  setup() {
-    let showSideBar = ref(false);
-    const toggleSideBar = () => (showSideBar.value = !showSideBar.value);
-    return { showSideBar, toggleSideBar };
-  },
-  data() {
-    return {
-      auth: useUserStore(),
-      userMenuIsOpen: false,
-    };
-  },
-};
+const showSideBar = ref(false);
+const toggleSideBar = () => (showSideBar.value = !showSideBar.value);
+
+const auth = useUserStore();
+const userMenuIsOpen = ref(false);
 </script>
 
 <template>
@@ -147,7 +125,7 @@ export default {
             </button>
 
             <div v-show="userMenuIsOpen" class="relative w-36 flex flex-col bg-blue-500 rounded-lg shadow shadow-gray-300">
-              <RouterLink to="/profile" class="py-2 hover:bg-gray-100 rounded text-left">
+              <RouterLink :to="'/profile/' + auth.user.name" class="py-2 hover:bg-gray-100 rounded text-left">
                 <span class="ml-4">Profile</span>
               </RouterLink>
               <button @click="auth.logout" class="py-2 hover:bg-gray-100 rounded text-left">
