@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type Bet from '@/models/Bet';
+import type Bet from '@/models/bet';
 
 defineProps<{
   bet: Bet;

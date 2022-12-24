@@ -2,8 +2,8 @@
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "../stores/user";
 
-import User from "@/models/User";
-import type Bet from "@/models/Bet";
+import User from "@/models/user";
+import type Bet from "@/models/bet";
 
 import BetHistory from "@/components/game/bets/History.vue";
 

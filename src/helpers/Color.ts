@@ -1,4 +1,4 @@
-import Color from "@/enums/Color";
+import Color from "@/enums/color";
 
 export default {
   getClassFromColor: (color: string | undefined) => {

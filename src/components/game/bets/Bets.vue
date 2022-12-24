@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Color from "@/enums/Color";
+import Color from "@/enums/color";
 import BetCard from "@/components/game/bets/Bet.vue";
 
-import type Bet from "@/models/Bet";
+import type Bet from "@/models/bet";
 
 const props = defineProps<{
   active: boolean;

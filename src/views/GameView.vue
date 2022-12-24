@@ -3,18 +3,18 @@ import { onMounted, ref } from "vue";
 import axios from "axios";
 import anime, { type AnimeParams } from "animejs";
 
-import Color from "@/enums/Color";
-import ColorHelper from "@/helpers/Color";
+import Color from "@/enums/color";
+import ColorHelper from "@/helpers/color";
 
 import { useUserStore } from "@/stores/user";
-import { RollStatus } from "@/enums/RollStatus";
+import { RollStatus } from "@/enums/rollStatus";
 
 import Histories from "@/components/game/rolls/Histories.vue";
 import AmountButton from "@/components/game/AmountButton.vue";
 import Bets from "@/components/game/bets/Bets.vue";
 
-import type Bet from "@/models/Bet";
-import Roll from "@/models/Roll";
+import type Bet from "@/models/bet";
+import Roll from "@/models/roll";
 
 import IconCross from "@/components/icons/IconCross.vue";
 

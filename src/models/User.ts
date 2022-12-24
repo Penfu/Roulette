@@ -1,5 +1,5 @@
 import axios from "axios";
-import type Bet from "./Bet";
+import type Bet from "./bet";
 
 export default class User {
   constructor(
