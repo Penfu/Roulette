@@ -1,25 +1,26 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Bet from "@/components/Bet.vue";
 import Color from "@/enums/Color";
+import BetCard from "@/components/game/bets/Bet.vue";
+
+import type Bet from "@/models/Bet";
 
 const props = defineProps<{
   active: boolean;
   color: any;
   value: number;
-  bets: Array<{ user: string; value: number }>;
+  bets: Bet[];
 }>();
 
 const emit = defineEmits<{
-  "add-bet": (color: any) => void;
+  (e: 'addBet', color: any): void;
 }>();
 
-const bet = ref({});
 const hovered = ref(false);
 
 const addBet = () => {
   if (props.active) {
-    emit("add-bet", props.color);
+    emit("addBet", props.color);
   }
 };
 </script>
@@ -48,11 +49,10 @@ const addBet = () => {
       class="p-2 h-64 overflow-y-hidden space-y-2 bg-white text-left text-xl text-gray-800 rounded shadow shadow-gray-300 transition-transform duration-300 ease-in-out"
       :class="{ 'scale-105': active && hovered }"
     >
-      <Bet
+      <BetCard
         v-for="(bet, index) in bets"
         :key="index"
-        :name="bet.user"
-        :value="bet.value"
+        :bet="bet"
       />
     </div>
   </div>

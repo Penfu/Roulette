@@ -1,37 +1,37 @@
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
 import axios from "axios";
 import anime, { type AnimeParams } from "animejs";
 
-import { useUserStore } from "@/stores/user";
-
 import Color from "@/enums/Color";
-import { RollStatus } from "@/enums/RollStatus";
-
 import ColorHelper from "@/helpers/Color";
 
-import Bets from "@/components/Bets.vue";
-import AmountButton from "@/components/AmountButton.vue";
+import { useUserStore } from "@/stores/user";
+import { RollStatus } from "@/enums/RollStatus";
+
+import Histories from "@/components/game/rolls/Histories.vue";
+import AmountButton from "@/components/game/AmountButton.vue";
+import Bets from "@/components/game/bets/Bets.vue";
+
+import type Bet from "@/models/Bet";
+import Roll from "@/models/Roll";
 
 import IconCross from "@/components/icons/IconCross.vue";
-import Histories from "@/components/Histories.vue";
-import { onMounted, ref } from "vue";
 
 const auth = useUserStore();
-const status = ref(RollStatus.OPEN);
-const result = ref({
-  color: "" as string,
-  value: 0 as number,
-});
+const status = ref(RollStatus.LOADING);
+const result = ref({} as Roll);
+
 const infoMessage = ref("");
 
 const balance = ref(0 as number);
 
 const bets = ref({
-  red: [] as Array<{ user: string; value: number }>,
-  black: [] as Array<{ user: string; value: number }>,
-  green: [] as Array<{ user: string; value: number }>,
+  red: [] as Bet[],
+  black: [] as Bet[],
+  green: [] as Bet[],
 });
-const histories = ref([] as Array<{ color: string; value: number }>);
+const histories = ref([] as Roll[]);
 
 const wheel = ref(HTMLInputElement);
 const balanceInput = ref(HTMLInputElement);
@@ -67,8 +67,7 @@ onMounted(async () => {
         status.value = RollStatus.OPEN;
         break;
       case "CLOSE":
-        // For late bets
-        bets.value = e.bets;
+        bets.value = e.bets; // For late bets
 
         if (status.value == RollStatus.CLOSE) return;
 
@@ -92,10 +91,7 @@ onMounted(async () => {
         bets.value.black = [];
         bets.value.green = [];
 
-        histories.value.unshift({
-          color: e.result.color,
-          value: e.result.value,
-        });
+        histories.value.unshift(new Roll(e.result.value, e.result.color));
 
         if (histories.value.length > 10) {
           histories.value.pop();
@@ -237,26 +233,26 @@ const addBet = async (color: string) => {
     >
       <Bets
         ref="betsRed"
+        :active="status === RollStatus.OPEN"
         color="red"
         :value="2"
-        :bets="bets[Color.RED]"
-        :active="status === RollStatus.OPEN"
+        :bets="bets[Color.RED] as Bet[]"
         @add-bet="addBet"
       />
       <Bets
         ref="betsGreen"
+        :active="status === RollStatus.OPEN"
         color="green"
         :value="13"
-        :bets="bets[Color.GREEN]"
-        :active="status === RollStatus.OPEN"
+        :bets="bets[Color.GREEN] as Bet[]"
         @add-bet="addBet"
       />
       <Bets
         ref="betsBlack"
+        :active="status === RollStatus.OPEN"
         color="black"
         :value="2"
-        :bets="bets[Color.BLACK]"
-        :active="status === RollStatus.OPEN"
+        :bets="bets[Color.BLACK] as Bet[]"
         @add-bet="addBet"
       />
     </div>

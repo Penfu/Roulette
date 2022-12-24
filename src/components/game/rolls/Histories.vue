@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import History from "@/components/History.vue";
+import History from "@/components/game/rolls/History.vue";
 
 const props = defineProps<{
   histories: Array<{ color: string; value: number }>;

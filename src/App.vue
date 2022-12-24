@@ -21,9 +21,7 @@ const userMenuIsOpen = ref(false);
 </script>
 
 <template>
-  <div
-    class="min-h-screen flex flex-col sm:flex-row space-y-4 sm:space-y-0 bg-gray-100"
-  >
+  <div class="min-h-screen flex flex-col sm:flex-row space-y-4 sm:space-y-0 bg-gray-100">
     <!-- Sidebar -->
     <aside
       class="z-20 px-4 py-4 sticky top-0 sm:w-32 sm:h-screen bg-gray-100 transition-width transition-slowest duration-500 ease"
@@ -32,10 +30,7 @@ const userMenuIsOpen = ref(false);
       <div
         class="py-4 px-2 sm:py-2 w-full h-full flex flex-row sm:flex-col justify-center items-center space-x-4 sm:space-x-0 overflow-hidden text-gray-700 bg-white rounded-lg shadow shadow-gray-300"
       >
-        <div
-          class="lg:py-4 my-2 px-4 sm:w-full flex"
-          :class="{ 'flex-col-reverse': !showSideBar }"
-        >
+        <div class="lg:py-4 my-2 px-4 sm:w-full flex" :class="{ 'flex-col-reverse': !showSideBar }">
           <!-- Title -->
           <RouterLink
             to="/"
@@ -43,11 +38,7 @@ const userMenuIsOpen = ref(false);
             :class="{ 'lg:my-6': !showSideBar }"
           >
             <CubeIcon class="w-6 h-6" />
-            <span
-              class="hidden text-lg font-bold"
-              :class="{ 'lg:block': showSideBar }"
-              >Roll</span
-            >
+            <span class="hidden text-lg font-bold" :class="{ 'lg:block': showSideBar }">Roll</span>
           </RouterLink>
 
           <!-- Toggle button -->
@@ -59,10 +50,7 @@ const userMenuIsOpen = ref(false);
               v-if="!showSideBar"
               class="w-7 h-7 text-gray-600 group-hover:text-gray-800"
             />
-            <CloseSidebarIcon
-              v-else
-              class="w-7 h-7 text-gray-600 group-hover:text-gray-800"
-            />
+            <CloseSidebarIcon v-else class="w-7 h-7 text-gray-600 group-hover:text-gray-800" />
           </button>
         </div>
 
@@ -76,9 +64,7 @@ const userMenuIsOpen = ref(false);
               class="p-3 sm:w-full flex justify-center items-center text-lg hover:bg-gray-200 rounded"
             >
               <HomeIcon class="lg:mx-2 w-6 h-6" />
-              <span
-                class="hidden grow font-medium"
-                :class="{ 'lg:block': showSideBar }"
+              <span class="hidden grow font-medium" :class="{ 'lg:block': showSideBar }"
                 >Roulette</span
               >
             </RouterLink>
@@ -88,9 +74,7 @@ const userMenuIsOpen = ref(false);
               class="p-3 sm:w-full flex justify-center items-center text-lg hover:bg-gray-200 rounded"
             >
               <TrophyIcon class="lg:mx-2 w-6 h-6" />
-              <span
-                class="hidden grow font-medium"
-                :class="{ 'lg:block': showSideBar }"
+              <span class="hidden grow font-medium" :class="{ 'lg:block': showSideBar }"
                 >Leaderboard</span
               >
             </RouterLink>
@@ -110,29 +94,31 @@ const userMenuIsOpen = ref(false);
           </label>
 
           <!-- User Profile -->
-          <div v-if="auth.isAuth"
-          class="flex">
+          <div v-if="auth.isAuth" class="flex">
             <button
               @click="userMenuIsOpen = !userMenuIsOpen"
               class="p-3 sm:w-full flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded"
             >
               <UserIcon class="w-6 h-6" />
-              <span
-                class="hidden font-medium"
-                :class="{ 'lg:block': showSideBar }"
-                >{{ auth.user.name }}</span
-              >
+              <span class="hidden font-medium" :class="{ 'lg:block': showSideBar }">{{
+                auth.user.name
+              }}</span>
             </button>
 
-            <div v-show="userMenuIsOpen" class="relative w-36 flex flex-col bg-blue-500 rounded-lg shadow shadow-gray-300">
-              <RouterLink :to="'/profile/' + auth.user.name" class="py-2 hover:bg-gray-100 rounded text-left">
+            <div
+              v-show="userMenuIsOpen"
+              class="relative w-36 flex flex-col bg-blue-500 rounded-lg shadow shadow-gray-300"
+            >
+              <RouterLink
+                :to="'/profile/' + auth.user.name"
+                class="py-2 hover:bg-gray-100 rounded text-left"
+              >
                 <span class="ml-4">Profile</span>
               </RouterLink>
               <button @click="auth.logout" class="py-2 hover:bg-gray-100 rounded text-left">
                 <span class="ml-4">Logout</span>
               </button>
             </div>
-
           </div>
 
           <!-- Login btn -->
@@ -142,11 +128,7 @@ const userMenuIsOpen = ref(false);
             class="p-3 flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded"
           >
             <ArrowRightOnRectangleIcon class="w-6 h-6" />
-            <span
-              class="hidden font-medium"
-              :class="{ 'lg:block': showSideBar }"
-              >Login</span
-            >
+            <span class="hidden font-medium" :class="{ 'lg:block': showSideBar }">Login</span>
           </RouterLink>
         </div>
       </div>

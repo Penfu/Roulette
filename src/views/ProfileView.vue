@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import axios from "axios";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "../stores/user";
 
+import User from "@/models/User";
+import type Bet from "@/models/Bet";
+
+import BetHistory from "@/components/game/bets/History.vue";
+
 const props = defineProps({
-  username: {
+  name: {
     type: String,
     required: true,
   },
 });
 
 const auth = useUserStore();
-const user = ref(null as any);
-const bets = ref([] as Array<any>);
+const user = ref({} as User);
+const bets = ref([] as Bet[]);
 
-onMounted(async () => {
-  user.value = await axios
-    .get(`http://localhost:8000/api/users/${props.username}`)
-    .then((res) => res.data);
-  bets.value = Array.from({ length: 10 });
+const isMyProfile = computed(() => auth.user?.name === props.name);
+
+onMounted(async () => {;
+  user.value = await User.fromName(props.name);
+  bets.value = await user.value.getBets();
 });
 </script>
 
@@ -35,7 +39,7 @@ onMounted(async () => {
         <!-- Description -->
         <div class="grow flex flex-col">
           <div class="grow">
-            <h3 class="text-3xl font-bold">{{ user?.name }}</h3>
+            <h3 class="text-3xl font-bold">{{ isMyProfile ? "My profile " + user?.name : user?.name }}</h3>
             <h4>{{ user?.email }}</h4>
           </div>
           <span>Joined Feb 2022</span>
@@ -118,10 +122,12 @@ onMounted(async () => {
     </div>
 
     <!-- Bets History -->
-    <div class="p-8 bg-white rounded-lg shadow shadow-gray-300">
+    <div class="p-8 bg-white rounded-lg shadow shadow-gray-300 space-y-8">
       <h3 class="text-gray-700 font-medium text-lg">Bets History</h3>
-      <div v-for="i in bets" :key="i">
-        <span>history</span>
+      <div class="space-y-4">
+        <div v-for="(bet, index) in bets" :key="index">
+          <BetHistory :bet="(bet as Bet)" />
+        </div>
       </div>
     </div>
   </main>

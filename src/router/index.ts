@@ -23,7 +23,7 @@ const router = createRouter({
       component: () => import("../views/LeaderboardView.vue"),
     },
     {
-      path: "/profile/:username?",
+      path: "/profile/:name?",
       name: "profile",
       component: ProfileView,
       props: true,
