@@ -3,9 +3,9 @@
     <div class="my-4 h-48 grid grid-cols-3 gap-4 animate-pulse">
       <!-- Colors -->
       <div class="-mt-12 flex flex-col lg:flex-row justify-center items-center gap-2">
-        <div class="h-8 w-8 bg-gray-400 rounded"></div>
-        <div class="h-8 w-8 bg-gray-400 rounded"></div>
-        <div class="h-8 w-8 bg-gray-400 rounded"></div>
+        <div class="p-6 bg-gray-400 rounded"></div>
+        <div class="p-6 bg-gray-400 rounded"></div>
+        <div class="p-6 bg-gray-400 rounded"></div>
       </div>
 
       <!-- Count -->

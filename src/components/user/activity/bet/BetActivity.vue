@@ -19,7 +19,7 @@ const detailed = ref(false);
     <div @click="detailed = !detailed" class="p-6 flex items-center space-x-8 hover:cursor-pointer">
       <div class="grow flex items-center space-x-4">
         <div
-          class="w-8 h-8 rounded"
+          class="w-8 h-8 rounded shadow-md"
           :class="{
             'bg-red-500 shadow-red-300': bet.color == Color.RED,
             'bg-gray-900 shadow-gray-500': bet.color == Color.BLACK,
@@ -28,8 +28,8 @@ const detailed = ref(false);
         ></div>
         <span>{{ bet.value }}</span>
       </div>
+      <span>{{ bet.isWin ? 'Win' : 'Lose' }}</span>
       <span>{{ bet.formattedCreatedAt }}</span>
-      <span>{{ bet.isWin }}</span>
 
       <button class="focus:outline-none">
         <svg

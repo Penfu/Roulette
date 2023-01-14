@@ -60,7 +60,7 @@ onMounted(async () => {;
             <h3 class="text-3xl font-bold">{{ isMyProfile ? "My profile " + user?.name : user?.name }}</h3>
             <h4>{{ user?.email }}</h4>
           </div>
-          <span>Joined Feb 2022</span>
+          <span>Joined {{ user?.formatedCreatedAt }}</span>
         </div>
 
         <!-- Balance -->
@@ -79,21 +79,21 @@ onMounted(async () => {;
         class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
       >
         <span class="text-3xl font-bold">{{ betCount }}</span>
-        <span>Bets</span>
+        <span class="text-xl text-gray-700">Bets</span>
       </div>
 
       <div
         class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
       >
         <span class="text-3xl font-bold">{{ betWinrate }}%</span>
-        <span>Wins</span>
+        <span class="text-xl text-gray-700">Wins</span>
       </div>
 
       <div
         class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
       >
         <span class="text-3xl font-bold">{{ betAverage }}</span>
-        <span>Coins bet on average</span>
+        <span class="text-xl text-gray-700">Average coins bet</span>
       </div>
     </div>
 

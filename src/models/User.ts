@@ -1,5 +1,5 @@
 import axios from "axios";
-import Bet from "@/models/bet"
+import Bet from "@/models/bet";
 
 export default class User {
   constructor(
@@ -27,11 +27,19 @@ export default class User {
     return this._balance;
   }
 
-  get created_at() {
+  get createdAt() {
     return this._created_at;
   }
 
-  get updated_at() {
+  get formatedCreatedAt() {
+    return this._created_at.toLocaleString("fr-CH", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  get updatedAt() {
     return this._updated_at;
   }
 
