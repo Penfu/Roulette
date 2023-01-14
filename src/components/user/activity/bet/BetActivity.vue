@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
-import RollActivityLoading from "./RollActivityLoading.vue";
+import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoading.vue";
 
 import type Bet from "@/models/bet";
 import Color from "@/enums/color";
@@ -9,7 +9,7 @@ const props = defineProps<{
   bet: Bet;
 }>();
 
-const RollActivity = defineAsyncComponent(() => import("./RollActivity.vue"));
+const RollActivity = defineAsyncComponent(() => import("@/components/user/activity/roll/RollActivity.vue"));
 
 const detailed = ref(false);
 </script>

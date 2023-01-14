@@ -6,7 +6,8 @@ import type User from "@/models/user";
 import UserProvider from "@/providers/user";
 import type Bet from "@/models/bet";
 
-import BetActivity from "@/components/user/activity/BetActivity.vue";
+import BetStatsOnColor from "@/components/user/stats/bet/BetOnColor.vue";
+import BetActivity from "@/components/user/activity/bet/BetActivity.vue";
 
 const props = defineProps({
   name: {
@@ -20,15 +21,31 @@ const user = ref({} as User);
 const bets = ref([] as Bet[]);
 
 const isMyProfile = computed(() => auth.user?.name === props.name);
+const userStats = ref({
+	bets_on_red: 0,
+	bets_on_black: 0,
+	bets_on_green: 0,
+	red_wins: 0,
+	black_wins: 0,
+	green_wins: 0,
+	total_bet: 0,
+	total_winnings: 0
+});
+
+const betCount = computed(() => userStats.value.bets_on_red + userStats.value.bets_on_black + userStats.value.bets_on_green);
+const betWin = computed(() => userStats.value.red_wins + userStats.value.black_wins + userStats.value.green_wins);
+const betWinrate = computed(() => (betWin.value / betCount.value * 100).toFixed(2));
+const betAverage = computed(() => (userStats.value.total_bet / betCount.value).toFixed(2));
 
 onMounted(async () => {;
   user.value = await UserProvider.fetchUser(props.name);
+  userStats.value = await user.value.fetchStats();
   bets.value = await user.value.fetchBets();
 });
 </script>
 
 <template>
-  <main class="space-y-8 md:space-y-10">
+  <main class="flex flex-col space-y-8 md:space-y-10">
     <!-- User -->
     <div class="p-8 bg-white rounded-lg shadow shadow-gray-300">
       <div class="flex space-x-8">
@@ -54,76 +71,41 @@ onMounted(async () => {;
       </div>
     </div>
 
-    <!-- Global Review -->
+    <!-- Global Stats -->
     <div
       class="lg:mx-8 xl:mx-32 grid grid-cols-1 lg:grid-cols-3 grid-flow-row gap-4 justify-items-center"
     >
       <div
         class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
       >
-        <span class="text-3xl font-bold">1024</span>
+        <span class="text-3xl font-bold">{{ betCount }}</span>
         <span>Bets</span>
       </div>
 
       <div
         class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
       >
-        <span class="text-3xl font-bold">50$</span>
-        <span>Bet moyen</span>
+        <span class="text-3xl font-bold">{{ betWinrate }}%</span>
+        <span>Wins</span>
       </div>
 
       <div
         class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
       >
-        <span class="text-3xl font-bold">50%</span>
-        <span>Winrate</span>
+        <span class="text-3xl font-bold">{{ betAverage }}</span>
+        <span>Coins bet on average</span>
       </div>
     </div>
 
-    <!-- Colors Review -->
+    <!-- Bets Stats -->
     <div class="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
-      <!-- Red -->
-      <div
-        class="p-2 w-full flex items-center space-x-8 bg-white rounded-lg shadow shadow-gray-300"
-      >
-        <div class="p-8 bg-red-500 rounded"></div>
-        <div class="flex items-center space-x-4">
-          <div class="grow flex flex-col">
-            <span class="grow">Winrate 30%</span>
-            <span>Count 100</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Green -->
-      <div
-        class="p-2 w-full flex items-center space-x-8 bg-white rounded-lg shadow shadow-gray-300"
-      >
-        <div class="flex items-center space-x-4">
-          <div class="p-8 bg-green-500 rounded"></div>
-          <div class="grow flex flex-col">
-            <span class="grow">Winrate 50%</span>
-            <span>Count 100</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Black -->
-      <div
-        class="p-2 w-full flex items-center space-x-8 bg-white rounded-lg shadow shadow-gray-300"
-      >
-        <div class="flex items-center space-x-4">
-          <div class="p-8 bg-gray-900 rounded"></div>
-          <div class="grow flex flex-col">
-            <span class="grow">Winrate 10%</span>
-            <span>Count 100</span>
-          </div>
-        </div>
-      </div>
+      <BetStatsOnColor color="red" :win="userStats.red_wins" :count="userStats.bets_on_red" />
+      <BetStatsOnColor color="black" :win="userStats.black_wins" :count="userStats.bets_on_black" />
+      <BetStatsOnColor color="green" :win="userStats.green_wins" :count="userStats.bets_on_green" />
     </div>
 
-    <!-- Bets History -->
-    <div class="p-8 bg-white rounded-lg shadow shadow-gray-300 space-y-8">
+    <!-- Bets Activity -->
+    <div class="grow p-8 bg-white rounded-lg shadow shadow-gray-300 space-y-8">
       <h3 class="text-gray-700 font-medium text-xl">Bets History</h3>
       <div class="space-y-4">
         <div v-for="(bet, index) in bets" :key="index">

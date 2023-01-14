@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Color from "@/enums/color";
 
-import BetOnColor from "./BetOnColor.vue";
+import BetOnColor from "@/components/user/activity/bet/BetOnColor.vue";
 import { computed } from "vue";
 import type Bet from "@/models/bet";
 
@@ -11,9 +11,7 @@ const props = defineProps<{
 
 const roll = await props.bet.roll();
 
-const winrate = computed(() =>
-  roll == undefined ? 0 : (roll?.win / roll?.betCount) * 100
-);
+const winrate = computed(() => (roll?.win / roll?.betCount) * 100);
 </script>
 
 <template>
