@@ -26,13 +26,13 @@ const close = (e: any) => {
 <template>
   <div>
     <!-- Dropdown toggle button -->
-    <button @click="toggle">
-      <slot name="header"></slot>
+    <button @click="toggle" class="w-full dropdown">
+      <slot name="trigger"></slot>
     </button>
 
     <!-- Dropdown menu -->
-    <div v-show="open" class="absolute right-0 py-2 mt-2 w-44 bg-white rounded border border-gray-300 shadow">
-      <slot name="body"></slot>
+    <div v-show="open">
+      <slot name="content"></slot>
     </div>
   </div>
 </template>

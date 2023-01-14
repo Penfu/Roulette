@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const roll = await props.bet.roll();
 
-const winrate = computed(() => (roll?.win / roll?.betCount) * 100);
+const winrate = computed(() => (roll?.win / roll?.betCount * 100).toFixed(2));
 </script>
 
 <template>

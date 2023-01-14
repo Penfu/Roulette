@@ -5,8 +5,6 @@ const props = defineProps<{
   histories: Array<{ color: string; value: number }>;
 }>();
 
-console.log("Histories: " + props.histories);
-
 </script>
 
 <template>

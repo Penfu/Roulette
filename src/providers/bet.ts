@@ -9,7 +9,7 @@ export default class BetProvider {
       "/bets",
       {
         color: bet.color,
-        value: bet.value,
+        amount: bet.amount,
       },
       {
         headers: {

@@ -8,7 +8,7 @@ const props = defineProps<{
   count: number;
 }>();
 
-const winrate = computed(() => (props.win / props.count) * 100);
+const winrate = computed(() => (props.win / props.count * 100).toFixed(2));
 </script>
 
 <template>

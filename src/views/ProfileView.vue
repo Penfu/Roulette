@@ -45,7 +45,7 @@ onMounted(async () => {;
 </script>
 
 <template>
-  <main class="flex flex-col space-y-8 md:space-y-10">
+  <main class="space-y-8 md:space-y-10">
     <!-- User -->
     <div class="p-8 bg-white rounded-lg shadow shadow-gray-300">
       <div class="flex space-x-8">
@@ -105,7 +105,7 @@ onMounted(async () => {;
     </div>
 
     <!-- Bets Activity -->
-    <div class="grow p-8 bg-white rounded-lg shadow shadow-gray-300 space-y-8">
+    <div class="grow p-8 bg-white rounded-lg shadow shadow-gray-300 space-y-4">
       <h3 class="text-gray-700 font-medium text-xl">Bets History</h3>
       <div class="space-y-4">
         <div v-for="(bet, index) in bets" :key="index">

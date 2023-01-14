@@ -26,7 +26,7 @@ const detailed = ref(false);
             'bg-green-500 shadow-green-300': bet.color == Color.GREEN,
           }"
         ></div>
-        <span>{{ bet.value }}</span>
+        <span>{{ bet.amount }}</span>
       </div>
       <span>{{ bet.isWin ? 'Win' : 'Lose' }}</span>
       <span>{{ bet.formattedCreatedAt }}</span>
