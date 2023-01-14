@@ -12,6 +12,7 @@ onUnmounted(() => {
 });
 
 const toggle = () => {
+  console.log('toggle');
   open.value = !open.value;
 };
 
@@ -25,14 +26,8 @@ const close = (e: any) => {
 <template>
   <div>
     <!-- Dropdown toggle button -->
-    <button @click="open = !open"
-      class="p-2 flex items-center rounded border border-gray-300 shadow-sm bg-white hover:bg-gray-50 text-gray-800">
+    <button @click="toggle">
       <slot name="header"></slot>
-      <svg class="w-5 h-5 text-gray-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd"
-          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-          clip-rule="evenodd" />
-      </svg>
     </button>
 
     <!-- Dropdown menu -->
