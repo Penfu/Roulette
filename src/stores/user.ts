@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import axios from "axios";
 
 export const useUserStore = defineStore("user", () => {
@@ -13,21 +13,8 @@ export const useUserStore = defineStore("user", () => {
 
   if (localStorage.getItem("token")) {
     token.value = localStorage.getItem("token");
-    loginFromToken(token.value as string);
+    loginFromToken();
   }
-
-  watch(
-    token,
-    (newToken) => {
-      if (newToken == null)
-        localStorage.removeItem("token");
-      else
-        localStorage.setItem("token", JSON.stringify(newToken));
-    },
-    {
-      deep: true,
-    }
-  );
 
   async function getCsrfToken() {
     await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");
@@ -45,13 +32,13 @@ export const useUserStore = defineStore("user", () => {
     user.value = response.data.user;
     token.value = response.data.token;
 
-    await loginFromToken(token.value as string);
+    await loginFromToken();
   }
 
-  async function loginFromToken(token: string) {
+  async function loginFromToken() {
     await getCsrfToken();
 
-    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
     const response = await axios.get("/users/me");
 
     user.value = response.data;
@@ -65,6 +52,8 @@ export const useUserStore = defineStore("user", () => {
       password,
     });
 
+    localStorage.setItem("token", response.data.token);
+
     user.value = response.data.user;
     token.value = response.data.token;
   }
@@ -75,6 +64,8 @@ export const useUserStore = defineStore("user", () => {
       email: "",
       balance: 0,
     };
+
+    localStorage.removeItem("token");
     token.value = null;
   }
 

@@ -2,10 +2,11 @@
 import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "../stores/user";
 
-import User from "@/models/user";
+import type User from "@/models/user";
+import UserProvider from "@/providers/user";
 import type Bet from "@/models/bet";
 
-import BetHistory from "@/components/game/bets/History.vue";
+import BetActivity from "@/components/user/activity/BetActivity.vue";
 
 const props = defineProps({
   name: {
@@ -21,13 +22,13 @@ const bets = ref([] as Bet[]);
 const isMyProfile = computed(() => auth.user?.name === props.name);
 
 onMounted(async () => {;
-  user.value = await User.fromName(props.name);
-  bets.value = await user.value.getBets();
+  user.value = await UserProvider.fetchUser(props.name);
+  bets.value = await user.value.fetchBets();
 });
 </script>
 
 <template>
-  <main class="h-screen space-y-8 md:space-y-10">
+  <main class="space-y-8 md:space-y-10">
     <!-- User -->
     <div class="p-8 bg-white rounded-lg shadow shadow-gray-300">
       <div class="flex space-x-8">
@@ -114,7 +115,7 @@ onMounted(async () => {;
         <div class="flex items-center space-x-4">
           <div class="p-8 bg-gray-900 rounded"></div>
           <div class="grow flex flex-col">
-            <span class="grow">Winrate 10</span>
+            <span class="grow">Winrate 10%</span>
             <span>Count 100</span>
           </div>
         </div>
@@ -123,10 +124,10 @@ onMounted(async () => {;
 
     <!-- Bets History -->
     <div class="p-8 bg-white rounded-lg shadow shadow-gray-300 space-y-8">
-      <h3 class="text-gray-700 font-medium text-lg">Bets History</h3>
+      <h3 class="text-gray-700 font-medium text-xl">Bets History</h3>
       <div class="space-y-4">
         <div v-for="(bet, index) in bets" :key="index">
-          <BetHistory :bet="(bet as Bet)" />
+          <BetActivity :bet="(bet as Bet)" />
         </div>
       </div>
     </div>

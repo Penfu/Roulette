@@ -1,5 +1,5 @@
 import axios from "axios";
-import type Bet from "./bet";
+import Bet from "@/models/bet"
 
 export default class User {
   constructor(
@@ -8,7 +8,7 @@ export default class User {
     private _email: string,
     private _balance: number,
     private _created_at: Date,
-    private _updated_at: Date,
+    private _updated_at: Date
   ) {}
 
   get id() {
@@ -35,23 +35,24 @@ export default class User {
     return this._updated_at;
   }
 
-  async getBets(): Promise<Bet[]> {
-    return (await axios.get(`http://localhost:8000/api/users/${this.name}/bets`)).data;
+  async fetchStats() {
+    const stats = (await axios.get(`http://localhost:8000/api/users/${this.name}/stats`)).data;
+    return stats;
   }
 
-  static async fromName(name: string) {
-    return await axios.get(`http://localhost:8000/api/users/${name}`)
-      .then((response) => User.fromJSON(response.data));
+  async fetchBets(): Promise<Bet[]> {
+    const bets = (await axios.get(`http://localhost:8000/api/users/${this.name}/bets`)).data;
+    return bets.map((bet: JSON) => Bet.fromJson(bet));
   }
 
-  static fromJSON(json: any): User {
+  static fromJson(json: any): User {
     return new User(
       json.id,
       json.name,
       json.email,
       json.balance,
       new Date(json.created_at),
-      new Date(json.updated_at),
+      new Date(json.updated_at)
     );
   }
 }
