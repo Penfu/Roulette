@@ -26,13 +26,13 @@ const addBet = () => {
 </script>
 
 <template>
-  <div class="basis-1/3 flex flex-col space-y-4">
+  <div class="w-full flex flex-col space-y-4">
     <button
       :disable="() => !active"
       @click="addBet"
       @mouseover="hovered = true"
       @mouseout="hovered = false"
-      class="py-4 font-semibold rounded shadow transition-transform duration-300 ease-in-out cursor-default"
+      class="py-4 w-full font-semibold rounded shadow-md transition-transform duration-300 ease-in-out cursor-default"
       :class="{
         'bg-red-500 shadow-red-300': color == Color.RED,
         'bg-green-500 shadow-green-300': color == Color.GREEN,
@@ -46,7 +46,7 @@ const addBet = () => {
       x {{ value }}
     </button>
     <div
-      class="p-2 h-64 overflow-y-hidden space-y-2 bg-white text-left text-xl text-gray-800 rounded shadow shadow-gray-300 transition-transform duration-300 ease-in-out"
+      class="grow p-2 h-64 overflow-y-hidden space-y-2 bg-white text-left text-xl text-gray-800 rounded shadow-md shadow-gray-300 transition-transform duration-300 ease-in-out"
       :class="{ 'scale-105': active && hovered }"
     >
       <BetCard
