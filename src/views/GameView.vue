@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import axios from "axios";
+import { computed, onMounted, ref } from "vue";
 import anime, { type AnimeParams } from "animejs";
 
 import Color from "@/enums/color";
@@ -9,6 +8,7 @@ import ColorHelper from "@/helpers/color";
 import { useUserStore } from "@/stores/user";
 import { RollStatus } from "@/enums/rollStatus";
 
+import FlashResult from "@/components/game/result/FlashResult.vue";
 import Histories from "@/components/game/rolls/Histories.vue";
 import AmountButton from "@/components/game/AmountButton.vue";
 import Bets from "@/components/game/bets/Bets.vue";
@@ -19,11 +19,12 @@ import RollProvider from "@/providers/roll";
 import Bet from "@/models/bet";
 import Roll from "@/models/roll";
 
-import IconCross from "@/components/icons/IconCross.vue";
+import CrossIcon from "@/components/icons/CrossIcon.vue";
 
 const auth = useUserStore();
 const status = ref(RollStatus.LOADING);
 const result = ref({} as Roll);
+const timer = ref(0 as number);
 
 const infoMessage = ref("");
 
@@ -34,13 +35,26 @@ const bets = ref({
   black: [] as Bet[],
   green: [] as Bet[],
 });
+const myBets = ref({
+  red: null as Bet | null,
+  black: null as Bet | null,
+  green: null as Bet | null,
+});
+const hasBet = computed(() => {
+  return (
+    myBets.value.red !== null ||
+    myBets.value.black !== null ||
+    myBets.value.green !== null
+  );
+});
+
 const histories = ref([] as Roll[]);
 
 const wheel = ref(HTMLInputElement);
 const balanceInput = ref(HTMLInputElement);
 
 onMounted(async () => {
-  histories.value = await RollProvider.getRolls();
+  histories.value = await RollProvider.fetchRolls();
 
   let wheelSpin: AnimeParams = anime({
     targets: wheel.value,
@@ -51,10 +65,16 @@ onMounted(async () => {
   });
 
   window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
+    timer.value = e.timer;
+
     switch (e.status) {
       case "OPEN":
         infoMessage.value = Math.round(e.timer / 1000) + " seconds left";
-        bets.value = e.bets;
+        bets.value = {
+          red: e.bets.red.map((bet: any) => new Bet(Color.RED, bet.amount, bet.user)),
+          black: e.bets.black.map((bet: any) => new Bet(Color.BLACK, bet.amount, bet.user)),
+          green: e.bets.green.map((bet: any) => new Bet(Color.GREEN, bet.amount, bet.user)),
+        };
 
         if (status.value == RollStatus.OPEN) return;
 
@@ -81,18 +101,50 @@ onMounted(async () => {
         infoMessage.value = "Rolling";
         break;
       case "RESULT":
-        if (status.value == RollStatus.RESULT) return;
+        if (status.value == RollStatus.RESULT) {
+          if (timer.value == 0) reset();
+          return;
+        }
 
         console.log("Result: " + e.result.color + " " + e.result.value);
+
+        bets.value.red
+          .filter((bet: any) => bet.user == auth.user.name)
+          .map((bet: any) => {
+            myBets.value.red = bet;
+          });
+        bets.value.black
+          .filter((bet: any) => bet.user == auth.user.name)
+          .map((bet: any) => {
+            myBets.value.black = bet;
+          });
+        bets.value.green
+          .filter((bet: any) => bet.user == auth.user.name)
+          .map((bet: any) => {
+            myBets.value.green = bet;
+          });
+
+        switch (e.result.color) {
+          case "red":
+            if (myBets.value.red != null)
+              auth.user.balance += myBets.value.red.amount * 2;
+            break;
+          case "black":
+            if (myBets.value.black != null)
+              auth.user.balance += myBets.value.black.amount * 2;
+            break;
+          case "green":
+            if (myBets.value.green != null)
+              auth.user.balance += myBets.value.green.amount * 2;
+            break;
+        }
+
         wheelSpin.pause();
 
         status.value = RollStatus.RESULT;
-        result.value = e.result;
-        infoMessage.value = e.result.value + " " + e.result.color + " won";
+        result.value = Roll.fromJson(e.result);
 
-        bets.value.red = [];
-        bets.value.black = [];
-        bets.value.green = [];
+        infoMessage.value = e.result.value + " " + e.result.color + " won";
 
         histories.value.unshift(new Roll(e.result.value, e.result.color));
 
@@ -103,6 +155,20 @@ onMounted(async () => {
     }
   });
 });
+
+const reset = () => {
+  status.value = RollStatus.LOADING;
+
+  bets.value.red = [];
+  bets.value.black = [];
+  bets.value.green = [];
+
+  myBets.value = {
+    red: null,
+    black: null,
+    green: null,
+  };
+};
 
 const addBalance = (value: number) => {
   if (auth.user.balance < value) {
@@ -141,7 +207,7 @@ const addBet = async (color: string) => {
     return;
   }
 
-  const bet = new Bet(balance.value, color, auth.user.name);
+  const bet = new Bet(color, balance.value, auth.user.name);
   balance.value = 0;
 
   await BetProvider.addBet(bet);
@@ -149,61 +215,67 @@ const addBet = async (color: string) => {
 </script>
 
 <template>
-  <main class="flex flex-col space-y-12">
-    <!-- Roll -->
-    <div class="py-4 bg-white rounded-lg shadow shadow-gray-300">
-      <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
-        <img ref="wheel" src="@/assets/roulette.png" alt="Roulette" class="py-2 basis-2/3 h-80 w-80 object-contain" />
-        <div class="flex flex-col justify-end">
-          <div class="h-20 my-8 flex grow justify-center items-center text-center text-2xl font-semibold uppercase">
-            <p v-show="status === RollStatus.OPEN">{{ infoMessage }}</p>
-            <p v-show="status === RollStatus.CLOSE">ROLLING...</p>
-            <div v-show="status === RollStatus.RESULT" class="flex items-center justify-center space-x-4">
-              <p>Result</p>
-              <span class="block px-3 py-1 text-white bg-red-500 rounded text-center"
-                :class="ColorHelper.getClassFromColor(result.color)">{{ result.value }}</span>
+  <main class="">
+    <FlashResult class="mb-2" v-if="status == RollStatus.RESULT && hasBet" :timer="timer" :bets="(myBets as any)"
+      :roll="(result as Roll)" />
+
+    <div class="h-full flex flex-col space-y-8">
+      <!-- Roll -->
+      <div class="py-4 bg-white rounded-lg shadow shadow-gray-300">
+        <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
+          <img ref="wheel" src="@/assets/roulette.png" alt="Roulette" class="py-2 basis-2/3 h-80 w-80 object-contain" />
+          <div class="flex flex-col justify-end">
+            <div class="h-20 my-8 flex grow justify-center items-center text-center text-2xl font-semibold uppercase">
+              <p v-show="status === RollStatus.OPEN">{{ infoMessage }}</p>
+              <p v-show="status === RollStatus.CLOSE">ROLLING...</p>
+              <div v-show="status === RollStatus.RESULT" class="flex items-center justify-center space-x-4">
+                <p>Result</p>
+                <span class="block px-3 py-1 text-white bg-red-500 rounded text-center shadow-md"
+                  :class="ColorHelper.getClassFromColor(result.color)">{{ result.value }}</span>
+              </div>
+            </div>
+            <div class="justify-end items-center xl:items-end">
+              <Histories class="basis-1/3" :histories="histories" />
             </div>
           </div>
-          <div class="justify-end items-center xl:items-end">
-            <Histories class="basis-1/3" :histories="histories" />
+        </div>
+      </div>
+
+      <!-- Amount buttons -->
+      <div>
+        <h3 class="pb-1 text-xl font-bold uppercase">Choose a bet</h3>
+        <div class="mt-2 min-h-20 bg-white rounded-lg shadow shadow-gray-300">
+          <div class="w-full h-full px-4 py-2 flex text-xl">
+            <div class="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+              <AmountButton @add-balance="addBalance" :value="1" />
+              <AmountButton @add-balance="addBalance" :value="10" />
+              <AmountButton @add-balance="addBalance" :value="100" />
+              <AmountButton @add-balance="addBalance" :value="1000" />
+              <AmountButton @add-balance="addBalance(auth.user.balance)" />
+              <input v-bind="{ value: balance }" ref="balanceInput" type="number" readonly
+                class="px-4 h-12 w-full lg:w-32 outline outline-2 outline-gray-200 rounded shadow shadow-gray-300" />
+            </div>
+            <div class="grow flex justify-end">
+              <button @click="resetBalance"
+                class="h-12 px-12 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-md shadow-red-300">
+                <CrossIcon />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Amount buttons -->
-    <div>
-      <h3 class="pb-1 text-xl font-bold uppercase">Choose a bet</h3>
-      <div class="mt-2 min-h-20 bg-white rounded-lg shadow shadow-gray-300">
-        <div class="w-full h-full px-4 py-2 flex text-xl">
-          <div class="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-            <AmountButton @add-balance="addBalance" :value="1" />
-            <AmountButton @add-balance="addBalance" :value="10" />
-            <AmountButton @add-balance="addBalance" :value="100" />
-            <AmountButton @add-balance="addBalance" :value="1000" />
-            <AmountButton @add-balance="addBalance(auth.user.balance)" />
-            <input v-bind="{ value: balance }" ref="balanceInput" type="number" readonly
-              class="px-4 h-12 w-full lg:w-32 outline outline-2 outline-gray-200 rounded shadow shadow-gray-300" />
-          </div>
-          <div class="grow flex justify-end">
-            <button @click="resetBalance"
-              class="h-12 px-12 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow shadow-red-300">
-              <IconCross />
-            </button>
-          </div>
-        </div>
+      <!-- Bet buttons -->
+      <div
+        class="h-full flex flex-col md:flex-row gap-x-4 gap-y-8 text-center text-white text-2xl transition-all duration-300"
+        :class="{ 'scale-95': status !== RollStatus.OPEN }">
+        <Bets ref="betsRed" :active="status === RollStatus.OPEN" color="red" :value="2"
+          :bets="(bets[Color.RED] as Bet[])" @add-bet="addBet" />
+        <Bets ref="betsGreen" :active="status === RollStatus.OPEN" color="green" :value="13"
+          :bets="(bets[Color.GREEN] as Bet[])" @add-bet="addBet" />
+        <Bets ref="betsBlack" :active="status === RollStatus.OPEN" color="black" :value="2"
+          :bets="(bets[Color.BLACK] as Bet[])" @add-bet="addBet" />
       </div>
-    </div>
-
-    <!-- Bet buttons -->
-    <div class="flex w-full space-x-4 text-center text-white text-2xl transition-all duration-300"
-      :class="{ 'scale-95': status !== RollStatus.OPEN }">
-      <Bets ref="betsRed" :active="status === RollStatus.OPEN" color="red" :value="2" :bets="bets[Color.RED] as Bet[]"
-        @add-bet="addBet" />
-      <Bets ref="betsGreen" :active="status === RollStatus.OPEN" color="green" :value="13"
-        :bets="bets[Color.GREEN] as Bet[]" @add-bet="addBet" />
-      <Bets ref="betsBlack" :active="status === RollStatus.OPEN" color="black" :value="2"
-        :bets="bets[Color.BLACK] as Bet[]" @add-bet="addBet" />
     </div>
   </main>
 </template>
