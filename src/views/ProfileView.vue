@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { useUserStore } from "../stores/user";
+
+import { useUserStore } from "@/stores/user";
+import { useNumberHelper } from "@/helpers/number";
 
 import type User from "@/models/user";
 import UserProvider from "@/providers/user";
@@ -16,28 +18,30 @@ const props = defineProps({
   },
 });
 
+const { pourcent } = useNumberHelper();
+
 const auth = useUserStore();
-const user = ref({} as User);
+const user = ref<User>();
 const bets = ref([] as Bet[]);
 
-const isMyProfile = computed(() => auth.user?.name === props.name);
 const userStats = ref({
-	bets_on_red: 0,
-	bets_on_black: 0,
-	bets_on_green: 0,
-	red_wins: 0,
-	black_wins: 0,
-	green_wins: 0,
-	total_bet: 0,
-	total_winnings: 0
+  bets_on_red: 0,
+  bets_on_black: 0,
+  bets_on_green: 0,
+  red_wins: 0,
+  black_wins: 0,
+  green_wins: 0,
+  total_bet: 0,
 });
+
+const isMyProfile = computed(() => auth.user?.name === props.name);
 
 const betCount = computed(() => userStats.value.bets_on_red + userStats.value.bets_on_black + userStats.value.bets_on_green);
 const betWin = computed(() => userStats.value.red_wins + userStats.value.black_wins + userStats.value.green_wins);
-const betWinrate = computed(() => (betWin.value / betCount.value * 100).toFixed(2));
-const betAverage = computed(() => (userStats.value.total_bet / betCount.value).toFixed(2));
+const betWinrate = computed(() => pourcent(betWin.value, betCount.value));
+const betAverage = computed(() => pourcent(userStats.value.total_bet, betCount.value));
 
-onMounted(async () => {;
+onMounted(async () => {
   user.value = await UserProvider.fetchUser(props.name);
   userStats.value = await user.value.fetchStats();
   bets.value = await user.value.fetchBets();
@@ -45,55 +49,77 @@ onMounted(async () => {;
 </script>
 
 <template>
-  <main class="space-y-8 md:space-y-10">
+  <main class="flex flex-col space-y-8 md:space-y-10">
     <!-- User -->
     <div class="p-8 bg-white rounded-lg shadow shadow-gray-300">
-      <div class="flex space-x-8">
-        <!-- Avatar -->
-        <div>
-          <div class="w-32 h-32 bg-gray-600 rounded-lg"></div>
-        </div>
-
-        <!-- Description -->
-        <div class="grow flex flex-col">
-          <div class="grow">
-            <h3 class="text-3xl font-bold">{{ isMyProfile ? "My profile " + user?.name : user?.name }}</h3>
-            <h4>{{ user?.email }}</h4>
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="grow flex space-x-8">
+          <!-- Avatar -->
+          <div>
+            <div class="w-32 h-32 bg-gray-600 rounded-lg"></div>
           </div>
-          <span>Joined {{ user?.formatedCreatedAt }}</span>
+
+          <!-- Description -->
+          <div class="grow flex flex-col">
+            <div class="grow">
+              <div v-if="user">
+                <h3 class="text-3xl font-bold">{{ isMyProfile? "My profile " + user?.name : user?.name }}</h3>
+                <h4>{{ user?.email }}</h4>
+              </div>
+              <div v-else class="space-y-2 animate-pulse">
+                <div class="h-8 w-52 bg-gray-400 rounded"></div>
+                <div class="h-4 w-52 bg-gray-400 rounded"></div>
+              </div>
+            </div>
+            <span v-if="user">Joined {{ user?.formatedCreatedAt }}</span>
+            <div v-else class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+          </div>
         </div>
 
         <!-- Balance -->
         <div class="flex flex-col justify-center items-center">
-          <span class="text-3xl font-bold">{{ user?.balance }}$</span>
-          <span>Balance</span>
+          <span class="text-3xl font-bold">{{ user?.balance }} coins</span>
         </div>
       </div>
     </div>
 
     <!-- Global Stats -->
-    <div
-      class="lg:mx-8 xl:mx-32 grid grid-cols-1 lg:grid-cols-3 grid-flow-row gap-4 justify-items-center"
-    >
+    <div v-if="userStats.total_bet" class="flex flex-col md:flex-row gap-4 justify-items-center">
       <div
-        class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
-      >
+        class="basis-1/3 py-4 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300">
         <span class="text-3xl font-bold">{{ betCount }}</span>
         <span class="text-xl text-gray-700">Bets</span>
       </div>
 
       <div
-        class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
-      >
+        class="basis-1/3 py-4 lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300">
         <span class="text-3xl font-bold">{{ betWinrate }}%</span>
         <span class="text-xl text-gray-700">Wins</span>
       </div>
 
       <div
-        class="py-6 w-full lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300"
-      >
+        class="basis-1/3 py-4 lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300">
         <span class="text-3xl font-bold">{{ betAverage }}</span>
         <span class="text-xl text-gray-700">Average coins bet</span>
+      </div>
+    </div>
+    <div v-else class="flex flex-col md:flex-row gap-4 justify-items-center">
+      <div
+        class="basis-1/3 py-4 flex flex-col justify-center items-center space-y-4 bg-white rounded-lg shadow shadow-gray-300">
+        <div class="h-6 w-52 bg-gray-400 rounded animate-pulse"></div>
+        <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+      </div>
+
+      <div
+        class="basis-1/3 py-4 flex flex-col justify-center items-center space-y-4 bg-white rounded-lg shadow shadow-gray-300">
+        <div class="h-6 w-52 bg-gray-400 rounded animate-pulse"></div>
+        <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+      </div>
+
+      <div
+        class="basis-1/3 py-4 flex flex-col justify-center items-center space-y-4 bg-white rounded-lg shadow shadow-gray-300">
+        <div class="h-6 w-52 bg-gray-400 rounded animate-pulse"></div>
+        <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
       </div>
     </div>
 

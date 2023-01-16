@@ -1,17 +1,20 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import Color from "@/enums/color";
+import type Bet from "@/models/bet";
+import { useNumberHelper } from "@/helpers/number";
 
 import BetOnColor from "@/components/user/activity/bet/BetOnColor.vue";
-import { computed } from "vue";
-import type Bet from "@/models/bet";
 
 const props = defineProps<{
   bet: Bet;
 }>();
 
-const roll = await props.bet.roll();
+const { pourcent } = useNumberHelper();
 
-const winrate = computed(() => (roll?.win / roll?.betCount * 100).toFixed(2));
+const roll = await props.bet.roll();
+const winrate = computed(() =>  pourcent(roll?.win, roll?.betCount));
 </script>
 
 <template>
