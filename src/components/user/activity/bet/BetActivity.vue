@@ -28,7 +28,13 @@ const detailed = ref(false);
         ></div>
         <span>{{ bet.amount }}</span>
       </div>
-      <span>{{ bet.isWin ? 'Win' : 'Lose' }}</span>
+      <span class="px-2 text-lg text-gray-800 font-bold rounded shadow-md"
+        :class="{
+          'bg-green-300  shadow-green-500': bet.isWin,
+          'bg-red-300  shadow-red-500': !bet.isWin
+        }">
+        {{ bet.isWin ? 'Win' : 'Lose' }}
+      </span>
       <span>{{ bet.formattedCreatedAt }}</span>
 
       <button class="focus:outline-none">

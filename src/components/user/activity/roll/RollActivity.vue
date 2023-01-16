@@ -22,9 +22,9 @@ const winrate = computed(() =>  pourcent(roll?.win, roll?.betCount));
     <div class="my-2 h-48 grid grid-cols-3 gap-4">
       <!-- Colors -->
       <div class="flex flex-col lg:flex-row justify-center items-center gap-2">
-        <BetOnColor :color="Color.RED" :value="roll.redBetCount" :max="roll.betCount" />
-        <BetOnColor :color="Color.BLACK" :value="roll.blackBetCount" :max="roll.betCount" />
-        <BetOnColor :color="Color.GREEN" :value="roll.greenBetCount" :max="roll.betCount" />
+        <BetOnColor :count="roll.redBetCount" :color="Color.RED" :color-win="roll.color"  />
+        <BetOnColor :count="roll.blackBetCount" :color="Color.BLACK" :color-win="roll.color"  />
+        <BetOnColor :count="roll.greenBetCount" :color="Color.GREEN" :color-win="roll.color"  />
       </div>
 
       <!-- Count -->
