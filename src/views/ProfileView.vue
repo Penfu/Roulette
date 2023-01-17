@@ -22,7 +22,9 @@ const { pourcent } = useNumberHelper();
 
 const auth = useUserStore();
 const user = ref<User>();
+
 const bets = ref([] as Bet[]);
+const betsOffset = ref(0 as number);
 
 const userStats = ref({
   bets_on_red: 0,
@@ -45,10 +47,15 @@ const betWin = computed(
 const betWinrate = computed(() => pourcent(betWin.value, betCount.value));
 const betAverage = computed(() => pourcent(userStats.value.total_bet, betCount.value));
 
+const loadBets = async () => {
+  bets.value.push(...await user.value?.fetchBets(betsOffset.value, 10) ?? []);
+  betsOffset.value += 10;
+};
+
 onMounted(async () => {
   user.value = await UserProvider.fetchUser(props.name);
   userStats.value = await user.value.fetchStats();
-  bets.value = await user.value.fetchBets();
+  loadBets();
 });
 </script>
 
@@ -131,7 +138,8 @@ onMounted(async () => {
       <BetStatsOnColor color="black" :win="userStats.black_wins" :count="userStats.bets_on_black" />
       <BetStatsOnColor color="green" :win="userStats.green_wins" :count="userStats.bets_on_green" />
     </div>
-    <div v-else class="space-y-4">
+    <!-- Bets Stats Skeleton -->
+    <div v-else class="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
       <div class="p-2 w-full flex items-center space-x-8 bg-white rounded-lg shadow shadow-gray-300">
         <div class="p-8 bg-gray-600 rounded shadow-md animate-pulse"></div>
         <div class="text-xl space-y-2">
@@ -158,10 +166,15 @@ onMounted(async () => {
     <!-- Bets Activity -->
     <div class="grow p-8 bg-white rounded-lg shadow shadow-gray-300 space-y-4">
       <h3 class="text-gray-700 font-medium text-xl">Bets History</h3>
-      <div class="space-y-4">
+      <div class="space-y-4 text-center">
         <div v-for="(bet, index) in bets" :key="index">
           <BetActivity :bet="(bet as Bet)" />
         </div>
+
+        <button v-show="bets.length > 0"
+          class="px-6 py-3 md:py-2 w-full md:w-auto bg-gray-600 hover:bg-gray-700 text-white text-lg rounded-md shadow-md shadow-gray-300" @click="loadBets">
+          Load more
+        </button>
       </div>
     </div>
   </main>

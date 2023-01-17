@@ -48,8 +48,12 @@ export default class User {
     return stats;
   }
 
-  async fetchBets(): Promise<Bet[]> {
-    const bets = (await axios.get(`http://localhost:8000/api/users/${this.name}/bets`)).data;
+  async fetchBets(offset = 0, limit = 10): Promise<Bet[]> {
+    const bets = (
+      await axios.get(
+        `http://localhost:8000/api/users/${this.name}/bets?offset=${offset}&limit=${limit}`
+      )
+    ).data;
     return bets.map((bet: JSON) => Bet.fromJson(bet));
   }
 
