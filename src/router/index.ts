@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import GameView from "@/views/GameView.vue";
+import LeaderboardView from "@/views/LeaderboardView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
+
+const lazyLoad = (view: string) => {
+  return () => import(`../views/${view}.vue`);
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,15 +16,12 @@ const router = createRouter({
     {
       path: "/",
       name: "game",
-      component: GameView,
+      component: lazyLoad('GameView'),
     },
     {
       path: "/leaderboard",
       name: "leaderboard",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/LeaderboardView.vue"),
+      component: LeaderboardView,
     },
     {
       path: "/profile/:name?",

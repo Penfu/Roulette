@@ -25,19 +25,15 @@ const winrate = computed(() => pourcent(props.win, props.count));
         'bg-green-500 shadow-green-300': color === Color.GREEN,
       }"
     ></div>
-    <div v-if="win">
+    <div>
       <div class="space-x-1 text-xl">
-        <span class="font-bold">{{ winrate }}%</span>
+        <span class="font-bold">{{ winrate || '~' }}%</span>
         <span class="text-gray-800">wins</span>
       </div>
       <div class="space-x-1 text-xl">
         <span class="font-bold">{{ count }}</span>
         <span class="text-gray-800">{{ count > 1 ? "bets" : "bet" }}</span>
       </div>
-    </div>
-    <div v-else class="space-y-4 animate-pulse">
-      <div class="h-4 w-52 bg-gray-400 rounded"></div>
-      <div class="h-4 w-52 bg-gray-400 rounded"></div>
     </div>
   </div>
 </template>

@@ -36,8 +36,12 @@ const userStats = ref({
 
 const isMyProfile = computed(() => auth.user?.name === props.name);
 
-const betCount = computed(() => userStats.value.bets_on_red + userStats.value.bets_on_black + userStats.value.bets_on_green);
-const betWin = computed(() => userStats.value.red_wins + userStats.value.black_wins + userStats.value.green_wins);
+const betCount = computed(
+  () => userStats.value.bets_on_red + userStats.value.bets_on_black + userStats.value.bets_on_green
+);
+const betWin = computed(
+  () => userStats.value.red_wins + userStats.value.black_wins + userStats.value.green_wins
+);
 const betWinrate = computed(() => pourcent(betWin.value, betCount.value));
 const betAverage = computed(() => pourcent(userStats.value.total_bet, betCount.value));
 
@@ -63,7 +67,9 @@ onMounted(async () => {
           <div class="grow flex flex-col">
             <div class="grow">
               <div v-if="user">
-                <h3 class="text-3xl font-bold">{{ isMyProfile? "My profile " + user?.name : user?.name }}</h3>
+                <h3 class="text-3xl font-bold">
+                  {{ isMyProfile? "My profile " + user?.name : user?.name }}
+                </h3>
                 <h4>{{ user?.email }}</h4>
               </div>
               <div v-else class="space-y-2 animate-pulse">
@@ -90,13 +96,11 @@ onMounted(async () => {
         <span class="text-3xl font-bold">{{ betCount }}</span>
         <span class="text-xl text-gray-700">Bets</span>
       </div>
-
       <div
         class="basis-1/3 py-4 lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300">
         <span class="text-3xl font-bold">{{ betWinrate }}%</span>
         <span class="text-xl text-gray-700">Wins</span>
       </div>
-
       <div
         class="basis-1/3 py-4 lg:w-64 flex flex-col justify-center items-center space-y-2 bg-white rounded-lg shadow shadow-gray-300">
         <span class="text-3xl font-bold">{{ betAverage }}</span>
@@ -109,13 +113,11 @@ onMounted(async () => {
         <div class="h-6 w-52 bg-gray-400 rounded animate-pulse"></div>
         <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
       </div>
-
       <div
         class="basis-1/3 py-4 flex flex-col justify-center items-center space-y-4 bg-white rounded-lg shadow shadow-gray-300">
         <div class="h-6 w-52 bg-gray-400 rounded animate-pulse"></div>
         <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
       </div>
-
       <div
         class="basis-1/3 py-4 flex flex-col justify-center items-center space-y-4 bg-white rounded-lg shadow shadow-gray-300">
         <div class="h-6 w-52 bg-gray-400 rounded animate-pulse"></div>
@@ -124,10 +126,33 @@ onMounted(async () => {
     </div>
 
     <!-- Bets Stats -->
-    <div class="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+    <div v-if="userStats.total_bet" class="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
       <BetStatsOnColor color="red" :win="userStats.red_wins" :count="userStats.bets_on_red" />
       <BetStatsOnColor color="black" :win="userStats.black_wins" :count="userStats.bets_on_black" />
       <BetStatsOnColor color="green" :win="userStats.green_wins" :count="userStats.bets_on_green" />
+    </div>
+    <div v-else class="space-y-4">
+      <div class="p-2 w-full flex items-center space-x-8 bg-white rounded-lg shadow shadow-gray-300">
+        <div class="p-8 bg-gray-600 rounded shadow-md animate-pulse"></div>
+        <div class="text-xl space-y-2">
+          <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+          <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+        </div>
+      </div>
+      <div class="p-2 w-full flex items-center space-x-8 bg-white rounded-lg shadow shadow-gray-300">
+        <div class="p-8 bg-gray-600 rounded shadow-md animate-pulse"></div>
+        <div class="text-xl space-y-2">
+          <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+          <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+        </div>
+      </div>
+      <div class="p-2 w-full flex items-center space-x-8 bg-white rounded-lg shadow shadow-gray-300">
+        <div class="p-8 bg-gray-600 rounded shadow-md animate-pulse"></div>
+        <div class="text-xl space-y-2">
+          <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+          <div class="h-4 w-52 bg-gray-400 rounded animate-pulse"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Bets Activity -->

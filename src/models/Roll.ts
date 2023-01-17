@@ -1,4 +1,6 @@
 export default class Roll {
+  public id: number = 0;
+
   public betCount: number = 0;
   public redBetCount: number = 0;
   public blackBetCount: number = 0;
@@ -22,6 +24,8 @@ export default class Roll {
 
   static fromJson(json: any): Roll {
     const roll = new Roll(json.value, json.color);
+
+    roll.id = json.id;
 
     roll.betCount = json.bet_count;
     roll.redBetCount = json.red_bet_count;

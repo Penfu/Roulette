@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type Color from "@/enums/color";
 import Helper from "@/helpers/color";
 
 const props = defineProps<{

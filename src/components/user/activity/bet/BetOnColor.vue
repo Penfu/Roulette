@@ -12,7 +12,7 @@ const props = defineProps<{
 
 <template>
   <div class="h-full flex items-center">
-    <div class="h-28 flex lg:flex-col items-center justify-end gap-2">
+    <div class="h-28 flex flex-col items-center justify-end gap-2">
       <ChevronDownIcon v-show="color === colorWin" />
       <div class="p-6 rounded shadow-md" :class="{
         'bg-red-500 shadow-red-300': color === Color.RED,

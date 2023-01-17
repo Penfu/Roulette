@@ -18,17 +18,17 @@ const winrate = computed(() =>  pourcent(roll?.win, roll?.betCount));
 </script>
 
 <template>
-  <div class="py-6 mx-6 border-t border-gray-300">
-    <div class="my-2 h-48 grid grid-cols-3 gap-4">
+  <div class="border-t border-gray-300">
+    <div class="mx-6 lg:mx-0 my-2 lg:h-48 flex flex-col lg:flex-row gap-4">
       <!-- Colors -->
-      <div class="flex flex-col lg:flex-row justify-center items-center gap-2">
+      <div class="py-6 basis-1/3 flex justify-center items-center gap-2">
         <BetOnColor :count="roll.redBetCount" :color="Color.RED" :color-win="roll.color"  />
         <BetOnColor :count="roll.blackBetCount" :color="Color.BLACK" :color-win="roll.color"  />
         <BetOnColor :count="roll.greenBetCount" :color="Color.GREEN" :color-win="roll.color"  />
       </div>
 
       <!-- Count -->
-      <div class="flex flex-col border-x border-gray-300 justify-center items-center space-y-2">
+      <div class="py-6 basis-1/3 flex flex-col border-y lg:border-y-0 lg:border-x border-gray-300 justify-center items-center space-y-2">
         <span class="text-4xl font-bold">{{ winrate }}%</span>
         <div class="w-56 h-20 flex flex-col">
           <span class="text-xl font-bold text-gray-700">Bet on the right color</span>
@@ -41,7 +41,7 @@ const winrate = computed(() =>  pourcent(roll?.win, roll?.betCount));
       </div>
 
       <!-- Amount -->
-      <div class="flex flex-col justify-center items-center space-y-2">
+      <div class="py-6 basis-1/3 flex flex-col justify-center items-center space-y-2">
         <span class="text-4xl font-bold">{{ roll.amount }}</span>
         <div class="h-20">
           <span class="text-xl font-bold text-gray-700">Coins was bet</span>

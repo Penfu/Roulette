@@ -13,7 +13,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'addBet', color: any): void;
+  (e: "addBet", color: any): void;
 }>();
 
 const hovered = ref(false);
@@ -26,7 +26,7 @@ const addBet = () => {
 </script>
 
 <template>
-  <div class="w-full flex flex-col space-y-4">
+  <div class="w-full h-80 xl:h-full flex flex-col space-y-4">
     <button
       :disable="() => !active"
       @click="addBet"
@@ -45,15 +45,17 @@ const addBet = () => {
     >
       x {{ value }}
     </button>
-    <div
-      class="grow p-2 h-64 overflow-y-hidden space-y-2 bg-white text-left text-xl text-gray-800 rounded shadow-md shadow-gray-300 transition-transform duration-300 ease-in-out"
+    <TransitionGroup
+      tag="div"
+      class="grow p-2 overflow-y-hidden space-y-2 bg-white text-left text-xl text-gray-800 rounded shadow-md shadow-gray-300 transition-transform duration-300 ease-in-out"
       :class="{ 'scale-105': active && hovered }"
+      move-class="transition-all duration-500 ease-in-out"
+      enter-active-class="transition-all duration-500 ease-in-out"
+      leave-active-class="transition-all duration-500 ease-in-out"
+      enter-from-class="opacity-0 -translate-y-4"
+      leave-to-class="opacity-0 -translate-y-4"
     >
-      <BetCard
-        v-for="(bet, index) in bets"
-        :key="index"
-        :bet="bet"
-      />
-    </div>
+      <BetCard v-for="(bet, index) in bets.slice().reverse()" :key="index" :bet="bet" />
+    </TransitionGroup>
   </div>
 </template>

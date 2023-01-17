@@ -63,14 +63,6 @@ const result = computed(() => {
 });
 
 const active = ref(true);
-
-console.log("WIN BET: ", wins?.value);
-console.log("WIN AMOUNT: ", winsAmount?.value);
-
-console.log("LOSS BETS: ", losses?.value);
-console.log("LOSS AMOUNT: ", lossesAmount?.value);
-
-console.log("TOTAL AMOUNT: ", totalAmount?.value);
 </script>
 
 <template>

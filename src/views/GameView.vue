@@ -146,11 +146,8 @@ onMounted(async () => {
 
         infoMessage.value = e.result.value + " " + e.result.color + " won";
 
-        histories.value.unshift(new Roll(e.result.value, e.result.color));
-
-        if (histories.value.length > 10) {
-          histories.value.pop();
-        }
+        if (histories.value.length == 10) histories.value.pop();
+        histories.value.unshift(Roll.fromJson(e.result));
         break;
     }
   });
@@ -215,16 +212,24 @@ const addBet = async (color: string) => {
 </script>
 
 <template>
-  <main class="">
-    <FlashResult class="mb-2" v-if="status == RollStatus.RESULT && hasBet" :timer="timer" :bets="(myBets as any)"
-      :roll="(result as Roll)" />
+  <main class="grow flex flex-col">
+    <Transition mode="out-in" enter-active-class="transition ease-out duration-1000"
+      leave-active-class="transition ease-out duration-1000" enter-from-class="opacity-0 transform scale-95"
+      enter-to-class="opacity-100 transform scale-100" leave-from-class="opacity-100 transform scale-100"
+      leave-to-class="opacity-0 transform scale-95">
 
-    <div class="h-full flex flex-col space-y-8">
+      <FlashResult class="mb-2" v-if="status == RollStatus.RESULT && hasBet" :timer="timer" :bets="(myBets as any)"
+        :roll="(result as Roll)" />
+    </Transition>
+
+    <div class="h-full grow flex flex-col space-y-8">
       <!-- Roll -->
-      <div class="py-4 bg-white rounded-lg shadow shadow-gray-300">
+      <div class="px-2 py-4 bg-white rounded-lg shadow shadow-gray-300">
         <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
-          <img ref="wheel" src="@/assets/roulette.png" alt="Roulette" class="py-2 basis-2/3 h-80 w-80 object-contain" />
-          <div class="flex flex-col justify-end">
+          <div class="py-2 basis-2/3 flex justify-center">
+            <img ref="wheel" src="@/assets/roulette.png" alt="Roulette" class="h-80 w-80 object-contain" />
+          </div>
+          <div class="basis-1/3 flex flex-col justify-end">
             <div class="h-20 my-8 flex grow justify-center items-center text-center text-2xl font-semibold uppercase">
               <p v-show="status === RollStatus.OPEN">{{ infoMessage }}</p>
               <p v-show="status === RollStatus.CLOSE">ROLLING...</p>
@@ -235,7 +240,7 @@ const addBet = async (color: string) => {
               </div>
             </div>
             <div class="justify-end items-center xl:items-end">
-              <Histories class="basis-1/3" :histories="histories" />
+              <Histories class="basis-1/3" :histories="(histories as Roll[])" />
             </div>
           </div>
         </div>
@@ -267,7 +272,7 @@ const addBet = async (color: string) => {
 
       <!-- Bet buttons -->
       <div
-        class="h-full flex flex-col md:flex-row gap-x-4 gap-y-8 text-center text-white text-2xl transition-all duration-300"
+        class="grow flex flex-col md:flex-row gap-x-4 gap-y-8 text-center text-white text-2xl transition-all duration-300"
         :class="{ 'scale-95': status !== RollStatus.OPEN }">
         <Bets ref="betsRed" :active="status === RollStatus.OPEN" color="red" :value="2"
           :bets="(bets[Color.RED] as Bet[])" @add-bet="addBet" />
