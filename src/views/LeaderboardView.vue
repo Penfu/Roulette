@@ -47,10 +47,11 @@ onMounted(async () => {
     <div
       class="flex flex-col lg:flex-row bg-white rounded-lg shadow shadow-gray-300"
     >
-      <div
+      <RouterLink
         v-for="user in podium"
         :key="user.name"
-        class="w-full py-6 sm:py-8 lg:py-10 flex items-center justify-center bg-white first:bg-yellow-400 first:rounded-t-lg last:rounded-b-lg lg:first:rounded-none lg:last:rounded-none lg:first:rounded-l-lg lg:last:rounded-r-lg"
+        :to="`/profile/${user.name}`"
+        class="w-full py-6 sm:py-8 lg:py-10 flex items-center justify-center bg-white first:bg-yellow-400 hover:drop-shadow-lg first:rounded-t-lg last:rounded-b-lg lg:first:rounded-none lg:last:rounded-none lg:first:rounded-l-lg lg:last:rounded-r-lg"
       >
         <div class="basis-1/2 flex items-center space-x-16">
           <span class="w-full basis-1/3 text-5xl font-bold">
@@ -65,7 +66,7 @@ onMounted(async () => {
             <span class="">{{ user.balance }}</span>
           </div>
         </div>
-      </div>
+      </RouterLink>
     </div>
 
     <!-- Search bar -->
@@ -102,15 +103,16 @@ onMounted(async () => {
     <div v-else
       class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-white rounded-lg shadow shadow-gray-300 overflow-y-auto"
     >
-      <div
+      <RouterLink
         v-for="user in filteredLeaderboard"
         :key="user.name"
-        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
+        :to="`/profile/${user.name}`"
+        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100  rounded"
       >
         <span class="w-6">{{ user.rank }}</span>
         <span class="grow">{{ user.name }}</span>
         <span class="">{{ user.balance }}</span>
-      </div>
+      </RouterLink>
 
       <div
         v-if="search && !filteredLeaderboard.length"

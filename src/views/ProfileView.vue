@@ -25,6 +25,7 @@ const user = ref<User>();
 
 const bets = ref([] as Bet[]);
 const betsOffset = ref(0 as number);
+const hasMoreBets = computed(() => bets.value.length >= betsOffset.value);
 
 const userStats = ref({
   bets_on_red: 0,
@@ -48,7 +49,7 @@ const betWinrate = computed(() => pourcent(betWin.value, betCount.value));
 const betAverage = computed(() => pourcent(userStats.value.total_bet, betCount.value));
 
 const loadBets = async () => {
-  bets.value.push(...await user.value?.fetchBets(betsOffset.value, 10) ?? []);
+  bets.value.push(...await user.value?.fetchBets(betsOffset.value) ?? []);
   betsOffset.value += 10;
 };
 
@@ -171,7 +172,7 @@ onMounted(async () => {
           <BetActivity :bet="(bet as Bet)" />
         </div>
 
-        <button v-show="bets.length > 0"
+        <button v-show="bets.length > 0 && hasMoreBets"
           class="px-6 py-3 md:py-2 w-full md:w-auto bg-gray-600 hover:bg-gray-700 text-white text-lg rounded-md shadow-md shadow-gray-300" @click="loadBets">
           Load more
         </button>
