@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 import type Bet from "@/models/bet";
 import type Roll from "@/models/roll";
@@ -18,6 +18,30 @@ const props = defineProps<{
   roll: Roll;
 }>();
 
+const initialTimer = props.timer;
+const duration = 5000;
+const interval = 50;
+
+const progress = ref(0);
+
+let intervalId: number;
+
+onMounted(() => {
+  intervalId = setInterval(() => {
+    if (initialTimer <= 0 || progress.value >= 100) {
+      clearInterval(intervalId);
+      return;
+    }
+
+    progress.value += duration / (interval * 100);
+    console.log(progress.value);
+  }, interval);
+});
+
+onUnmounted(() => {
+  clearInterval(intervalId);
+});
+
 const wins = computed(() => {
   const { red, black, green } = props.bets;
 
@@ -30,7 +54,6 @@ const wins = computed(() => {
       return green;
   }
 });
-
 const losses = computed(() => {
   const { red, black, green } = props.bets;
 
@@ -85,8 +108,8 @@ const active = ref(true);
 
     <div class="h-5 bg-gray-300 rounded shadow-md shadow-gray-300">
       <div
-        class="h-full bg-gray-800 rounded transition-width duration-500"
-        :style="{ width: 100 - (timer / 5000) * 100 + '%' }"
+        class="h-full bg-gray-800 rounded transition-width duration-75 ease-in-out"
+          :style="{ width: `${progress}%` }">
       ></div>
     </div>
   </div>
