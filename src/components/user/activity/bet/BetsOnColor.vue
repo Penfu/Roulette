@@ -3,7 +3,7 @@ import Color from "@/enums/color";
 
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 
-const props = defineProps<{
+defineProps<{
   count: number,
   color: string,
   colorWin: string,

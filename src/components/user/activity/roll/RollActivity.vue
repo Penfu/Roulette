@@ -5,7 +5,7 @@ import Color from "@/enums/color";
 import type Bet from "@/models/bet";
 import { useNumberHelper } from "@/helpers/number";
 
-import BetOnColor from "@/components/user/activity/bet/BetOnColor.vue";
+import BetsOnColor from "@/components/user/activity/bet/BetsOnColor.vue";
 
 const props = defineProps<{
   bet: Bet;
@@ -22,9 +22,9 @@ const winrate = computed(() =>  pourcent(roll?.win, roll?.betCount));
     <div class="mx-6 lg:mx-0 my-2 lg:h-48 flex flex-col lg:flex-row gap-4">
       <!-- Colors -->
       <div class="py-6 basis-1/3 flex justify-center items-center gap-2">
-        <BetOnColor :count="roll.redBetCount" :color="Color.RED" :color-win="roll.color"  />
-        <BetOnColor :count="roll.blackBetCount" :color="Color.BLACK" :color-win="roll.color"  />
-        <BetOnColor :count="roll.greenBetCount" :color="Color.GREEN" :color-win="roll.color"  />
+        <BetsOnColor :count="roll.redBetCount" :color="Color.RED" :color-win="roll.color"  />
+        <BetsOnColor :count="roll.blackBetCount" :color="Color.BLACK" :color-win="roll.color"  />
+        <BetsOnColor :count="roll.greenBetCount" :color="Color.GREEN" :color-win="roll.color"  />
       </div>
 
       <!-- Count -->
