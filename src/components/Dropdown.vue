@@ -12,7 +12,6 @@ onUnmounted(() => {
 });
 
 const toggle = () => {
-  console.log('toggle');
   open.value = !open.value;
 };
 
