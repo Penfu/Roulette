@@ -150,7 +150,7 @@ onMounted(async () => {
           targets: wheel.value,
           rotate: finalAngle,
           duration: 2000,
-          easing: "linear",
+          easing: "easeOutQuad",
           begin: function () {
             anime.set(wheel.value, { 'rotate': currentRotation });
           },
