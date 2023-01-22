@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import NotFoundViewVue from "@/views/NotFoundView.vue";
+
 import LeaderboardView from "@/views/LeaderboardView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 
@@ -14,9 +16,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: "/:pathMatch(.*)*",
+      component: NotFoundViewVue,
+    },
+    {
       path: "/",
       name: "game",
-      component: lazyLoad('GameView'),
+      component: lazyLoad("GameView"),
     },
     {
       path: "/leaderboard",
