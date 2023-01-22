@@ -26,8 +26,8 @@ const winrate = computed(() => pourcent(props.win, props.count));
       }"
     ></div>
     <div>
-      <div class="space-x-1 text-xl">
-        <span class="font-bold">{{ winrate || '~' }}%</span>
+      <div v-show="props.count > 0" class="space-x-1 text-xl">
+        <span class="font-bold">{{ winrate }}%</span>
         <span class="text-gray-800">wins</span>
       </div>
       <div class="space-x-1 text-xl">

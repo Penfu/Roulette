@@ -114,12 +114,16 @@ onMounted(async () => {
         </div>
         <div
           class="w-full py-4 flex flex-col justify-center items-center space-y-1 bg-white rounded-lg shadow shadow-gray-300">
-          <span class="text-3xl font-bold">{{ betWinrate }}%</span>
+          <span v-if="betCount > 0" class="text-3xl font-bold">{{ betWinrate }}%</span>
+          <span v-else class="text-3xl font-bold">0</span>
+
           <span class="text-xl text-gray-700">Wins</span>
         </div>
         <div
           class="w-full py-4 flex flex-col justify-center items-center space-y-1 bg-white rounded-lg shadow shadow-gray-300">
-          <span class="text-3xl font-bold">{{ betAverage }}</span>
+          <span v-if="betCount > 0" class="text-3xl font-bold">{{ betAverage }}</span>
+          <span v-else class="text-3xl font-bold">0</span>
+
           <span class="text-xl text-gray-700">Average coins bet</span>
         </div>
       </div>
