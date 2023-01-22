@@ -20,7 +20,6 @@ const auth = useUserStore();
 
 <template>
   <div class="px-4 min-h-screen flex flex-col sm:flex-row sm:gap-4 bg-gray-100">
-    <!-- Nav -->
     <!-- Sidebar -->
     <aside class="z-20 sm:py-4 sticky top-0 sm:h-screen rounded-b-lg">
       <div
@@ -63,7 +62,7 @@ const auth = useUserStore();
             <span>{{ auth.user.balance }}</span>
           </label>
 
-          <!-- User Profile -->
+          <!-- User Profile Dropdown -->
           <Dropdown v-if="auth.isAuth">
             <template #trigger>
               <div
