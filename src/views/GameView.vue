@@ -19,6 +19,7 @@ import RollProvider from "@/providers/roll";
 import Bet from "@/models/bet";
 import Roll from "@/models/roll";
 
+import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 
 const auth = useUserStore();
@@ -58,7 +59,7 @@ onMounted(async () => {
 
   let wheelSpin: AnimeParams = anime({
     targets: wheel.value,
-    rotate: 360 * 5,
+    rotate: 360 * 6,
     duration: 6000,
     easing: "linear",
     autoplay: false,
@@ -101,58 +102,107 @@ onMounted(async () => {
         infoMessage.value = "Rolling";
         break;
       case "RESULT":
+        if (status.value == RollStatus.ROLL)
+        {
+          return;
+        }
+
+        if (status.value == RollStatus.CLOSE)
+        {
+          status.value = RollStatus.ROLL;
+        }
+
         if (status.value == RollStatus.RESULT) {
           if (timer.value == 0) reset();
           return;
         }
 
-        console.log("Result: " + e.result.color + " " + e.result.value);
-
-        bets.value.red
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.red = bet;
-          });
-        bets.value.black
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.black = bet;
-          });
-        bets.value.green
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.green = bet;
-          });
-
-        switch (e.result.color) {
-          case "red":
-            if (myBets.value.red != null)
-              auth.user.balance += myBets.value.red.amount * 2;
-            break;
-          case "black":
-            if (myBets.value.black != null)
-              auth.user.balance += myBets.value.black.amount * 2;
-            break;
-          case "green":
-            if (myBets.value.green != null)
-              auth.user.balance += myBets.value.green.amount * 2;
-            break;
-        }
-
-        wheelSpin.pause();
-
-        status.value = RollStatus.RESULT;
         result.value = Roll.fromJson(e.result);
 
-        infoMessage.value = e.result.value + " " + e.result.color + " won";
+        const caseSize = 360 / 11; // 11 cases
+        const halfCaseSize = caseSize / 2;
+        const marge = caseSize / 10;
 
-        if (histories.value.length == 10) histories.value.pop();
-        histories.value.unshift(Roll.fromJson(e.result));
+        let finalAngle = 0;
+
+        if (result.value.color === Color.RED) {
+          let caseNum = Math.floor(Math.random() * 5); // 5 possible cases for red
+          finalAngle = halfCaseSize; // Add Green case before
+          finalAngle += caseSize + (caseNum * 2 * caseSize); // Add Red(s) and Black(s) cases before
+          finalAngle += anime.random(marge, caseSize - marge);
+        }
+        else if (result.value.color === Color.BLACK) {
+          let caseNum = Math.floor(Math.random() * 5) + 1; // 5 possible cases for black
+          finalAngle = halfCaseSize; // Add Green case before
+          finalAngle += caseNum * 2 * caseSize; // Add Red(s) and Black(s) cases before
+          finalAngle += anime.random(marge, caseSize - marge); // Add random size inside the range with marge
+        }
+        else if (result.value.color === Color.GREEN) {
+          finalAngle = 360 + anime.random(-halfCaseSize + marge, halfCaseSize - marge);
+        }
+
+        const currentRotation = parseFloat(anime.get(wheel.value, "rotate") as string);
+        const rotationToEndTheTurn = 360 - (currentRotation % 360);
+
+        finalAngle += currentRotation + rotationToEndTheTurn;
+
+        anime({
+          targets: wheel.value,
+          rotate: finalAngle,
+          duration: 2000,
+          easing: "linear",
+          begin: function () {
+            anime.set(wheel.value, { 'rotate': currentRotation });
+          },
+          complete: function () {
+            showResult();
+            wheelSpin.pause();
+          }
+        });
         break;
     }
   });
 });
 
+const showResult = () => {
+  status.value = RollStatus.RESULT;
+
+  if (histories.value.length == 10) histories.value.pop();
+  histories.value.unshift(result.value);
+
+  // List player bets
+  bets.value.red
+    .filter((bet: any) => bet.user == auth.user.name)
+    .map((bet: any) => {
+      myBets.value.red = bet;
+    });
+  bets.value.black
+    .filter((bet: any) => bet.user == auth.user.name)
+    .map((bet: any) => {
+      myBets.value.black = bet;
+    });
+  bets.value.green
+    .filter((bet: any) => bet.user == auth.user.name)
+    .map((bet: any) => {
+      myBets.value.green = bet;
+    });
+
+  // Give money if the player won
+  switch (result.value.color) {
+    case Color.RED:
+      if (myBets.value.red != null)
+        auth.user.balance += myBets.value.red.amount * 2;
+      break;
+    case Color.BLACK:
+      if (myBets.value.black != null)
+        auth.user.balance += myBets.value.black.amount * 2;
+      break;
+    case Color.GREEN:
+      if (myBets.value.green != null)
+        auth.user.balance += myBets.value.green.amount * 13;
+      break;
+  }
+};
 const reset = () => {
   status.value = RollStatus.LOADING;
 
@@ -226,13 +276,14 @@ const addBet = async (color: string) => {
       <!-- Roll -->
       <div class="px-2 py-4 bg-white rounded-lg shadow shadow-gray-300">
         <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
-          <div class="py-2 basis-2/3 flex justify-center">
+          <div class="py-2 basis-2/3 flex flex-col justify-center items-center space-y-2">
+            <ChevronDownIcon />
             <img ref="wheel" src="@/assets/roulette.png" alt="Roulette" class="h-80 w-80 object-contain" />
           </div>
           <div class="basis-1/3 flex flex-col justify-end">
             <div class="h-20 my-8 flex grow justify-center items-center text-center text-2xl font-semibold uppercase">
               <p v-show="status === RollStatus.OPEN">{{ infoMessage }}</p>
-              <p v-show="status === RollStatus.CLOSE">ROLLING...</p>
+              <p v-show="status === RollStatus.CLOSE || status === RollStatus.ROLL">ROLLING...</p>
               <div v-show="status === RollStatus.RESULT" class="flex items-center justify-center space-x-4">
                 <p>Result</p>
                 <span class="block px-3 py-1 text-white bg-red-500 rounded text-center shadow-md"

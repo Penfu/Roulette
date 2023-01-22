@@ -34,7 +34,6 @@ onMounted(() => {
     }
 
     progress.value += duration / (interval * 100);
-    console.log(progress.value);
   }, interval);
 });
 
