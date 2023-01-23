@@ -2,7 +2,7 @@
 
 # Roulette Client
 
-This template should help get you started developing with Vue 3 in Vite.
+The Roulette project is a gambling game that allows users to place virtual bets on a roulette wheel, with the goal of winning coins by correctly predicting the outcome of the game. The project is divided into two main parts: a backend API built using the PHP framework Laravel, and a frontend built using the Vue.js framework, written in TypeScript.
 
 ## Recommended IDE Setup
 
