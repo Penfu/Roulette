@@ -109,7 +109,7 @@ const active = ref(true);
       <div
         class="h-full bg-gray-800 rounded transition-width duration-75 ease-in-out"
           :style="{ width: `${progress}%` }">
-      ></div>
+      </div>
     </div>
   </div>
 </template>
