@@ -1,17 +1,18 @@
 <script setup lang="ts">
 
+import { useGameStore } from '@/stores/game';
+
 const props = defineProps<{
   value?: number;
 }>();
 
-const emit = defineEmits<{
-  (e: 'addBalance', value: number): void;
-}>();
+const add = useGameStore().addBalance;
+const allIn = useGameStore().allInBalance;
 </script>
 
 <template>
   <button
-    @click="emit('addBalance', props.value ?? 0)"
+    @click="value ? add(value) : allIn()"
     class="h-12 w-full lg:w-32 bg-gray-100 hover:bg-gray-300 font-semibold rounded shadow-md shadow-gray-300"
   >
     {{ value ?? "All In" }}

@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 
-import type Bet from "@/models/bet";
-import type Roll from "@/models/roll";
+import { useGameStore } from "@/stores/game";
+
 import Color from "@/enums/color";
 import Result from "@/enums/result";
+
+import type Bet from "@/models/bet";
+import type Roll from "@/models/roll";
 
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 
 const props = defineProps<{
-  timer: number;
   bets: {
     red: Bet;
     black: Bet;
@@ -18,7 +20,9 @@ const props = defineProps<{
   roll: Roll;
 }>();
 
-const initialTimer = props.timer;
+const game = useGameStore();
+
+const initialTimer = game.timer;
 const duration = 5000;
 const interval = 50;
 
@@ -67,12 +71,16 @@ const losses = computed(() => {
 });
 
 const winsAmount = computed(() => {
- return wins ? wins.value?.color === Color.GREEN ? wins.value?.amount * 13 : wins.value?.amount : 0;
+  return wins
+    ? wins.value?.color === Color.GREEN
+      ? wins.value?.amount * 13
+      : wins.value?.amount
+    : 0;
 });
 const lossesAmount = computed(() => {
   if (!losses?.value) return 0;
   return losses.value.reduce((acc, curr) => {
-    return curr !== null ? acc + curr.amount : acc
+    return curr !== null ? acc + curr.amount : acc;
   }, 0);
 });
 
@@ -88,8 +96,7 @@ const active = ref(true);
 </script>
 
 <template>
-  <div v-show="active"
-    class="px-4 py-2 h-auto space-y-4 bg-white rounded-lg shadow shadow-gray-300">
+  <div v-show="active" class="px-4 py-2 h-auto space-y-4 bg-white rounded-lg shadow shadow-gray-300">
     <div class="flex">
       <div class="grow text-2xl">
         <span v-if="result == Result.EQUAL">😐 No wins no losses &nbsp</span>
@@ -106,10 +113,8 @@ const active = ref(true);
     </div>
 
     <div class="h-5 bg-gray-300 rounded shadow-md shadow-gray-300">
-      <div
-        class="h-full bg-gray-800 rounded transition-width duration-75 ease-in-out"
-          :style="{ width: `${progress}%` }">
-      </div>
+      <div class="h-full bg-gray-800 rounded transition-width duration-75 ease-in-out"
+        :style="{ width: `${progress}%` }"></div>
     </div>
   </div>
 </template>

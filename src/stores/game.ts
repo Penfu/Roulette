@@ -1,0 +1,62 @@
+import { ref } from "vue";
+import { defineStore } from "pinia";
+
+import { useUserStore } from "@/stores/user";
+import { RollStep } from "@/enums/step";
+
+import type Roll from "@/models/roll";
+import type Color from "@/enums/color";
+import Bet from "@/models/bet";
+import BetProvider from "@/providers/bet";
+
+export const useGameStore = defineStore("game", () => {
+  const auth = useUserStore();
+
+  const step = ref(RollStep.DEFAULT);
+  const timer = ref(0);
+  const histories = ref([] as Roll[]);
+  const balance = ref(0);
+
+  function addBalance(amount: number) {
+     if (auth.user.balance < amount) {
+       console.log("You don't have enough money!");
+       return;
+     }
+
+     auth.user.balance -= amount;
+     balance.value += amount;
+  };
+
+  function allInBalance() {
+    addBalance(auth.user.balance);
+  };
+
+  function resetBalance() {
+    auth.user.balance += balance.value;
+    balance.value = 0;
+  };
+
+  async function makeBet(color: string) {
+      if (step.value !== RollStep.BET) {
+        console.log("Bets are closed!");
+        return;
+      }
+      if (balance.value === 0) {
+        console.log("Select an amount to bet!");
+        return;
+      }
+
+      const bet = new Bet(color, balance.value, auth.user.name);
+      balance.value = 0;
+
+      await BetProvider.addBet(bet);
+  }
+
+  return {
+    step,
+    timer,
+    histories,
+    balance, addBalance, allInBalance, resetBalance,
+    makeBet,
+  };
+});
