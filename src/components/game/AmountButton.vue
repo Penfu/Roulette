@@ -2,17 +2,16 @@
 
 import { useGameStore } from '@/stores/game';
 
-const props = defineProps<{
+defineProps<{
   value?: number;
 }>();
 
-const add = useGameStore().addBalance;
-const allIn = useGameStore().allInBalance;
+const game = useGameStore();
 </script>
 
 <template>
   <button
-    @click="value ? add(value) : allIn()"
+    @click="value ? game.addBalance(value) : game.allInBalance()"
     class="h-12 w-full lg:w-32 bg-gray-100 hover:bg-gray-300 font-semibold rounded shadow-md shadow-gray-300"
   >
     {{ value ?? "All In" }}
