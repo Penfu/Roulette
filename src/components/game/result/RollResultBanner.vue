@@ -6,8 +6,7 @@ import { useGameStore } from "@/stores/game";
 import Color from "@/enums/color";
 import Result from "@/enums/result";
 
-import type Bet from "@/models/bet";
-import type Roll from "@/models/roll";
+import type Bet from "@/models/Bet";
 
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 
@@ -17,7 +16,6 @@ const props = defineProps<{
     black: Bet;
     green: Bet;
   };
-  roll: Roll;
 }>();
 
 const game = useGameStore();
@@ -48,7 +46,7 @@ onUnmounted(() => {
 const wins = computed(() => {
   const { red, black, green } = props.bets;
 
-  switch (props.roll.color) {
+  switch (game.result.color) {
     case Color.RED:
       return red;
     case Color.BLACK:
@@ -60,7 +58,7 @@ const wins = computed(() => {
 const losses = computed(() => {
   const { red, black, green } = props.bets;
 
-  switch (props.roll.color) {
+  switch (game.result.color) {
     case Color.RED:
       return [black, green];
     case Color.BLACK:

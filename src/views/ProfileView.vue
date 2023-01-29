@@ -4,9 +4,10 @@ import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useNumberHelper } from "@/helpers/number";
 
-import type User from "@/models/user";
 import UserProvider from "@/providers/user";
-import type Bet from "@/models/bet";
+
+import type User from "@/models/User";
+import type Bet from "@/models/Bet";
 
 import BetStatsOnColor from "@/components/user/stats/bet/BetOnColor.vue";
 import BetActivity from "@/components/user/activity/bet/BetActivity.vue";

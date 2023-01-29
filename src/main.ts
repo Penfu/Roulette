@@ -23,6 +23,7 @@ window.Echo = new Echo({
   key: import.meta.env.VITE_APP_WEBSOCKET_KEY,
   wsHost: import.meta.env.VITE_APP_WEBSOCKET_SERVER,
   wsPort: 6001,
+  wssPort: 6001,
   forceTLS: false,
   disableStats: true,
   enabledTransports: ["ws", "wss"],

@@ -16,8 +16,8 @@ import Bets from "@/components/game/bets/Bets.vue";
 
 import RollProvider from "@/providers/roll";
 
-import Bet from "@/models/bet";
-import Roll from "@/models/roll";
+import Bet from "@/models/Bet";
+import Roll from "@/models/Roll";
 
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 
@@ -38,7 +38,6 @@ watch(
   }
 );
 
-const result = ref({} as Roll);
 const message = ref("");
 
 const bets = ref({
@@ -66,15 +65,16 @@ onMounted(async () => {
 
   window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
     game.timer = e.timer;
+    bets.value = {
+      red: e.bets.red.map((bet: any) => new Bet(Color.RED, bet.amount, bet.user)),
+      black: e.bets.black.map((bet: any) => new Bet(Color.BLACK, bet.amount, bet.user)),
+      green: e.bets.green.map((bet: any) => new Bet(Color.GREEN, bet.amount, bet.user)),
+    };
+    game.result = Roll.fromJson(e.result);
 
     switch (e.status) {
       case "BET":
         message.value = Math.round(e.timer / 1000) + " seconds left";
-        bets.value = {
-          red: e.bets.red.map((bet: any) => new Bet(Color.RED, bet.amount, bet.user)),
-          black: e.bets.black.map((bet: any) => new Bet(Color.BLACK, bet.amount, bet.user)),
-          green: e.bets.green.map((bet: any) => new Bet(Color.GREEN, bet.amount, bet.user)),
-        };
 
         if (game.step == RollStep.BET)
           return;
@@ -82,8 +82,6 @@ onMounted(async () => {
         game.step = RollStep.BET;
         break;
       case "ROLL":
-        bets.value = e.bets; // For late bets
-
         if (game.step == RollStep.ROLL)
           return;
 
@@ -94,7 +92,6 @@ onMounted(async () => {
         if (game.step == RollStep.ROLL_TO_RESULT)
           return;
 
-        result.value = Roll.fromJson(e.result);
         game.step = RollStep.ROLL_TO_RESULT;
 
         break;
@@ -112,7 +109,7 @@ onMounted(async () => {
           game.histories.pop();
         }
 
-        game.histories.unshift(result.value);
+        game.histories.unshift(game.result);
 
         // List player bets
         bets.value.red
@@ -132,7 +129,7 @@ onMounted(async () => {
           });
 
         // Give money if the player won
-        switch (result.value.color) {
+        switch (game.result.color) {
           case Color.RED:
             if (myBets.value.red != null)
               auth.user.balance += myBets.value.red.amount * 2;
@@ -174,14 +171,13 @@ const reset = () => {
       enter-to-class="opacity-100 transform scale-100" leave-from-class="opacity-100 transform scale-100"
       leave-to-class="opacity-0 transform scale-95">
 
-      <RollResultBanner class="mb-2" v-if="game.step == RollStep.DISPLAY_RESULT && hasBet" :bets="(myBets as any)"
-        :roll="(result as Roll)" />
+      <RollResultBanner class="mb-2" v-if="game.step == RollStep.DISPLAY_RESULT && hasBet" :bets="(myBets as any)" />
     </Transition>
 
     <div class="h-full grow flex flex-col space-y-8">
       <!-- Roll -->
       <div class="px-2 py-4 bg-white rounded-lg shadow shadow-gray-300">
-        <Roulette :message="message" :result="(result as Roll)" />
+        <Roulette :message="message" />
       </div>
 
       <!-- Amount buttons -->

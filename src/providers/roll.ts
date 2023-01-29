@@ -1,5 +1,6 @@
-import Roll from "@/models/roll";
 import axios from "axios";
+
+import Roll from "@/models/Roll";
 
 export default class RollProvider {
   public static async fetchRollFromBet(bet: number) : Promise<Roll> {

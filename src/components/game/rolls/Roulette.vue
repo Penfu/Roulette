@@ -8,14 +8,13 @@ import ColorHelper from '@/helpers/color';
 import { RollStep } from '@/enums/step';
 import Color from '@/enums/color';
 
-import type Roll from '@/models/roll';
+import type Roll from '@/models/Roll';
 
 import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
 
 import Histories from './Histories.vue';
 
 const props = defineProps<{
-  result: Roll;
   message: string;
 }>();
 
@@ -66,19 +65,19 @@ watch(
 
       let finalAngle = 0;
 
-      if (props.result.color === Color.RED) {
+      if (game.result.color === Color.RED) {
         let caseNum = Math.floor(Math.random() * 5); // 5 possible cases for red
         finalAngle = halfCaseSize; // Add Green case before
         finalAngle += caseSize + (caseNum * 2 * caseSize); // Add Red(s) and Black(s) cases before
         finalAngle += anime.random(marge, caseSize - marge);
       }
-      else if (props.result.color === Color.BLACK) {
+      else if (game.result.color === Color.BLACK) {
         let caseNum = Math.floor(Math.random() * 5) + 1; // 5 possible cases for black
         finalAngle = halfCaseSize; // Add Green case before
         finalAngle += caseNum * 2 * caseSize; // Add Red(s) and Black(s) cases before
         finalAngle += anime.random(marge, caseSize - marge); // Add random size inside the range with marge
       }
-      else if (props.result.color === Color.GREEN) {
+      else if (game.result.color === Color.GREEN) {
         finalAngle = 360 + anime.random(-halfCaseSize + marge, halfCaseSize - marge);
       }
 
@@ -117,7 +116,7 @@ watch(
         <div v-show="game.step === RollStep.DISPLAY_RESULT" class="flex items-center justify-center space-x-4">
           <p>Result</p>
           <span class="block px-3 py-1 text-white bg-red-500 rounded text-center shadow-md"
-            :class="ColorHelper.getClassFromColor(result.color)">{{ result.value }}</span>
+            :class="ColorHelper.getClassFromColor(game.result.color)">{{ game.result.value }}</span>
         </div>
       </div>
       <div class="justify-end items-center xl:items-end">

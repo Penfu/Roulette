@@ -4,9 +4,8 @@ import { defineStore } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { RollStep } from "@/enums/step";
 
-import type Roll from "@/models/roll";
-import type Color from "@/enums/color";
-import Bet from "@/models/bet";
+import type Roll from "@/models/Roll";
+import Bet from "@/models/Bet";
 import BetProvider from "@/providers/bet";
 
 export const useGameStore = defineStore("game", () => {
@@ -16,6 +15,7 @@ export const useGameStore = defineStore("game", () => {
   const timer = ref(0);
   const histories = ref([] as Roll[]);
   const balance = ref(0);
+  const result = ref({} as Roll);
 
   function addBalance(amount: number) {
      if (auth.user.balance < amount) {
@@ -58,5 +58,6 @@ export const useGameStore = defineStore("game", () => {
     histories,
     balance, addBalance, allInBalance, resetBalance,
     makeBet,
+    result,
   };
 });
