@@ -1,5 +1,6 @@
-import User from "@/models/user";
 import axios from "axios";
+
+import User from "@/models/User";
 
 export default class RollProvider {
   public static async fetchUser(name: string) {

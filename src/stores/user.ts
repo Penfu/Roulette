@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { defineStore } from "pinia";
 import axios from "axios";
 
 export const useUserStore = defineStore("user", () => {
@@ -32,7 +32,21 @@ export const useUserStore = defineStore("user", () => {
     user.value = response.data.user;
     token.value = response.data.token;
 
-    await loginFromToken();
+    localStorage.setItem("token", response.data.token);
+  }
+
+  async function login(email: string, password: string) {
+    await getCsrfToken();
+
+    const response = await axios.post("/login", {
+      email,
+      password,
+    });
+
+    user.value = response.data.user;
+    token.value = response.data.token;
+
+    localStorage.setItem("token", response.data.token);
   }
 
   async function loginFromToken() {
@@ -44,29 +58,15 @@ export const useUserStore = defineStore("user", () => {
     user.value = response.data;
   }
 
-  async function login(email: string, password: string) {
-    await getCsrfToken();
-
-    const response = await axios.post("/login", {
-      email,
-      password,
-    });
-
-    localStorage.setItem("token", response.data.token);
-
-    user.value = response.data.user;
-    token.value = response.data.token;
-  }
-
   function logout() {
     user.value = {
       name: "",
       email: "",
       balance: 0,
     };
+    token.value = null;
 
     localStorage.removeItem("token");
-    token.value = null;
   }
 
   return { user, token, isAuth, register, login, logout };

@@ -5,21 +5,21 @@ import router from "@/router";
 import { useUserStore } from "../stores/user";
 
 import Step from "@/components/register/Step.vue";
-import UsernameStep from "@/components/register/Username.vue";
+import NameStep from "@/components/register/Name.vue";
 import EmailStep from "@/components/register/Email.vue";
 import PasswordStep from "@/components/register/Password.vue";
 
 const userStore = useUserStore();
 
 const steps = [
-  { component: UsernameStep, title: "Username" },
+  { component: NameStep, title: "Username" },
   { component: EmailStep,    title: "Email" },
   { component: PasswordStep, title: "Password" },
 ];
 const step = ref(0);
 
 const user = ref({
-  username: "",
+  name: "",
   email: "",
   password: "",
   password_confirmation: "",
@@ -44,7 +44,7 @@ const register = async () => {
     return;
   }
 
-  await userStore.register(user.value.username, user.value.email, user.value.password);
+  await userStore.register(user.value.name, user.value.email, user.value.password);
 
   if (userStore.isAuth) {
     router.push("/");
