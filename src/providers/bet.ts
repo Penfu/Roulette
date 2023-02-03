@@ -1,9 +1,9 @@
 import axios from "axios";
 
-import { useUserStore } from "@/stores/user";
+import { useAuthStore } from "@/stores/auth";
 import type Bet from "@/models/Bet";
 
-const user = useUserStore();
+const user = useAuthStore();
 
 export default class BetProvider {
   public static async addBet(bet: Bet) {

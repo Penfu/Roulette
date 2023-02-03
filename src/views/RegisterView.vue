@@ -1,50 +1,73 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import router from "@/router";
 
-import { useUserStore } from "../stores/user";
+import { useAuthStore } from "../stores/auth";
 
 import Step from "@/components/register/Step.vue";
 import NameStep from "@/components/register/Name.vue";
 import EmailStep from "@/components/register/Email.vue";
 import PasswordStep from "@/components/register/Password.vue";
 
-const userStore = useUserStore();
+const userStore = useAuthStore();
 
 const steps = [
-  { component: NameStep, title: "Username" },
+  { component: NameStep,     title: "Username" },
   { component: EmailStep,    title: "Email" },
   { component: PasswordStep, title: "Password" },
 ];
+
 const step = ref(0);
+
+const errorsByStep = computed(() => {
+  return [
+    userStore.authErrors.name,
+    userStore.authErrors.email,
+    userStore.authErrors.password,
+  ];
+});
 
 const user = ref({
   name: "",
   email: "",
   password: "",
-  password_confirmation: "",
+  passwordConfirmation: "",
 });
-const errors = ref({});
+
+const isReadyToSubmit = computed(() => {
+  return step.value === steps.length - 1;
+});
+const isFetching = ref(false);
+
+onMounted(() => {
+  userStore.authErrors = {
+    name: [],
+    email: [],
+    password: [],
+  };
+});
 
 const previousStep = () => {
   if (step.value > 0)
     step.value--;
 };
 
-const nextStep = (e: any) => {
-  if (step.value < steps.length - 1)
-    step.value++;
-  else
-    register();
+const nextStep = () => {
+  if (isReadyToSubmit.value)
+    return;
+
+  step.value++;
 };
 
 const register = async () => {
-  if (user.value.password !== user.value.password_confirmation) {
-    errors.value = { password: ["Passwords do not match"] };
+  if (user.value.password !== user.value.passwordConfirmation) {
+    userStore.authErrors.password.push("Passwords do not match");
     return;
   }
 
+  isFetching.value = true;
   await userStore.register(user.value.name, user.value.email, user.value.password);
+  isFetching.value = false;
 
   if (userStore.isAuth) {
     router.push("/");
@@ -59,8 +82,8 @@ const register = async () => {
         <h2 class="text-3xl font-semibold uppercase text-center">Register</h2>
 
         <!-- Steps -->
-        <div class="flex space-x-8">
-          <step v-for="(c, index) in steps" :key="index" @set-step="step = index" :is-active="index === step" :index="index" :title="c.title" />
+        <div class="flex justify-center gap-6 md:gap-8">
+          <step v-for="(c, index) in steps" :key="index" @set-step="step = index" :is-active="index === step" :index="index" :title="c.title" :hasError="errorsByStep[index].length > 0" />
         </div>
       </div>
 
@@ -68,18 +91,28 @@ const register = async () => {
       <div class="max-w-lg w-full flex flex-col space-y-6">
         <div class="h-64">
           <keep-alive>
-            <component :is="steps[step].component" :user="user" />
+            <component :is="steps[step].component" :user="user" :errors="userStore.authErrors" />
           </keep-alive>
         </div>
 
         <!-- Buttons -->
         <div class="flex space-x-4">
           <button @click="previousStep"
-            class="w-full px-4 py-3 hover:bg-gray-50 border border-gray-400 rounded text-lg">
+            class="grow px-4 py-3 hover:bg-gray-50 border border-gray-400 rounded text-lg">
             Back
           </button>
-          <button @click="nextStep" class="w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg">
+
+          <button v-if="!isReadyToSubmit" @click="nextStep()" class="basis-1/2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg">
             Next Step
+          </button>
+          <button v-else @click="register()" class="flex justify-center items-center basis-4/5 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg transition-width duration-500">
+            Register
+            <span v-if="isFetching" class="basis-1/5 flex justify-center items-center">
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+            </span>
           </button>
         </div>
       </div>

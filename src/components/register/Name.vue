@@ -4,12 +4,16 @@ defineProps<{
   user: {
     name: string;
   };
+  errors: {
+    name: string[];
+  }
 }>();
 </script>
 
 <template>
-  <div>
-    <label class="block py-2">Name</label>
+  <div class="py-2 space-y-2">
+    <label class="block text-red-500">{{ errors.name[0] }}</label>
+    <label class="block">Name</label>
     <input
       type="text"
       v-model="user.name"

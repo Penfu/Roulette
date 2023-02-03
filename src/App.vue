@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
-import { useUserStore } from "./stores/user";
+import { useAuthStore } from "@/stores/auth";
 
 import {
   CubeIcon,
@@ -15,7 +15,7 @@ import Dropdown from "./components/Dropdown.vue";
 
 const sideBarIsOpen = ref(false);
 
-const auth = useUserStore();
+const auth = useAuthStore();
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-import { useUserStore } from "@/stores/user";
+import { useAuthStore } from "@/stores/auth";
 import { RollStep } from "@/enums/step";
 
 import type Roll from "@/models/Roll";
@@ -9,7 +9,7 @@ import Bet from "@/models/Bet";
 import BetProvider from "@/providers/bet";
 
 export const useGameStore = defineStore("game", () => {
-  const auth = useUserStore();
+  const auth = useAuthStore();
 
   const step = ref(RollStep.DEFAULT);
   const timer = ref(0);

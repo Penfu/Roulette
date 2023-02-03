@@ -2,11 +2,16 @@ import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
-export const useUserStore = defineStore("user", () => {
+export const useAuthStore = defineStore("auth", () => {
   const user = ref({
     name: "" as string,
     email: "" as string,
     balance: 0 as number,
+  });
+  const authErrors = ref({
+    name: [] as string[],
+    email: [] as string[],
+    password: [] as string[],
   });
   const token = ref(null as string | null);
   const isAuth = computed(() => token.value != null);
@@ -23,16 +28,24 @@ export const useUserStore = defineStore("user", () => {
   async function register(name: string, email: string, password: string) {
     await getCsrfToken();
 
-    const response = await axios.post("/register", {
-      name,
-      email,
-      password,
-    });
+    try {
+      const response = await axios.post("/register", {
+        name,
+        email,
+        password,
+      });
 
-    user.value = response.data.user;
-    token.value = response.data.token;
+      user.value = response.data.user;
+      token.value = response.data.token;
 
-    localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.token);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 422) {
+        authErrors.value.name = error.response.data.errors.name || [];
+        authErrors.value.email = error.response.data.errors.email || [];
+        authErrors.value.password = error.response.data.errors.password || [];
+      }
+    }
   }
 
   async function login(email: string, password: string) {
@@ -69,5 +82,5 @@ export const useUserStore = defineStore("user", () => {
     localStorage.removeItem("token");
   }
 
-  return { user, token, isAuth, register, login, logout };
+  return { user, authErrors, token, isAuth, register, login, logout };
 });
