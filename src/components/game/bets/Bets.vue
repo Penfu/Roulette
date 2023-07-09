@@ -6,7 +6,7 @@ import { useGameStore } from "@/stores/game";
 import Color from "@/enums/color";
 import BetCard from "@/components/game/bets/Bet.vue";
 
-import type Bet from "@/models/bet";
+import type Bet from "@/models/Bet";
 import { RollStep } from "@/enums/step";
 
 const props = defineProps<{

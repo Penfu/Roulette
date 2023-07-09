@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 
-import { useUserStore } from "@/stores/user";
+import { useAuthStore } from "@/stores/auth";
 import { useNumberHelper } from "@/helpers/number";
 
 import UserProvider from "@/providers/user";
@@ -21,7 +21,7 @@ const props = defineProps({
 
 const { pourcent } = useNumberHelper();
 
-const auth = useUserStore();
+const auth = useAuthStore();
 const user = ref<User>();
 
 const bets = ref([] as Bet[]);

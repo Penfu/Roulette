@@ -4,7 +4,7 @@ import anime from "animejs";
 
 import Color from "@/enums/color";
 
-import { useUserStore } from "@/stores/user";
+import { useAuthStore } from "@/stores/auth";
 import { useGameStore } from "@/stores/game";
 
 import { RollStep } from "@/enums/step";
@@ -21,7 +21,7 @@ import Roll from "@/models/Roll";
 
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 
-const auth = useUserStore();
+const auth = useAuthStore();
 const game = useGameStore();
 
 watch(
