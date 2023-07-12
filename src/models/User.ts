@@ -1,5 +1,6 @@
 import axios from "axios";
-import Bet from "@/models/Bet";
+
+import Bet from "@/models/bet";
 
 export default class User {
   constructor(

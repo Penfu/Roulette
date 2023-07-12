@@ -8,13 +8,13 @@ import ColorHelper from '@/helpers/color';
 import { RollStep } from '@/enums/step';
 import Color from '@/enums/color';
 
-import type Roll from '@/models/Roll';
+import type Roll from '@/models/roll';
 
 import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
 
 import Histories from './Histories.vue';
 
-const props = defineProps<{
+defineProps<{
   message: string;
 }>();
 

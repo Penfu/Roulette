@@ -6,7 +6,7 @@ import { useGameStore } from "@/stores/game";
 import Color from "@/enums/color";
 import Result from "@/enums/result";
 
-import type Bet from "@/models/Bet";
+import type Bet from "@/models/bet";
 
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 

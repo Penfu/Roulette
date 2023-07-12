@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { useAuthStore } from "@/stores/auth";
-import type Bet from "@/models/Bet";
+import type Bet from "@/models/bet";
 
 const user = useAuthStore();
 

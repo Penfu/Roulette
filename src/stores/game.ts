@@ -4,8 +4,9 @@ import { defineStore } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { RollStep } from "@/enums/step";
 
-import type Roll from "@/models/Roll";
-import Bet from "@/models/Bet";
+import type Roll from "@/models/roll";
+import Bet from "@/models/bet";
+
 import BetProvider from "@/providers/bet";
 
 export const useGameStore = defineStore("game", () => {

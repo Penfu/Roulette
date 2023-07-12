@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import anime from "animejs";
 
-import type Bet from "@/models/Bet";
+import type Bet from "@/models/bet";
 
 const props = defineProps<{
   bet: Bet;

@@ -16,8 +16,8 @@ import Bets from "@/components/game/bets/Bets.vue";
 
 import RollProvider from "@/providers/roll";
 
-import Bet from "@/models/Bet";
-import Roll from "@/models/Roll";
+import Bet from "@/models/bet";
+import Roll from "@/models/roll";
 
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 
