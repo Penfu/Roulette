@@ -11,15 +11,15 @@ const props = defineProps<{
   bet: Bet;
 }>();
 
-const { pourcent } = useNumberHelper();
+const { percent } = useNumberHelper();
 
 const roll = await props.bet.roll();
-const winrate = computed(() =>  pourcent(roll?.win, roll?.betCount));
+const winrate = computed(() =>  percent(roll?.win, roll?.betCount));
 </script>
 
 <template>
   <div class="border-t border-gray-300">
-    <div class="mx-6 lg:mx-0 my-2 lg:h-48 flex flex-col lg:flex-row gap-4">
+    <div class="mx-6 lg:mx-0 my-2 lg:h-48 flex flex-col lg:flex-row gap-2">
       <!-- Colors -->
       <div class="py-6 basis-1/3 flex justify-center items-center gap-2">
         <BetsOnColor :count="roll.redBetCount" :color="Color.RED" :color-win="roll.color"  />
@@ -43,9 +43,7 @@ const winrate = computed(() =>  pourcent(roll?.win, roll?.betCount));
       <!-- Amount -->
       <div class="py-6 basis-1/3 flex flex-col justify-center items-center space-y-2">
         <span class="text-4xl font-bold">{{ roll.amount }}</span>
-        <div class="h-20">
-          <span class="text-xl font-bold text-gray-700">Coins was bet</span>
-        </div>
+        <span class="text-xl font-bold text-gray-700">Coins was bet</span>
       </div>
     </div>
   </div>

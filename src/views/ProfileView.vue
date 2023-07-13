@@ -19,7 +19,7 @@ const props = defineProps({
   },
 });
 
-const { pourcent } = useNumberHelper();
+const { percent } = useNumberHelper();
 
 const auth = useAuthStore();
 const user = ref<User>();
@@ -48,8 +48,8 @@ const betCount = computed(
 const betWin = computed(
   () => userStats.value.red_wins + userStats.value.black_wins + userStats.value.green_wins
 );
-const betWinrate = computed(() => pourcent(betWin.value, betCount.value));
-const betAverage = computed(() => pourcent(userStats.value.total_bet, betCount.value));
+const betWinrate = computed(() => percent(betWin.value, betCount.value));
+const betAverage = computed(() => percent(userStats.value.total_bet, betCount.value));
 
 const loadBets = async () => {
   const newBets = await user.value?.fetchBets(betsOffset.value) ?? [];
@@ -138,7 +138,7 @@ onMounted(async () => {
       </div>
 
       <!-- Bets Stats -->
-      <div v-if="userStatsAreLoad" class="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+      <div v-if="userStatsAreLoad" class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
         <BetStatsOnColor color="red" :win="userStats.red_wins" :count="userStats.bets_on_red" />
         <BetStatsOnColor color="black" :win="userStats.black_wins" :count="userStats.bets_on_black" />
         <BetStatsOnColor color="green" :win="userStats.green_wins" :count="userStats.bets_on_green" />

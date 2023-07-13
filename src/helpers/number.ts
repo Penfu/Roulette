@@ -3,9 +3,9 @@ export const useNumberHelper = () => {
     return Number(parseFloat(number.toExponential(decimalPlaces)).toFixed(decimalPlaces));
   };
 
-  const pourcent = (number: number, max: number, decimalPlaces: number = 2) => {
-    return round(number / max * 100, decimalPlaces);
+  const percent = (number: number, max: number, decimalPlaces: number = 2) => {
+    return round((number / max) * 100, decimalPlaces);
   };
 
-  return { round, pourcent };
+  return { round, percent };
 };

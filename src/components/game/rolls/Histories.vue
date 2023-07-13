@@ -3,13 +3,13 @@ import type Roll from "@/models/roll";
 
 import History from "@/components/game/rolls/History.vue";
 
-const props = defineProps<{
-  histories: Roll[];
+defineProps<{
+  rolls: Roll[];
 }>();
 </script>
 
 <template>
-  <div v-if="histories.length == 0" class="p-2 grid grid-flow-col grid-rows-2 lg:grid-rows-1 gap-2">
+  <div v-if="rolls.length === 0" class="p-2 grid grid-flow-col grid-rows-2 lg:grid-rows-1 gap-2">
     <div
       v-for="x in 10"
       :key="x"
@@ -27,10 +27,9 @@ const props = defineProps<{
     class="p-2 grid grid-flow-col grid-rows-2 lg:grid-rows-1 gap-2"
   >
     <History
-      v-for="history in histories"
-      :key="history.id"
-      :color="history.color"
-      :value="history.value"
+      v-for="roll in rolls"
+      :key="roll.id"
+      :roll="roll"
     />
   </TransitionGroup>
 </template>

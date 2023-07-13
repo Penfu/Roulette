@@ -5,18 +5,18 @@ import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoa
 import type Bet from "@/models/bet";
 import Color from "@/enums/color";
 
-const props = defineProps<{
+defineProps<{
   bet: Bet;
 }>();
 
 const RollActivity = defineAsyncComponent(() => import("@/components/user/activity/roll/RollActivity.vue"));
 
-const detailed = ref(false);
+const isOpen = ref(false);
 </script>
 
 <template>
   <div class="flex flex-col bg-gray-50 rounded-lg border border-gray-300">
-    <div @click="detailed = !detailed" class="p-6 flex items-center space-x-8 hover:cursor-pointer">
+    <div @click="isOpen = !isOpen" class="p-6 flex items-center space-x-8 hover:cursor-pointer">
       <div class="grow flex items-center space-x-4">
         <div
           class="w-8 h-8 rounded shadow-md"
@@ -28,18 +28,20 @@ const detailed = ref(false);
         ></div>
         <span>{{ bet.amount }}</span>
       </div>
-      <span class="px-2 text-lg text-gray-800 font-bold rounded shadow-md"
+
+      <span class="w-14 uppercase text-gray-800 font-bold rounded shadow-md"
         :class="{
           'bg-green-300  shadow-green-500': bet.isWin,
           'bg-red-300  shadow-red-500': !bet.isWin
         }">
         {{ bet.isWin ? 'Win' : 'Lose' }}
       </span>
-      <span>{{ bet.formattedCreatedAt }}</span>
+
+      <span class="basis-1/5">{{ bet.formattedCreatedAt }}</span>
 
       <button class="focus:outline-none">
         <svg
-          v-if="detailed"
+          v-if="isOpen"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -63,7 +65,7 @@ const detailed = ref(false);
       </button>
     </div>
 
-    <Suspense v-if="detailed">
+    <Suspense v-if="isOpen">
       <template #default>
         <RollActivity :bet="bet" />
       </template>

@@ -12,7 +12,7 @@ import type Roll from '@/models/roll';
 
 import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
 
-import Histories from './Histories.vue';
+import Histories from '@/components/game/rolls/Histories.vue';
 
 defineProps<{
   message: string;
@@ -120,7 +120,7 @@ watch(
         </div>
       </div>
       <div class="justify-end items-center xl:items-end">
-        <Histories class="basis-1/3" :histories="(game.histories as Roll[])" />
+        <Histories class="basis-1/3" :rolls="game.histories" />
       </div>
     </div>
   </div>

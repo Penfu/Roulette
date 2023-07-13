@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { RollStep } from "@/enums/step";
 
-import type Roll from "@/models/roll";
+import Roll from "@/models/roll";
 import Bet from "@/models/bet";
 
 import BetProvider from "@/providers/bet";
@@ -14,7 +14,7 @@ export const useGameStore = defineStore("game", () => {
 
   const step = ref(RollStep.DEFAULT);
   const timer = ref(0);
-  const histories = ref([] as Roll[]);
+  const histories = ref([]);
   const balance = ref(0);
   const result = ref({} as Roll);
 
