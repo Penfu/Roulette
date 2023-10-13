@@ -42,7 +42,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="sm:h-screen flex flex-col space-y-4">
+  <main class="flex flex-col space-y-4">
     <!-- Podium -->
     <div
       class="flex flex-col lg:flex-row bg-white rounded-lg shadow shadow-gray-300"

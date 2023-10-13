@@ -23,7 +23,7 @@ const close = (e: any) => {
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <!-- Dropdown toggle button -->
     <button @click="toggle" class="w-full dropdown">
       <slot name="trigger"></slot>

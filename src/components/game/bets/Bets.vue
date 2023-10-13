@@ -30,7 +30,7 @@ const makeBet = () => {
 </script>
 
 <template>
-  <div class="w-full h-80 xl:h-full flex flex-col space-y-4">
+  <div class="w-full grow h-80 md:h-auto flex flex-col space-y-4">
     <button
       :disable="() => !isActive"
       @click="makeBet"

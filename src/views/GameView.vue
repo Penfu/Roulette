@@ -165,7 +165,7 @@ const reset = () => {
 </script>
 
 <template>
-  <main class="grow flex flex-col">
+  <main class="flex flex-col">
     <Transition mode="out-in" enter-active-class="transition ease-out duration-1000"
       leave-active-class="transition ease-out duration-1000" enter-from-class="opacity-0 transform scale-95"
       enter-to-class="opacity-100 transform scale-100" leave-from-class="opacity-100 transform scale-100"
@@ -174,7 +174,7 @@ const reset = () => {
       <RollResultBanner class="mb-2" v-if="game.step == RollStep.DISPLAY_RESULT && hasBet" :bets="(myBets as any)" />
     </Transition>
 
-    <div class="h-full grow flex flex-col space-y-8">
+    <div class="grow flex flex-col space-y-8">
       <!-- Roll -->
       <div class="px-2 py-4 bg-white rounded-lg shadow shadow-gray-300">
         <Roulette :message="message" />
