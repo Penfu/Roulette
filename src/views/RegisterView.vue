@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import router from "@/router";
 
-import { useAuthStore } from "../stores/auth";
+import { useAuthStore } from "@/stores/auth";
 
 import Step from "@/components/register/Step.vue";
 import NameStep from "@/components/register/Name.vue";
