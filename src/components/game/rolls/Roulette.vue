@@ -4,11 +4,9 @@ import anime from "animejs";
 
 import { useGameStore } from '@/stores/game';
 
-import ColorHelper from '@/helpers/color';
 import { RollStep } from '@/enums/step';
 import Color from '@/enums/color';
-
-import type Roll from '@/models/roll';
+import getClassFromColor from '@/helpers/color';
 
 import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
 
@@ -115,8 +113,8 @@ watch(
         <p v-show="game.step === RollStep.ROLL || game.step === RollStep.ROLL_TO_RESULT">ROLLING...</p>
         <div v-show="game.step === RollStep.DISPLAY_RESULT" class="flex items-center justify-center space-x-4">
           <p>Result</p>
-          <span class="block px-3 py-1 text-white bg-red-500 rounded text-center shadow-md"
-            :class="ColorHelper.getClassFromColor(game.result.color)">{{ game.result.value }}</span>
+          <span class="block px-3 py-1 text-white rounded text-center shadow-md"
+            :class="getClassFromColor(game.result.color)">{{ game.result.value }}</span>
         </div>
       </div>
       <div class="justify-end items-center xl:items-end">

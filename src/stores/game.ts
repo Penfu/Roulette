@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { RollStep } from "@/enums/step";
 
-import Roll from "@/models/roll";
+import type Roll from "@/models/roll";
 import Bet from "@/models/bet";
 
 import BetProvider from "@/providers/bet";
