@@ -3,18 +3,10 @@ import axios from "axios";
 import { computed, onMounted, ref } from "vue";
 
 const loading = ref(true);
-const search = ref("");
-const users = ref([] as Array<{ name: string; balance: number; rank: number }>);
+const search = ref('');
+const users = ref([] as { name: string; balance: number; rank: number }[]);
 
-const podium = computed(() => {
-  if (loading.value)
-    return [
-      { name: "", balance: null, rank: 1 },
-      { name: "", balance: null, rank: 2 },
-      { name: "", balance: null, rank: 3 },
-    ];
-  else return users.value.slice(0, 3);
-});
+const podium = computed(() => users.value.slice(0, 3));
 
 const filteredLeaderboard = computed(() => {
   return users.value
@@ -45,28 +37,22 @@ onMounted(async () => {
   <main class="flex flex-col space-y-4">
     <!-- Podium -->
     <div
-      class="flex flex-col lg:flex-row bg-white rounded-lg shadow shadow-gray-300"
+      class="h-64 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-white rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out "
     >
       <RouterLink
-        v-for="user in podium"
+        v-for="(user, index) in podium"
         :key="user.name"
         :to="`/profile/${user.name}`"
-        class="w-full py-6 sm:py-8 lg:py-10 flex items-center justify-center bg-white first:bg-yellow-400 hover:drop-shadow-lg first:rounded-t-lg last:rounded-b-lg lg:first:rounded-none lg:last:rounded-none lg:first:rounded-l-lg lg:last:rounded-r-lg"
+        class="group px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-center space-x-16 bg-white first:bg-yellow-400"
       >
-        <div class="basis-1/2 flex items-center space-x-16">
-          <span class="w-full basis-1/3 text-5xl font-bold">
-            {{ user.rank }}
-          </span>
-          <div v-if="loading" class="w-full flex flex-col basis-2/3 space-y-2 animate-pulse">
-            <span class="w-32 h-5 bg-gray-500 rounded-xl"></span>
-            <span class="w-32 h-5 bg-gray-500 rounded-xl"></span>
-          </div>
-          <div v-else class="w-full flex flex-col basis-2/3">
-            <span class="font-semibold">{{ user.name }}</span>
-            <span class="">{{ user.balance }}</span>
-          </div>
+          <span class="text-6xl font-bold">{{ index + 1}}</span>
+          <div class="grow flex flex-col">
+            <span class="font-semibold text-xl group-hover:text-3xl transform transition-all duration-300 ease-in-out">{{ user.name }}</span>
+            <span>{{ user.balance }}</span>
         </div>
       </RouterLink>
+
+      <div v-if="loading" class="grow bg-gray-500 rounded-xl animate-pulse" />
     </div>
 
     <!-- Search bar -->
@@ -80,7 +66,7 @@ onMounted(async () => {
       <div class="p-4 w-24 bg-gray-200 rounded-r-lg text-center">
         <span v-if="loading" class="text-xl animate-pulse">...</span>
         <span v-else class="text-lg font-semibold">
-          {{ filteredLeaderboard.length }} / {{ users.length - 3 }}
+          {{ filteredLeaderboard.length }} / {{ users.length - podium.length }}
         </span>
       </div>
     </div>
