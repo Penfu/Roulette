@@ -2,8 +2,10 @@
 import { defineAsyncComponent, ref } from "vue";
 import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoading.vue";
 
+import getClassFromColor from "@/helpers/color";
 import type Bet from "@/models/bet";
-import Color from "@/enums/color";
+
+import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 
 defineProps<{
   bet: Bet;
@@ -18,50 +20,21 @@ const isOpen = ref(false);
   <div class="flex flex-col bg-gray-50 rounded-lg border border-gray-300">
     <div @click="isOpen = !isOpen" class="p-6 flex items-center space-x-8 hover:cursor-pointer">
       <div class="grow flex items-center space-x-4">
-        <div
-          class="w-8 h-8 rounded shadow-md"
-          :class="{
-            'bg-red-500 shadow-red-300': bet.color == Color.RED,
-            'bg-gray-900 shadow-gray-500': bet.color == Color.BLACK,
-            'bg-green-500 shadow-green-300': bet.color == Color.GREEN,
-          }"
-        ></div>
+        <div class="w-8 h-8 rounded shadow-md" :class="getClassFromColor(bet.color)" />
         <span>{{ bet.amount }}</span>
       </div>
 
-      <span class="w-14 uppercase text-gray-800 font-bold rounded shadow-md"
-        :class="{
-          'bg-green-300  shadow-green-500': bet.isWin,
-          'bg-red-300  shadow-red-500': !bet.isWin
-        }">
+      <span class="w-14 uppercase text-gray-800 font-bold rounded shadow-md" :class="{
+        'bg-green-300  shadow-green-500': bet.isWin,
+        'bg-red-300  shadow-red-500': !bet.isWin
+      }">
         {{ bet.isWin ? 'Win' : 'Lose' }}
       </span>
 
-      <span class="basis-1/5">{{ bet.formattedCreatedAt }}</span>
+      <span class="px-6">{{ bet.formattedCreatedAt }}</span>
 
       <button class="focus:outline-none">
-        <svg
-          v-if="isOpen"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-6 h-6"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </svg>
-        <svg
-          v-else
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-6 h-6"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
+        <ChevronDownIcon :class="{ 'rotate-180': isOpen }" />
       </button>
     </div>
 

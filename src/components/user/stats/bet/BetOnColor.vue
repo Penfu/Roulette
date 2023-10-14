@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import Color from "@/enums/color";
+import getClassFromColor from "@/helpers/color";
 import { useNumberHelper } from "@/helpers/number";
 
 const props = defineProps<{
@@ -17,11 +17,7 @@ const winrate = computed(() => percent(props.win, props.count));
 
 <template>
   <div class="p-2 w-full flex items-center space-x-4 bg-white rounded-lg shadow shadow-gray-300">
-    <span class="p-8 rounded shadow-md" :class="{
-      'bg-red-500 shadow-red-300': color === Color.RED,
-      'bg-gray-900 shadow-gray-500': color === Color.BLACK,
-      'bg-green-500 shadow-green-300': color === Color.GREEN,
-    }" />
+    <span class="p-8 rounded shadow-md" :class="getClassFromColor(color)" />
 
     <div class="grow flex flex-row md:flex-col lg:flex-row justify-center lg:items-center">
       <div class="grow text-center space-x-1 text-xl">
