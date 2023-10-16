@@ -9,7 +9,7 @@ export default class BetProvider {
   public static async addBet(bet: Bet) {
     axios.defaults.headers.common["Authorization"] = "Bearer " + user.token;
 
-    await axios.get("http://localhost:8000/sanctum/csrf-cookie");
+    await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");
     await axios.post(
       "/bets",
       {

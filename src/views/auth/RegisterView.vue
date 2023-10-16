@@ -12,8 +12,8 @@ import PasswordStep from "@/components/register/Password.vue";
 const userStore = useAuthStore();
 
 const steps = [
-  { component: NameStep,     title: "Username" },
-  { component: EmailStep,    title: "Email" },
+  { component: NameStep, title: "Username" },
+  { component: EmailStep, title: "Email" },
   { component: PasswordStep, title: "Password" },
 ];
 
@@ -37,7 +37,7 @@ const user = ref({
 const isReadyToSubmit = computed(() => {
   return step.value === steps.length - 1;
 });
-const isFetching = ref(false);
+const isValidating = ref(false);
 
 onMounted(() => {
   userStore.authErrors = {
@@ -65,13 +65,11 @@ const register = async () => {
     return;
   }
 
-  isFetching.value = true;
+  isValidating.value = true;
   await userStore.register(user.value.name, user.value.email, user.value.password);
-  isFetching.value = false;
 
-  if (userStore.isAuth) {
-    router.push("/");
-  }
+  if (userStore.isAuth) router.push("/")
+  else isValidating.value = false;
 };
 </script>
 
@@ -83,7 +81,8 @@ const register = async () => {
 
         <!-- Steps -->
         <div class="flex justify-center gap-6 md:gap-8">
-          <step v-for="(c, index) in steps" :key="index" @set-step="step = index" :is-active="index === step" :index="index" :title="c.title" :hasError="errorsByStep[index].length > 0" />
+          <step v-for="(c, index) in steps" :key="index" @set-step="step = index" :is-active="index === step"
+            :index="index" :title="c.title" :hasError="errorsByStep[index].length > 0" />
         </div>
       </div>
 
@@ -97,18 +96,20 @@ const register = async () => {
 
         <!-- Buttons -->
         <div class="flex space-x-4">
-          <button @click="previousStep"
-            class="grow px-4 py-3 hover:bg-gray-50 border border-gray-400 rounded text-lg">
+          <button @click="previousStep" class="grow px-4 py-3 hover:bg-gray-50 border border-gray-400 rounded text-lg">
             Back
           </button>
 
-          <button v-if="!isReadyToSubmit" @click="nextStep()" class="basis-1/2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg">
+          <button v-if="!isReadyToSubmit" @click="nextStep()"
+            class="basis-1/2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg">
             Next Step
           </button>
-          <button v-else @click="register()" class="flex justify-center items-center basis-4/5 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg transition-width duration-500">
+          <button v-else @click="register()"
+            class="flex justify-center items-center basis-4/5 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg transition-width duration-500">
             Register
-            <span v-if="isFetching" class="basis-1/5 flex justify-center items-center">
-              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <span v-if="isValidating" class="basis-1/5 flex justify-center items-center">
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
               </svg>
