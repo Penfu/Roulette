@@ -3,11 +3,18 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 export const useAuthStore = defineStore("auth", () => {
-  const user = ref({
-    name: "" as string,
-    email: "" as string,
-    balance: 0 as number,
+  type User = {
+    name: string;
+    email: string;
+    balance: number;
+  };
+
+  const user = ref<User>({
+    name: "",
+    email: "",
+    balance: 0,
   });
+
   const authErrors = ref({
     name: [] as string[],
     email: [] as string[],
@@ -35,10 +42,7 @@ export const useAuthStore = defineStore("auth", () => {
         password,
       });
 
-      user.value = response.data.user;
-      token.value = response.data.token;
-
-      localStorage.setItem("token", response.data.token);
+      logUser(response.data.user, response.data.token);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 422) {
         authErrors.value.name = error.response.data.errors.name || [];
@@ -50,79 +54,56 @@ export const useAuthStore = defineStore("auth", () => {
 
   async function login(email: string, password: string) {
     await getCsrfToken();
+    const response = await axios.post("/login", { email, password });
 
-    const response = await axios.post("/login", {
-      email,
-      password,
-    });
-
-    user.value = response.data.user;
-    token.value = response.data.token;
-
-    localStorage.setItem("token", response.data.token);
+    logUser(response.data.user, response.data.token);
   }
 
   async function loginFromToken() {
-    await getCsrfToken();
-
     axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
     const response = await axios.get("/users/me");
 
     user.value = response.data;
   }
 
-  async function loginGithub() {
-    const response = await axios.get("/authorize/github/redirect");
-    console.log("Redirect response", response.data);
+  async function loginOAuth(provider: string) {
+    const response = await axios.get(`/authorize/${provider}/redirect`);
 
     if (response.data.redirect) {
       window.location.href = response.data.redirect;
       return;
     }
-
-    user.value = response.data.user;
-    token.value = response.data.token;
-
-    localStorage.setItem("token", response.data.token);
   }
 
-  async function loginGoogle() {
-    const response = await axios.get("/authorize/google/redirect");
-    console.log("Redirect response", response.data);
+  async function loginOAuthCallback(provider: string, code: string) {
+    const response = await axios.get(`/authorize/${provider}/callback`, {
+      params: { code },
+    });
 
-    if (response.data.redirect) {
-      window.location.href = response.data.redirect;
-      return;
-    }
-
-    user.value = response.data.user;
-    token.value = response.data.token;
-
-    localStorage.setItem("token", response.data.token);
+    logUser(response.data.user, response.data.token);
   }
-
-    async function loginOAuthCallback(provider: string, code: string) {
-      const response = await axios.get("/authorize/" + provider + "/callback", {
-        params: { code },
-      });
-      console.log("Callback response", response.data);
-
-      user.value = response.data.user;
-      token.value = response.data.token;
-
-      localStorage.setItem("token", response.data.token);
-    }
 
   function logout() {
-    user.value = {
-      name: "",
-      email: "",
-      balance: 0,
-    };
-    token.value = null;
-
-    localStorage.removeItem("token");
+    logUser({ name: "", email: "", balance: 0 }, null);
   }
 
-  return { user, authErrors, token, isAuth, register, login, loginGithub, loginGoogle, loginOAuthCallback, logout };
+  function logUser(newUser: User, newToken: string | null) {
+    user.value = newUser;
+    token.value = newToken;
+
+    if (newToken) localStorage.setItem("token", newToken);
+    else localStorage.removeItem("token");
+  }
+
+  return {
+    user,
+    authErrors,
+    token,
+    isAuth,
+    register,
+    login,
+    loginOAuth,
+    loginOAuthCallback,
+    logout,
+  };
 });
