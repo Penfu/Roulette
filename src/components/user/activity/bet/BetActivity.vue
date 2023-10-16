@@ -25,7 +25,7 @@ const isOpen = ref(false);
       </div>
 
       <span class="w-14 uppercase text-gray-800 font-bold rounded shadow-md" :class="{
-        'bg-green-300  shadow-green-500': bet.isWin,
+        'bg-green-300  shadow-green-400': bet.isWin,
         'bg-red-300  shadow-red-500': !bet.isWin
       }">
         {{ bet.isWin ? 'Win' : 'Lose' }}

@@ -38,7 +38,7 @@ const auth = useAuthStore();
         <!-- Balance -->
         <label v-show="auth.isAuth"
           class="p-3 flex justify-center items-center gap-2 rounded">
-          <BanknotesIcon class="h-8 w-8 text-green-500" />
+          <BanknotesIcon class="h-8 w-8 text-green-400" />
           <span class="text-xl">{{ auth.user.balance }}</span>
         </label>
 

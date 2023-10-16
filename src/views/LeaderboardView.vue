@@ -46,7 +46,7 @@ onMounted(async () => {
         v-for="(user, index) in podium"
         :key="user.name"
         :to="`/profile/${user.name}`"
-        class="group px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-center space-x-16 bg-white first:bg-yellow-400"
+        class="group px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-center space-x-16 bg-white first:bg-green-400"
       >
           <span class="text-6xl font-bold">{{ index + 1}}</span>
           <div class="grow flex flex-col">
@@ -96,7 +96,7 @@ onMounted(async () => {
         v-for="user in filteredLeaderboard"
         :key="user.name"
         :to="`/profile/${user.name}`"
-        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100  rounded"
+        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded-lg hover:bg-green-200"
       >
         <span class="w-6">{{ user.rank }}</span>
         <span class="grow">{{ user.name }}</span>
