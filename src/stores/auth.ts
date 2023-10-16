@@ -3,11 +3,18 @@ import { defineStore } from "pinia";
 import axios from "axios";
 
 export const useAuthStore = defineStore("auth", () => {
-  const user = ref({
-    name: "" as string,
-    email: "" as string,
-    balance: 0 as number,
+  type User = {
+    name: string;
+    email: string;
+    balance: number;
+  };
+
+  const user = ref<User>({
+    name: "",
+    email: "",
+    balance: 0,
   });
+
   const authErrors = ref({
     name: [] as string[],
     email: [] as string[],
@@ -21,12 +28,12 @@ export const useAuthStore = defineStore("auth", () => {
     loginFromToken();
   }
 
-  async function getCsrfToken() {
+  async function csrfToken() {
     await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");
   }
 
   async function register(name: string, email: string, password: string) {
-    await getCsrfToken();
+    await csrfToken();
 
     try {
       const response = await axios.post("/register", {
@@ -35,10 +42,7 @@ export const useAuthStore = defineStore("auth", () => {
         password,
       });
 
-      user.value = response.data.user;
-      token.value = response.data.token;
-
-      localStorage.setItem("token", response.data.token);
+      logUser(response.data.user, response.data.token);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 422) {
         authErrors.value.name = error.response.data.errors.name || [];
@@ -49,38 +53,62 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function login(email: string, password: string) {
-    await getCsrfToken();
+    await csrfToken();
+    const response = await axios.post("/login", { email, password });
 
-    const response = await axios.post("/login", {
-      email,
-      password,
-    });
-
-    user.value = response.data.user;
-    token.value = response.data.token;
-
-    localStorage.setItem("token", response.data.token);
+    logUser(response.data.user, response.data.token);
   }
 
   async function loginFromToken() {
-    await getCsrfToken();
-
     axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
     const response = await axios.get("/users/me");
 
     user.value = response.data;
   }
 
-  function logout() {
-    user.value = {
-      name: "",
-      email: "",
-      balance: 0,
-    };
-    token.value = null;
+  async function loginOAuth(provider: string) {
+    const response = await axios.get(`/authorize/${provider}/redirect`);
 
-    localStorage.removeItem("token");
+    if (response.data.redirect) {
+      window.location.href = response.data.redirect;
+      return;
+    }
   }
 
-  return { user, authErrors, token, isAuth, register, login, logout };
+  async function loginOAuthCallback(provider: string, code: string) {
+    const response = await axios.get(`/authorize/${provider}/callback`, {
+      params: { code },
+    });
+
+    logUser(response.data.user, response.data.token);
+  }
+
+  function logout() {
+    logUser({ name: "", email: "", balance: 0 }, null);
+  }
+
+  function logUser(newUser: User, newToken: string | null) {
+    user.value = newUser;
+    token.value = newToken;
+
+    if (newToken) {
+      localStorage.setItem("token", newToken);
+      axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
+    } else {
+      localStorage.removeItem("token");
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }
+
+  return {
+    user,
+    authErrors,
+    token,
+    isAuth,
+    register,
+    login,
+    loginOAuth,
+    loginOAuthCallback,
+    logout,
+  };
 });

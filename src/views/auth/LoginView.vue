@@ -2,7 +2,7 @@
 import router from "@/router";
 import { ref } from "vue";
 
-import { useAuthStore } from "../stores/auth";
+import { useAuthStore } from "@/stores/auth";
 
 const userStore = useAuthStore();
 
@@ -27,14 +27,14 @@ const login = async () => {
 
         <!-- OAuth -->
         <div class="w-full flex space-x-2 font-semibold">
-          <a href="http://localhost:8000/api/login/github"
+          <button @click="userStore.loginOAuth('github')"
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-gray-800 hover:bg-gray-900 text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
             Github
-          </a>
-          <a href="http://localhost:8000/api/login/google"
+          </button>
+          <button @click="userStore.loginOAuth('google')"
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
             Google
-          </a>
+          </button>
         </div>
 
         <!-- Manuel -->

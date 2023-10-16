@@ -21,25 +21,25 @@ const auth = useAuthStore();
       <!-- Title -->
       <RouterLink to="/" class="flex justify-center items-center space-x-2 text-lg">
         <CubeIcon class="w-6 h-6" />
-        <span class="hidden md:block text-lg font-bold">Roll</span>
+        <span class="hidden md:block text-2xl font-bold uppercase">Roll</span>
       </RouterLink>
 
       <!-- Links -->
       <div class="grow w-full">
         <div class="px-4 w-full flex flex-row items-center space-x-4 border-l border-gray-300">
-          <RouterLink to="/leaderboard" class="p-3 flex justify-center items-center text-lg hover:bg-gray-200 rounded">
-            <TrophyIcon class="lg:mx-2 w-6 h-6" />
-            <span class="hidden md:block grow font-medium">Leaderboard</span>
+          <RouterLink to="/leaderboard" class="p-3 flex justify-center items-center space-x-2 text-lg hover:bg-gray-200 rounded">
+            <TrophyIcon class="w-6 h-6" />
+            <span class="hidden md:block text-xl font-medium">Leaderboard</span>
           </RouterLink>
         </div>
       </div>
 
-      <div class="flex items-center gap-8">
+      <div class="flex items-center gap-2 md:gap-4 xl:gap-6">
         <!-- Balance -->
         <label v-show="auth.isAuth"
-          class="p-3 flex justify-center items-center gap-2 bg-white border border-gray-300 shadow-sm rounded">
-          <BanknotesIcon class="h-6 w-6 text-green-500" />
-          <span>{{ auth.user.balance }}</span>
+          class="p-3 flex justify-center items-center gap-2 rounded">
+          <BanknotesIcon class="h-8 w-8 text-green-500" />
+          <span class="text-xl">{{ auth.user.balance }}</span>
         </label>
 
         <!-- User Profile Dropdown -->
@@ -55,7 +55,7 @@ const auth = useAuthStore();
               class="z-20 absolute right-0 mt-2 py-4 flex flex-col justify-end items-center transition-all transition-slowest duration-500 ease">              <div class="w-36 bg-white rounded-lg shadow shadow-gray-300 drop-shadow">
                 <div class="m-2 flex flex-col">
                   <RouterLink :to="'/profile/' + auth.user.name" class="py-2 hover:bg-gray-200 rounded text-left">
-                    <span class="ml-4">Profile</span>
+                    <span class="ml-4">{{ auth.user.name }}</span>
                   </RouterLink>
                   <button @click="auth.logout" class="py-2 hover:bg-red-500 hover:text-white rounded text-left">
                     <span class="ml-4">Logout</span>
@@ -68,9 +68,8 @@ const auth = useAuthStore();
 
         <!-- Login btn -->
         <RouterLink v-else to="/login"
-          class="p-3 flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded">
-          <ArrowRightOnRectangleIcon class="w-6 h-6" />
-          <span class="hidden font-medium">Login</span>
+          class="py-2 px-4 text-lg font-semibold bg-gray-200 hover:bg-gray-300 rounded">
+          Login
         </RouterLink>
       </div>
     </div>
