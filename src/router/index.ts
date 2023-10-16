@@ -50,6 +50,7 @@ const router = createRouter({
       path: "/authorize/:provider/callback",
       name: "oauth",
       component: OAuthView,
+      props: true,
     },
   ],
 });

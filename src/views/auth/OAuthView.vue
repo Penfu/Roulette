@@ -4,13 +4,20 @@ import router from "@/router";
 import { useAuthStore } from "@/stores/auth";
 import { onMounted } from "vue";
 
+const props = defineProps({
+  provider: {
+    type: String,
+    required: true,
+  },
+});
+
 const userStore = useAuthStore();
 
 onMounted(async () => {
   const code = router.currentRoute.value.query.code as string;
 
   if (code) {
-    await userStore.loginGithubCallback(code);
+    await userStore.loginOAuthCallback(props.provider, code);
   }
 
   if (userStore.isAuth) {
@@ -25,7 +32,7 @@ onMounted(async () => {
     <div class="py-16 w-full flex items-center justify-center flex-col space-y-4">
 
       <div class="max-w-lg w-full space-y-12">
-        <h2 class="text-3xl font-semibold uppercase text-center">Login with Github</h2>
+        <h2 class="text-3xl font-semibold uppercase text-center">Login with {{ props.provider }}</h2>
       </div>
     </div>
   </main>

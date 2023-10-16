@@ -31,10 +31,10 @@ const login = async () => {
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-gray-800 hover:bg-gray-900 text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
             Github
           </button>
-          <a href="http://localhost:8000/api/login/google"
+          <button @click="userStore.loginGoogle()"
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
             Google
-          </a>
+          </button>
         </div>
 
         <!-- Manuel -->
