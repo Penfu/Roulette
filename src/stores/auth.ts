@@ -71,6 +71,33 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = response.data;
   }
 
+  async function loginGithub() {
+    const response = await axios.get("/authorize/github/redirect");
+    console.log("Redirect response", response.data);
+
+    if (response.data.redirect) {
+      window.location.href = response.data.redirect;
+      return;
+    }
+
+    user.value = response.data.user;
+    token.value = response.data.token;
+
+    localStorage.setItem("token", response.data.token);
+  }
+
+  async function loginGithubCallback(code: string) {
+    const response = await axios.get("/authorize/github/callback", {
+      params: { code },
+    });
+    console.log("Callback response", response.data);
+
+    user.value = response.data.user;
+    token.value = response.data.token;
+
+    localStorage.setItem("token", response.data.token);
+  }
+
   function logout() {
     user.value = {
       name: "",
@@ -82,5 +109,5 @@ export const useAuthStore = defineStore("auth", () => {
     localStorage.removeItem("token");
   }
 
-  return { user, authErrors, token, isAuth, register, login, logout };
+  return { user, authErrors, token, isAuth, register, login, loginGithub, loginGithubCallback, logout };
 });

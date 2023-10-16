@@ -68,9 +68,8 @@ const auth = useAuthStore();
 
         <!-- Login btn -->
         <RouterLink v-else to="/login"
-          class="p-3 flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded">
-          <ArrowRightOnRectangleIcon class="w-6 h-6" />
-          <span class="hidden font-medium">Login</span>
+          class="py-2 px-4 text-lg font-semibold bg-gray-200 hover:bg-gray-300 rounded">
+          Login
         </RouterLink>
       </div>
     </div>
