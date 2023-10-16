@@ -28,12 +28,12 @@ export const useAuthStore = defineStore("auth", () => {
     loginFromToken();
   }
 
-  async function getCsrfToken() {
+  async function csrfToken() {
     await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");
   }
 
   async function register(name: string, email: string, password: string) {
-    await getCsrfToken();
+    await csrfToken();
 
     try {
       const response = await axios.post("/register", {
@@ -53,7 +53,7 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function login(email: string, password: string) {
-    await getCsrfToken();
+    await csrfToken();
     const response = await axios.post("/login", { email, password });
 
     logUser(response.data.user, response.data.token);
@@ -91,8 +91,13 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = newUser;
     token.value = newToken;
 
-    if (newToken) localStorage.setItem("token", newToken);
-    else localStorage.removeItem("token");
+    if (newToken) {
+      localStorage.setItem("token", newToken);
+      axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
+    } else {
+      localStorage.removeItem("token");
+      delete axios.defaults.headers.common["Authorization"];
+    }
   }
 
   return {
