@@ -8,6 +8,8 @@ import Axios from "axios";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 
+import { MotionPlugin } from "@vueuse/motion";
+
 import "./assets/main.css";
 
 const app = createApp(App);
@@ -31,5 +33,6 @@ window.Echo = new Echo({
 
 app.use(pinia);
 app.use(router);
+app.use(MotionPlugin);
 
 app.mount("#app");
