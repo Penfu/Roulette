@@ -2,11 +2,22 @@
 import router from "@/router";
 
 import { useAuthStore } from "@/stores/auth";
+import { onMounted } from "vue";
 
 const userStore = useAuthStore();
 
-const code = router.currentRoute.value.query.code as string;
-await userStore.loginGithubCallback(code);
+onMounted(async () => {
+  const code = router.currentRoute.value.query.code as string;
+
+  if (code) {
+    await userStore.loginGithubCallback(code);
+  }
+
+  if (userStore.isAuth) {
+    router.push("/");
+  }
+});
+
 </script>
 
 <template>
