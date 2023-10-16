@@ -166,13 +166,12 @@ const reset = () => {
 
 <template>
   <main class="flex flex-col">
-    <Transition mode="out-in" enter-active-class="transition ease-out duration-1000"
-      leave-active-class="transition ease-out duration-1000" enter-from-class="opacity-0 transform scale-95"
-      enter-to-class="opacity-100 transform scale-100" leave-from-class="opacity-100 transform scale-100"
-      leave-to-class="opacity-0 transform scale-95">
-
-      <RollResultBanner class="mb-2" v-if="game.step == RollStep.DISPLAY_RESULT && hasBet" :bets="(myBets as any)" />
-    </Transition>
+    <RollResultBanner
+      v-motion
+      :initial="{ opacity: 0, y: -100 }"
+      :enter="{ opacity: 1, y: 0 }"
+      :leave="{ opacity: 0, y: 100 }"
+      class="mb-2" v-if="game.step == RollStep.DISPLAY_RESULT && hasBet" :bets="(myBets as any)" />
 
     <div class="grow flex flex-col space-y-8">
       <!-- Roll -->

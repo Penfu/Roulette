@@ -40,6 +40,9 @@ onMounted(async () => {
       class="h-64 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-white rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out "
     >
       <RouterLink
+        v-motion
+        :initial="{ opacity: 0, y: 100 }"
+        :enter="{ opacity: 1, y: 0, transition: { delay: 500 * (podium.length - (index + 1)) } }"
         v-for="(user, index) in podium"
         :key="user.name"
         :to="`/profile/${user.name}`"

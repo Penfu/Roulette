@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch } from "vue";
 import anime from "animejs";
 
-import { useGameStore } from '@/stores/game';
+import { useGameStore } from "@/stores/game";
 
-import { RollStep } from '@/enums/step';
-import Color from '@/enums/color';
-import getClassFromColor from '@/helpers/color';
+import { RollStep } from "@/enums/step";
+import Color from "@/enums/color";
+import getClassFromColor from "@/helpers/color";
 
-import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
+import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 
-import Histories from '@/components/game/rolls/Histories.vue';
+import Histories from "@/components/game/rolls/Histories.vue";
 
 defineProps<{
   message: string;
@@ -24,8 +24,8 @@ watch(
   () => game.step,
   (step) => {
     if (step === RollStep.RESET) {
-      anime.timeline({loop: 1})
-        // Make the wheel disappear
+      anime
+        .timeline()
         .add({
           targets: wheel.value,
           scale: [1, 0],
@@ -37,15 +37,13 @@ watch(
           rotate: 0,
           duration: 50,
         })
-        // Make the wheel appear
         .add({
           targets: wheel.value,
           scale: [0, 1],
           opacity: [0, 1],
           duration: 925,
-        })
-    }
-    else if (step === RollStep.ROLL) {
+        });
+    } else if (step === RollStep.ROLL) {
       // Make the wheel spin
       anime({
         targets: wheel.value,
@@ -54,8 +52,7 @@ watch(
         easing: "linear",
         paused: false,
       });
-    }
-    else if (step === RollStep.ROLL_TO_RESULT) {
+    } else if (step === RollStep.ROLL_TO_RESULT) {
       // Stop the wheel at the winning case
       const caseSize = 360 / 11; // 11 cases
       const halfCaseSize = caseSize / 2;
@@ -64,18 +61,16 @@ watch(
       let finalAngle = 0;
 
       if (game.result.color === Color.RED) {
-        let caseNum = Math.floor(Math.random() * 5); // 5 possible cases for red
+        const winningCaseIndex = Math.floor(Math.random() * 5); // 5 possible cases for red
         finalAngle = halfCaseSize; // Add Green case before
-        finalAngle += caseSize + (caseNum * 2 * caseSize); // Add Red(s) and Black(s) cases before
+        finalAngle += caseSize + winningCaseIndex * 2 * caseSize; // Add Red(s) and Black(s) cases before
         finalAngle += anime.random(marge, caseSize - marge);
-      }
-      else if (game.result.color === Color.BLACK) {
-        let caseNum = Math.floor(Math.random() * 5) + 1; // 5 possible cases for black
+      } else if (game.result.color === Color.BLACK) {
+        const winningCaseIndex = Math.floor(Math.random() * 5) + 1; // 5 possible cases for black
         finalAngle = halfCaseSize; // Add Green case before
-        finalAngle += caseNum * 2 * caseSize; // Add Red(s) and Black(s) cases before
+        finalAngle += winningCaseIndex * 2 * caseSize; // Add Red(s) and Black(s) cases before
         finalAngle += anime.random(marge, caseSize - marge); // Add random size inside the range with marge
-      }
-      else if (game.result.color === Color.GREEN) {
+      } else if (game.result.color === Color.GREEN) {
         finalAngle = 360 + anime.random(-halfCaseSize + marge, halfCaseSize - marge);
       }
 
@@ -92,31 +87,51 @@ watch(
         paused: false,
 
         begin: function () {
-          anime.set(wheel.value, { 'rotate': currentRotation });
+          anime.set(wheel.value, { rotate: currentRotation });
         },
       });
     }
   }
 );
-
 </script>
 
 <template>
   <div class="flex flex-col xl:flex-row items-center xl:items-stretch">
     <div class="py-2 basis-2/3 flex flex-col justify-center items-center space-y-2">
       <ChevronDownIcon />
-      <img ref="wheel" src="@/assets/roulette.png" alt="Roulette" class="h-80 w-80 object-contain" />
+      <img
+        v-motion-pop
+        ref="wheel"
+        src="@/assets/roulette.png"
+        alt="Roulette"
+        class="h-80 w-80 object-contain"
+        :class="{
+          ' !rotate-0': game.step === RollStep.BET,
+        }"
+      />
     </div>
+
     <div class="basis-1/3 flex flex-col justify-end">
-      <div class="h-20 my-8 flex grow justify-center items-center text-center text-2xl font-semibold uppercase">
-        <p v-show="game.step === RollStep.BET">{{ message }}</p>
-        <p v-show="game.step === RollStep.ROLL || game.step === RollStep.ROLL_TO_RESULT">ROLLING...</p>
-        <div v-show="game.step === RollStep.DISPLAY_RESULT" class="flex items-center justify-center space-x-4">
-          <p>Result</p>
-          <span class="block px-3 py-1 text-white rounded text-center shadow-md"
-            :class="getClassFromColor(game.result.color)">{{ game.result.value }}</span>
+      <div
+        class="h-20 my-8 flex grow justify-center items-center text-center text-3xl font-semibold uppercase"
+      >
+        <span v-show="game.step === RollStep.BET">{{ message }}</span>
+        <span v-show="game.step === RollStep.ROLL || game.step === RollStep.ROLL_TO_RESULT">
+          Rolling...
+        </span>
+        <div
+          v-show="game.step === RollStep.DISPLAY_RESULT"
+          class="flex items-center justify-center space-x-4"
+        >
+          <span>Result</span>
+          <span
+            class="block px-3 py-1 text-white rounded text-center shadow-md"
+            :class="getClassFromColor(game.result.color)"
+            >{{ game.result.value }}</span
+          >
         </div>
       </div>
+
       <div class="justify-end items-center xl:items-end">
         <Histories class="basis-1/3" :rolls="game.histories" />
       </div>
