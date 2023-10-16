@@ -8,6 +8,7 @@ import Step from "@/components/register/Step.vue";
 import NameStep from "@/components/register/Name.vue";
 import EmailStep from "@/components/register/Email.vue";
 import PasswordStep from "@/components/register/Password.vue";
+import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 
 const userStore = useAuthStore();
 
@@ -105,15 +106,9 @@ const register = async () => {
             Next Step
           </button>
           <button v-else @click="register()"
-            class="flex justify-center items-center basis-4/5 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg transition-width duration-500">
+            class="relative flex justify-center items-center basis-4/5 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg transition-width duration-500">
             Register
-            <span v-if="isValidating" class="basis-1/5 flex justify-center items-center">
-              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-              </svg>
-            </span>
+            <SpinnerIcon v-if="isValidating" class="absolute right-4" />
           </button>
         </div>
       </div>
