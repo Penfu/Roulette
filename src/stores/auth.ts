@@ -52,9 +52,19 @@ export const useAuthStore = defineStore("auth", () => {
 
   async function login(email: string, password: string) {
     await csrfToken();
-    const response = await axios.post("/login", { email, password });
 
-    logUser(response.data.user, response.data.token);
+    try {
+      const response = await axios.post("/login", { email, password });
+      logUser(response.data.user, response.data.token);
+
+      return { success: true, message: "success" };
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        return { success: false, message: "invalid_credentials" };
+      }
+
+      return { success: false, message: "error" };
+    }
   }
 
   async function loginFromToken() {
