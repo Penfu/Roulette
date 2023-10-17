@@ -15,11 +15,6 @@ export const useAuthStore = defineStore("auth", () => {
     balance: 0,
   });
 
-  const authErrors = ref({
-    name: [] as string[],
-    email: [] as string[],
-    password: [] as string[],
-  });
   const token = ref(null as string | null);
   const isAuth = computed(() => token.value != null);
 
@@ -43,12 +38,15 @@ export const useAuthStore = defineStore("auth", () => {
       });
 
       logUser(response.data.user, response.data.token);
+
+      return { success: true, message: "success" };
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 422) {
-        authErrors.value.name = error.response.data.errors.name || [];
-        authErrors.value.email = error.response.data.errors.email || [];
-        authErrors.value.password = error.response.data.errors.password || [];
+        const { name, email, password } = error.response.data.errors;
+        return { success: false, errors: { name, email, password } };
       }
+
+      return { success: false, message: "error" };
     }
   }
 
@@ -102,7 +100,6 @@ export const useAuthStore = defineStore("auth", () => {
 
   return {
     user,
-    authErrors,
     token,
     isAuth,
     register,
