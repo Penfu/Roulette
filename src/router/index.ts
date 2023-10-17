@@ -1,15 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-
 import { useAuthStore } from "@/stores/auth";
-
-import NotFoundViewVue from "@/views/NotFoundView.vue";
-
-import LeaderboardView from "@/views/LeaderboardView.vue";
-import ProfileView from "@/views/ProfileView.vue";
-
-import LoginView from "@/views/auth/LoginView.vue";
-import RegisterView from "@/views/auth/RegisterView.vue";
-import OAuthView from "@/views/auth/OAuthView.vue";
 
 const lazyLoad = (view: string) => {
   return () => import(`../views/${view}.vue`);
@@ -25,7 +15,7 @@ const router = createRouter({
   routes: [
     {
       path: "/:pathMatch(.*)*",
-      component: NotFoundViewVue,
+      component: lazyLoad("NotFoundViewVue"),
     },
     {
       path: "/",
@@ -35,30 +25,30 @@ const router = createRouter({
     {
       path: "/leaderboard",
       name: "leaderboard",
-      component: LeaderboardView,
+      component: lazyLoad("LeaderboardView"),
     },
     {
       path: "/profile/:name?",
       name: "profile",
-      component: ProfileView,
+      component: lazyLoad("ProfileView"),
       props: true,
     },
     {
       path: "/login",
       name: "login",
-      component: LoginView,
+      component: lazyLoad("auth/LoginView"),
       beforeEnter: [guestGuard],
     },
     {
       path: "/register",
       name: "register",
-      component: RegisterView,
+      component: lazyLoad("auth/RegisterView"),
       beforeEnter: [guestGuard],
     },
     {
       path: "/authorize/:provider/callback",
       name: "oauth",
-      component: OAuthView,
+      component: lazyLoad("auth/OAuthView"),
       props: true,
       beforeEnter: [guestGuard],
     },
