@@ -15,7 +15,7 @@ const router = createRouter({
   routes: [
     {
       path: "/:pathMatch(.*)*",
-      component: lazyLoad("NotFoundViewVue"),
+      component: lazyLoad("NotFoundView"),
     },
     {
       path: "/",
@@ -46,7 +46,7 @@ const router = createRouter({
       beforeEnter: [guestGuard],
     },
     {
-      path: "/authorize/:provider/callback",
+      path: "/authorize/:provider(github|google)/callback",
       name: "oauth",
       component: lazyLoad("auth/OAuthView"),
       props: true,
