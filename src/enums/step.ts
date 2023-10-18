@@ -1,0 +1,8 @@
+export enum RollStep {
+  BET = 'BET',
+  ROLL = 'ROLL',
+  ROLL_TO_RESULT = 'ROLL_TO_RESULT',
+  DISPLAY_RESULT = 'DISPLAY_RESULT',
+  RESET = 'RESET',
+  DEFAULT = 'LOADING',
+}

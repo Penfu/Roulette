@@ -1,22 +1,13 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
-
-window.Echo.channel('channel').listen('Hello', (e: any) => {
-  console.log(e);
-});
-
+import NavBar from "@/components/layout/NavBar.vue";
 </script>
 
 <template>
-  <header>
-    <div>
-      <nav>
-        <RouterLink to="/" class="mx-2">Home</RouterLink>
-        <RouterLink to="/about" class="mx-2">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+  <div class="bg-gray-100">
+    <div class="mx-auto max-w-[100rem] px-4 flex flex-col min-h-screen">
+      <NavBar />
 
-  <RouterView />
+      <RouterView class="z-10 py-4 grow" />
+    </div>
+  </div>
 </template>

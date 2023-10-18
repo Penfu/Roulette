@@ -1,23 +1,58 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+
+const lazyLoad = (view: string) => {
+  return () => import(`../views/${view}.vue`);
+};
+
+const authGuard = (to: any, from: any, next: any) =>
+  useAuthStore().isAuth ? next() : next({ name: "login" });
+const guestGuard = (to: any, from: any, next: any) =>
+  !useAuthStore().isAuth ? next() : next({ name: "home" });
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView
+      path: "/:pathMatch(.*)*",
+      component: lazyLoad("NotFoundView"),
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
-  ]
-})
+      path: "/",
+      name: "home",
+      component: lazyLoad("GameView"),
+    },
+    {
+      path: "/leaderboard",
+      name: "leaderboard",
+      component: lazyLoad("LeaderboardView"),
+    },
+    {
+      path: "/profile/:name?",
+      name: "profile",
+      component: lazyLoad("ProfileView"),
+      props: true,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: lazyLoad("auth/LoginView"),
+      beforeEnter: [guestGuard],
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: lazyLoad("auth/RegisterView"),
+      beforeEnter: [guestGuard],
+    },
+    {
+      path: "/authorize/:provider(github|google)/callback",
+      name: "oauth",
+      component: lazyLoad("auth/OAuthView"),
+      props: true,
+      beforeEnter: [guestGuard],
+    },
+  ],
+});
 
-export default router
+export default router;
