@@ -105,10 +105,9 @@ onMounted(async () => {
 
         game.step = RollStep.DISPLAY_RESULT;
 
-        if (game.histories.length == 10) {
+        if (game.histories.length >= 10) {
           game.histories.pop();
         }
-
         game.histories.unshift(game.result);
 
         // List player bets
@@ -195,7 +194,7 @@ const reset = () => {
             </div>
             <div class="grow flex justify-end">
               <button @click="game.resetBalance()"
-                class="h-12 px-12 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-md shadow-red-300">
+                class="h-12 px-8 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-md shadow-red-300">
                 <CrossIcon />
               </button>
             </div>

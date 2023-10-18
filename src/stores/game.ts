@@ -14,9 +14,9 @@ export const useGameStore = defineStore("game", () => {
 
   const step = ref(RollStep.DEFAULT);
   const timer = ref(0);
-  const histories = ref([]);
   const balance = ref(0);
-  const result = ref({} as Roll);
+  const result = ref<Roll>();
+  const histories = ref<Roll[]>([]);
 
   function addBalance(amount: number) {
      if (auth.user.balance < amount) {
@@ -56,9 +56,9 @@ export const useGameStore = defineStore("game", () => {
   return {
     step,
     timer,
-    histories,
     balance, addBalance, allInBalance, resetBalance,
     makeBet,
     result,
+    histories,
   };
 });
