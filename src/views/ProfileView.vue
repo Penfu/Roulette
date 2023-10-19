@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import moment from "moment";
 
-import { useAuthStore } from "@/stores/auth";
+import { useProfile } from "@/composables/useProfile";
+
 import { useNumberHelper } from "@/helpers/number";
-
-import type User from "@/models/user";
-import type Bet from "@/models/bet";
-
-import UserProvider from "@/providers/user";
 
 import BetStatsOnColor from "@/components/user/stats/bet/BetOnColor.vue";
 import BetActivity from "@/components/user/activity/bet/BetActivity.vue";
-
 const props = defineProps({
   name: {
     type: String,
@@ -21,46 +17,29 @@ const props = defineProps({
 
 const { percent } = useNumberHelper();
 
-const auth = useAuthStore();
-const user = ref<User>();
+const { user, fetchUser, stats, fetchUserStats, bets, fetchUserBets } = useProfile();
 
-const bets = ref([] as Bet[]);
 const betsOffset = ref(0 as number);
-const hasMoreBets = computed(() => bets.value.length >= betsOffset.value);
 const betsAreLoad = ref(false);
-
-const userStats = ref({
-  bets_on_red: 0,
-  bets_on_black: 0,
-  bets_on_green: 0,
-  red_wins: 0,
-  black_wins: 0,
-  green_wins: 0,
-  total_bet: 0,
-});
 const userStatsAreLoad = ref(false);
 
-const isMyProfile = computed(() => auth.user?.name === props.name);
-
 const betCount = computed(
-  () => userStats.value.bets_on_red + userStats.value.bets_on_black + userStats.value.bets_on_green
+  () => stats.value.bets_on_red + stats.value.bets_on_black + stats.value.bets_on_green
 );
 const betWin = computed(
-  () => userStats.value.red_wins + userStats.value.black_wins + userStats.value.green_wins
+  () => stats.value.red_wins + stats.value.black_wins + stats.value.green_wins
 );
 const betWinrate = computed(() => percent(betWin.value, betCount.value));
-const betAverage = computed(() => percent(userStats.value.total_bet, betCount.value));
+const betAverage = computed(() => percent(stats.value.total_bet, betCount.value));
 
 const loadBets = async () => {
-  const newBets = (await user.value?.fetchBets(betsOffset.value)) ?? [];
-  bets.value.push(...newBets);
+  await fetchUserBets(props.name, betsOffset.value);
   betsOffset.value += 10;
 };
 
 onMounted(async () => {
-  user.value = await UserProvider.fetchUser(props.name);
-
-  userStats.value = await user.value.fetchStats();
+  await fetchUser(props.name);
+  await fetchUserStats(props.name);
   userStatsAreLoad.value = true;
 
   loadBets();
@@ -70,7 +49,7 @@ onMounted(async () => {
 
 <template>
   <main class="flex flex-col space-y-8 md:space-y-10">
-    <!-- User -->
+    <!-- User info-->
     <div class="p-8 bg-white rounded-lg shadow shadow-gray-300">
       <div v-if="user" class="flex flex-col md:flex-row gap-8">
         <div class="grow flex space-x-8">
@@ -87,7 +66,8 @@ onMounted(async () => {
               </h3>
               <h4>{{ user.email }}</h4>
             </div>
-            <span>Joined {{ user?.formatedCreatedAt }}</span>
+            <span>Joined {{ moment(user.created_at).fromNow() }}</span
+            >
           </div>
         </div>
 
@@ -100,7 +80,7 @@ onMounted(async () => {
       <div v-else></div>
     </div>
 
-    <!-- Stats -->
+    <!-- User stats -->
     <div class="space-y-4">
       <h2 class="text-3xl text-gray-800 font-bold">Stats</h2>
 
@@ -146,17 +126,9 @@ onMounted(async () => {
         v-if="userStatsAreLoad"
         class="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4"
       >
-        <BetStatsOnColor color="red" :win="userStats.red_wins" :count="userStats.bets_on_red" />
-        <BetStatsOnColor
-          color="black"
-          :win="userStats.black_wins"
-          :count="userStats.bets_on_black"
-        />
-        <BetStatsOnColor
-          color="green"
-          :win="userStats.green_wins"
-          :count="userStats.bets_on_green"
-        />
+        <BetStatsOnColor color="red" :win="stats.red_wins" :count="stats.bets_on_red" />
+        <BetStatsOnColor color="black" :win="stats.black_wins" :count="stats.bets_on_black" />
+        <BetStatsOnColor color="green" :win="stats.green_wins" :count="stats.bets_on_green" />
       </div>
       <!-- Bets Stats Skeleton -->
       <div v-else class="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
@@ -174,7 +146,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <!-- Activity -->
+    <!-- Bet history -->
     <div class="grow flex flex-col space-y-4">
       <h2 class="text-3xl text-gray-800 font-bold">Bets</h2>
       <div class="p-4 grow bg-white rounded-lg shadow shadow-gray-300 space-y-4">
@@ -185,9 +157,9 @@ onMounted(async () => {
           </div>
 
           <button
-            v-show="bets.length > 0 && hasMoreBets"
+            v-show="bets.length > 0"
             class="px-6 py-3 md:py-2 w-full md:w-auto bg-gray-600 hover:bg-gray-700 text-white text-lg rounded-md shadow-md shadow-gray-300"
-            @click="loadBets"
+            @click="loadBets()"
           >
             Load more
           </button>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref } from "vue";
-import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoading.vue";
+import moment from "moment";
 
 import getClassFromColor from "@/helpers/color";
 import type Bet from "@/models/bet";
 
+import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoading.vue";
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 
 defineProps<{
@@ -36,7 +37,7 @@ const isOpen = ref(false);
         {{ bet.isWin ? "Win" : "Lose" }}
       </span>
 
-      <span class="px-6">{{ bet.formattedCreatedAt }}</span>
+      <span class="px-6">{{ moment(bet.createdAt).format("DD/MM/YYYY HH:mm:ss") }}</span>
 
       <button class="focus:outline-none">
         <ChevronDownIcon :class="{ 'rotate-180': isOpen }" />
@@ -46,7 +47,11 @@ const isOpen = ref(false);
     <div
       v-motion
       :initial="{ opacity: 0, y: -100 }"
-      :enter="{ opacity: 1, y: 0, transition: { type: 'keyframes', ease: 'easeInOut', duration: 150 } }"
+      :enter="{
+        opacity: 1,
+        y: 0,
+        transition: { type: 'keyframes', ease: 'easeInOut', duration: 150 },
+      }"
       v-if="isOpen"
     >
       <Suspense>
