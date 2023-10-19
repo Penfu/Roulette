@@ -1,26 +1,33 @@
 <script setup lang="ts">
-import axios from "axios";
 import { computed, onMounted, ref } from "vue";
 
+import { useUser } from "@/composables/useUser";
+
+type Rank = {
+  name: string;
+  balance: number;
+  rank: number;
+};
+
+const { users, fetchUsers } = useUser();
 const loading = ref(true);
-const search = ref('');
-const users = ref([] as { name: string; balance: number; rank: number }[]);
+const search = ref("");
 
-const podium = computed(() => users.value.slice(0, 3));
-
-const filteredLeaderboard = computed(() => {
-  return users.value
+const rankedUsers = ref<Rank[]>([]);
+const podiumUsers = computed(() => rankedUsers.value.slice(0, 3));
+const searchUsers = computed(() =>
+  rankedUsers.value
     .slice(3)
-    .filter((user) =>
-      user.name.toLowerCase().includes(search.value.toLowerCase())
-    );
-});
+    .filter((user) => user.name.toLowerCase().includes(search.value.toLowerCase()))
+);
 
 onMounted(async () => {
-  const response = await axios.get("http://localhost:8000/api/users");
+  await fetchUsers();
 
-  users.value = response.data
-    .sort((a: any, b: any) => b.balance - a.balance)
+  console.log("Fetching users...");
+
+  rankedUsers.value = users.value
+    .sort((a, b) => b.balance - a.balance)
     .map((user: any, index: number) => {
       return {
         name: user.name,
@@ -28,7 +35,6 @@ onMounted(async () => {
         rank: index + 1,
       };
     });
-
   loading.value = false;
 });
 </script>
@@ -37,21 +43,28 @@ onMounted(async () => {
   <main class="flex flex-col space-y-4">
     <!-- Podium -->
     <div
-      class="h-64 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-white rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out "
+      class="h-64 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-white rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out"
     >
       <RouterLink
         v-motion
         :initial="{ opacity: 0, y: 100 }"
-        :enter="{ opacity: 1, y: 0, transition: { delay: 500 * (podium.length - (index + 1)) } }"
-        v-for="(user, index) in podium"
+        :enter="{
+          opacity: 1,
+          y: 0,
+          transition: { delay: 500 * (podiumUsers.length - (index + 1)) },
+        }"
+        v-for="(user, index) in podiumUsers"
         :key="user.name"
         :to="`/profile/${user.name}`"
         class="group px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-center space-x-16 bg-white first:bg-green-400"
       >
-          <span class="text-6xl font-bold">{{ index + 1}}</span>
-          <div class="grow flex flex-col">
-            <span class="font-semibold text-xl group-hover:text-3xl transform transition-all duration-300 ease-in-out">{{ user.name }}</span>
-            <span>{{ user.balance }}</span>
+        <span class="text-6xl font-bold">{{ index + 1 }}</span>
+        <div class="grow flex flex-col">
+          <span
+            class="font-semibold text-xl group-hover:text-3xl transform transition-all duration-300 ease-in-out"
+            >{{ user.name }}</span
+          >
+          <span>{{ user.balance }}</span>
         </div>
       </RouterLink>
 
@@ -69,32 +82,35 @@ onMounted(async () => {
       <div class="p-4 w-24 bg-gray-200 rounded-r-lg text-center">
         <span v-if="loading" class="text-xl animate-pulse">...</span>
         <span v-else class="text-lg font-semibold">
-          {{ filteredLeaderboard.length }} / {{ users.length - podium.length }}
+          {{ searchUsers.length }} / {{ rankedUsers.length - podiumUsers.length }}
         </span>
       </div>
     </div>
 
     <!-- Ranking -->
-    <div v-if="loading"
-      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-white rounded-lg shadow shadow-gray-300 overflow-y-auto animate-pulse">
-        <div
-          v-for="i in 10"
-          :key="i"
-          class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
-        >
-          <span class="w-6 h-5 bg-gray-500 rounded-xl"></span>
-          <div class="grow flex">
-            <span class="w-32 h-5 bg-gray-500 rounded-xl"></span>
-          </div>
-          <span class="w-24 h-5 bg-gray-500 rounded-xl"></span>
+    <div
+      v-if="loading"
+      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-white rounded-lg shadow shadow-gray-300 overflow-y-auto animate-pulse"
+    >
+      <div
+        v-for="i in 10"
+        :key="i"
+        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
+      >
+        <span class="w-6 h-5 bg-gray-500 rounded-xl"></span>
+        <div class="grow flex">
+          <span class="w-32 h-5 bg-gray-500 rounded-xl"></span>
         </div>
+        <span class="w-24 h-5 bg-gray-500 rounded-xl"></span>
+      </div>
     </div>
-    <div v-else
+    <div
+      v-else
       class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-white rounded-lg shadow shadow-gray-300 overflow-y-auto"
     >
       <RouterLink
-        v-for="user in filteredLeaderboard"
-        :key="user.name"
+        v-for="user in searchUsers"
+        :key="user.rank"
         :to="`/profile/${user.name}`"
         class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded-lg hover:bg-green-200"
       >
@@ -104,12 +120,11 @@ onMounted(async () => {
       </RouterLink>
 
       <div
-        v-if="search && !filteredLeaderboard.length"
+        v-if="search && !searchUsers.length"
         class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
       >
         <p>No users found</p>
       </div>
     </div>
-
   </main>
 </template>
