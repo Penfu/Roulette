@@ -2,14 +2,12 @@
 import { computed, ref } from "vue";
 
 import { useGameStore } from "@/stores/game";
-
+import type Bet from "@/interfaces/bet";
 import getClassFromColor from "@/helpers/color";
+import { RollStep } from "@/enums/step";
 
-import Color from "@/enums/color";
 import BetCard from "@/components/game/bets/Bet.vue";
 
-import type Bet from "@/models/bet";
-import { RollStep } from "@/enums/step";
 
 const props = defineProps<{
   color: string;

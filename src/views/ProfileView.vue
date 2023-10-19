@@ -8,6 +8,7 @@ import { useNumberHelper } from "@/helpers/number";
 
 import BetStatsOnColor from "@/components/user/stats/bet/BetOnColor.vue";
 import BetActivity from "@/components/user/activity/bet/BetActivity.vue";
+
 const props = defineProps({
   name: {
     type: String,

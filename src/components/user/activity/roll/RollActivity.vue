@@ -1,25 +1,29 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+
+import type Bet from "@/interfaces/bet";
 import Color from "@/enums/color";
-import type Bet from "@/models/bet";
 import { useNumberHelper } from "@/helpers/number";
 
 import BetsOnColor from "@/components/user/activity/bet/BetsOnColor.vue";
+import { useRoll } from "@/composables/useRoll";
 
 const props = defineProps<{
   bet: Bet;
 }>();
 
 const { percent } = useNumberHelper();
+const { roll, fetchRollFromBet } = useRoll();
 
-const roll = await props.bet.roll();
-const winrate = computed(() =>  percent(roll?.win, roll?.betCount));
+const winrate = computed(() => percent(roll.value!.win, roll.value!.betCount));
+
+await fetchRollFromBet(props.bet.id);
 </script>
 
 <template>
   <div class="border-t border-gray-300">
-    <div class="mx-6 lg:mx-0 my-2 lg:h-48 flex flex-col lg:flex-row gap-2">
+    <div v-if="roll" class="mx-6 lg:mx-0 my-2 lg:h-48 flex flex-col lg:flex-row gap-2">
       <!-- Colors -->
       <div class="py-6 basis-1/3 flex justify-center items-center gap-2">
         <BetsOnColor :count="roll.redBetCount" :color="Color.RED" :color-win="roll.color"  />

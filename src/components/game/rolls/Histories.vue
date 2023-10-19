@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
-import type Roll from "@/models/roll";
+import type Roll from "@/interfaces/roll";
 
 import History from "@/components/game/rolls/History.vue";
 

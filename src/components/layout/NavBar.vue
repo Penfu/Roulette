@@ -5,8 +5,7 @@ import {
   CubeIcon,
   TrophyIcon,
   BanknotesIcon,
-  UserIcon,
-  ArrowRightOnRectangleIcon,
+  UserIcon
 } from "@heroicons/vue/24/outline";
 
 import Dropdown from "@/components/Dropdown.vue";

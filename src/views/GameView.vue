@@ -16,9 +16,8 @@ import Roulette from "@/components/game/rolls/Roulette.vue";
 import AmountButton from "@/components/game/AmountButton.vue";
 import Bets from "@/components/game/bets/Bets.vue";
 
-import Bet from "@/models/bet";
-
 import CrossIcon from "@/components/icons/CrossIcon.vue";
+import type Bet from "@/interfaces/bet";
 
 const auth = useAuthStore();
 const game = useGameStore();
@@ -65,9 +64,9 @@ onMounted(async () => {
   window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
     game.timer = e.timer;
     bets.value = {
-      red: e.bets.red.map((bet: any) => new Bet(Color.RED, bet.amount, bet.user)),
-      black: e.bets.black.map((bet: any) => new Bet(Color.BLACK, bet.amount, bet.user)),
-      green: e.bets.green.map((bet: any) => new Bet(Color.GREEN, bet.amount, bet.user)),
+      red: e.bets.red.map((bet: Bet) => { return { color: Color.RED, amount: bet.amount, user: bet.user } }),
+      black: e.bets.black.map((bet: Bet) => { return { color: Color.BLACK, amount: bet.amount, user: bet.user } }),
+      green: e.bets.green.map((bet: Bet) => { return { color: Color.GREEN, amount: bet.amount, user: bet.user } }),
     };
     game.result = e.result;
 

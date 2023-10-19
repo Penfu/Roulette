@@ -2,7 +2,7 @@ import { ref } from "vue";
 import axios from "axios";
 
 import type User from "@/interfaces/user";
-import type Bet from "@/models/bet";
+import type Bet from "@/interfaces/bet";
 
 export function useProfile() {
   const error = ref(null);
@@ -30,7 +30,7 @@ export function useProfile() {
 
   async function fetchUserBets(name: string, offset: number, limit: number = 10) {
     const response = await axios.get(`/users/${name}/bets?offset=${offset}&limit=${limit}`);
-    bets.value.push(...response.data);
+    bets.value.push(...response.data.map((bet: any) => ({ ...bet, isWin: bet.is_win, createdAt: bet.created_at })));
   }
 
   return { error, fetchUser, user, fetchUserStats, stats, fetchUserBets, bets };

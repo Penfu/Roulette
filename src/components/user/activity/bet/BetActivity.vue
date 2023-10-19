@@ -2,8 +2,8 @@
 import { defineAsyncComponent, ref } from "vue";
 import moment from "moment";
 
+import type Bet from "@/interfaces/bet";
 import getClassFromColor from "@/helpers/color";
-import type Bet from "@/models/bet";
 
 import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoading.vue";
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";

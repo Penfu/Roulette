@@ -24,8 +24,6 @@ const searchUsers = computed(() =>
 onMounted(async () => {
   await fetchUsers();
 
-  console.log("Fetching users...");
-
   rankedUsers.value = users.value
     .sort((a, b) => b.balance - a.balance)
     .map((user: any, index: number) => {

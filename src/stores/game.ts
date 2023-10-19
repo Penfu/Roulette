@@ -2,15 +2,15 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 import { useAuthStore } from "@/stores/auth";
+import { useBet } from "@/composables/useBet";
 import { RollStep } from "@/enums/step";
 
 import type Roll from "@/interfaces/roll";
-import Bet from "@/models/bet";
-
-import BetProvider from "@/providers/bet";
+import type Bet from "@/interfaces/bet";
 
 export const useGameStore = defineStore("game", () => {
   const auth = useAuthStore();
+  const { addBet } = useBet();
 
   const step = ref(RollStep.DEFAULT);
   const timer = ref(0);
@@ -19,44 +19,47 @@ export const useGameStore = defineStore("game", () => {
   const histories = ref<Roll[]>([]);
 
   function addBalance(amount: number) {
-     if (auth.user.balance < amount) {
-       console.log("You don't have enough money!");
-       return;
-     }
+    if (auth.user.balance < amount) {
+      console.log("You don't have enough money!");
+      return;
+    }
 
-     auth.user.balance -= amount;
-     balance.value += amount;
-  };
+    auth.user.balance -= amount;
+    balance.value += amount;
+  }
 
   function allInBalance() {
     addBalance(auth.user.balance);
-  };
+  }
 
   function resetBalance() {
     auth.user.balance += balance.value;
     balance.value = 0;
-  };
+  }
 
   async function makeBet(color: string) {
-      if (step.value !== RollStep.BET) {
-        console.log("Bets are closed!");
-        return;
-      }
-      if (balance.value === 0) {
-        console.log("Select an amount to bet!");
-        return;
-      }
+    if (step.value !== RollStep.BET) {
+      console.log("Bets are closed!");
+      return;
+    }
+    if (balance.value === 0) {
+      console.log("Select an amount to bet!");
+      return;
+    }
 
-      const bet = new Bet(color, balance.value, auth.user.name);
-      balance.value = 0;
+    const bet = { color, amount: balance.value, user: auth.user.name } as Bet;
+    balance.value = 0;
 
-      await BetProvider.addBet(bet);
+    await addBet(bet);
   }
 
   return {
     step,
     timer,
-    balance, addBalance, allInBalance, resetBalance,
+    balance,
+    addBalance,
+    allInBalance,
+    resetBalance,
     makeBet,
     result,
     histories,
