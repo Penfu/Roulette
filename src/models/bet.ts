@@ -1,5 +1,4 @@
-import type Roll from "@/models/roll";
-import RollProvider from "@/providers/roll";
+import type Roll from "@/interfaces/roll";
 
 export default class Bet {
   public id: number = 0;

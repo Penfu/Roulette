@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import getClassFromColor from "@/helpers/color";
-import type Roll from "@/models/roll";
+import type Roll from "@/interfaces/roll";
 
 defineProps<{
   roll: Roll;

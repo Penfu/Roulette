@@ -7,7 +7,6 @@ import { useGameStore } from "@/stores/game";
 import { RollStep } from "@/enums/step";
 import Color from "@/enums/color";
 import getClassFromColor from "@/helpers/color";
-import type Roll from "@/models/roll";
 
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 import Histories from "@/components/game/rolls/Histories.vue";

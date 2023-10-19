@@ -7,6 +7,8 @@ import Color from "@/enums/color";
 import { useAuthStore } from "@/stores/auth";
 import { useGameStore } from "@/stores/game";
 
+import { useRoll } from "@/composables/useRoll";
+
 import { RollStep } from "@/enums/step";
 
 import RollResultBanner from "@/components/game/result/RollResultBanner.vue";
@@ -14,18 +16,18 @@ import Roulette from "@/components/game/rolls/Roulette.vue";
 import AmountButton from "@/components/game/AmountButton.vue";
 import Bets from "@/components/game/bets/Bets.vue";
 
-import RollProvider from "@/providers/roll";
-
 import Bet from "@/models/bet";
-import Roll from "@/models/roll";
 
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 
 const auth = useAuthStore();
 const game = useGameStore();
 
+const { rolls, fetchRolls } = useRoll();
+
 watch(
-  () => game.balance, (newBalance, oldBalance) => {
+  () => game.balance,
+  (newBalance, oldBalance) => {
     if (newBalance > oldBalance) {
       anime({
         targets: balanceInput.value,
@@ -51,17 +53,14 @@ const myBets = ref({
   green: null as Bet | null,
 });
 const hasBet = computed(() => {
-  return (
-    myBets.value.red !== null ||
-    myBets.value.black !== null ||
-    myBets.value.green !== null
-  );
+  return myBets.value.red !== null || myBets.value.black !== null || myBets.value.green !== null;
 });
 
 const balanceInput = ref(HTMLInputElement);
 
 onMounted(async () => {
-  game.histories = await RollProvider.fetchRolls();
+  await fetchRolls();
+  game.histories = rolls.value;
 
   window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
     game.timer = e.timer;
@@ -70,27 +69,24 @@ onMounted(async () => {
       black: e.bets.black.map((bet: any) => new Bet(Color.BLACK, bet.amount, bet.user)),
       green: e.bets.green.map((bet: any) => new Bet(Color.GREEN, bet.amount, bet.user)),
     };
-    game.result = Roll.fromJson(e.result);
+    game.result = e.result;
 
     switch (e.status) {
       case "BET":
         message.value = Math.round(e.timer / 1000) + " seconds left";
 
-        if (game.step == RollStep.BET)
-          return;
+        if (game.step == RollStep.BET) return;
 
         game.step = RollStep.BET;
         break;
       case "ROLL":
-        if (game.step == RollStep.ROLL)
-          return;
+        if (game.step == RollStep.ROLL) return;
 
         game.step = RollStep.ROLL;
         message.value = "Rolling";
         break;
       case "ROLL_TO_RESULT":
-        if (game.step == RollStep.ROLL_TO_RESULT)
-          return;
+        if (game.step == RollStep.ROLL_TO_RESULT) return;
 
         game.step = RollStep.ROLL_TO_RESULT;
 
@@ -100,6 +96,10 @@ onMounted(async () => {
           if (game.timer == 0) {
             reset();
           }
+          return;
+        }
+
+        if (!game.result) {
           return;
         }
 
@@ -130,16 +130,13 @@ onMounted(async () => {
         // Give money if the player won
         switch (game.result.color) {
           case Color.RED:
-            if (myBets.value.red != null)
-              auth.user.balance += myBets.value.red.amount * 2;
+            if (myBets.value.red != null) auth.user.balance += myBets.value.red.amount * 2;
             break;
           case Color.BLACK:
-            if (myBets.value.black != null)
-              auth.user.balance += myBets.value.black.amount * 2;
+            if (myBets.value.black != null) auth.user.balance += myBets.value.black.amount * 2;
             break;
           case Color.GREEN:
-            if (myBets.value.green != null)
-              auth.user.balance += myBets.value.green.amount * 13;
+            if (myBets.value.green != null) auth.user.balance += myBets.value.green.amount * 13;
             break;
         }
 
@@ -170,7 +167,10 @@ const reset = () => {
       :initial="{ opacity: 0, y: -100 }"
       :enter="{ opacity: 1, y: 0 }"
       :leave="{ opacity: 0, y: 100 }"
-      class="mb-2" v-if="game.step == RollStep.DISPLAY_RESULT && hasBet" :bets="(myBets as any)" />
+      class="mb-2"
+      v-if="game.step == RollStep.DISPLAY_RESULT && hasBet"
+      :bets="(myBets as any)"
+    />
 
     <div class="grow flex flex-col space-y-8">
       <!-- Roll -->
@@ -189,12 +189,19 @@ const reset = () => {
               <AmountButton :value="100" />
               <AmountButton :value="1000" />
               <AmountButton />
-              <input v-bind="{ value: game.balance }" ref="balanceInput" type="number" readonly
-                class="px-4 h-12 w-full lg:w-32 outline outline-2 outline-gray-200 rounded shadow shadow-gray-300" />
+              <input
+                v-bind="{ value: game.balance }"
+                ref="balanceInput"
+                type="number"
+                readonly
+                class="px-4 h-12 w-full lg:w-32 outline outline-2 outline-gray-200 rounded shadow shadow-gray-300"
+              />
             </div>
             <div class="grow flex justify-end">
-              <button @click="game.resetBalance()"
-                class="h-12 px-8 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-md shadow-red-300">
+              <button
+                @click="game.resetBalance()"
+                class="h-12 px-8 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-md shadow-red-300"
+              >
                 <CrossIcon />
               </button>
             </div>
@@ -205,7 +212,8 @@ const reset = () => {
       <!-- Bet buttons -->
       <div
         class="grow flex flex-col md:flex-row gap-x-4 gap-y-8 text-center text-white text-2xl transition-all duration-300"
-        :class="{ 'scale-95': game.step !== RollStep.BET }">
+        :class="{ 'scale-95': game.step !== RollStep.BET }"
+      >
         <Bets ref="betsRed" color="red" :value="2" :bets="bets[Color.RED]" />
         <Bets ref="betsGreen" color="green" :value="13" :bets="bets[Color.GREEN]" />
         <Bets ref="betsBlack" color="black" :value="2" :bets="bets[Color.BLACK]" />
