@@ -23,12 +23,8 @@ window.Pusher = Pusher;
 window.Echo = new Echo({
   broadcaster: "pusher",
   key: import.meta.env.VITE_APP_WEBSOCKET_KEY,
-  wsHost: import.meta.env.VITE_APP_WEBSOCKET_SERVER,
-  wsPort: 6001,
-  wssPort: 6001,
-  forceTLS: false,
-  disableStats: true,
-  enabledTransports: ["ws", "wss"],
+  cluster: import.meta.env.VITE_APP_WEBSOCKET_CLUSTER,
+  forceTLS: true,
 });
 
 app.use(pinia);
