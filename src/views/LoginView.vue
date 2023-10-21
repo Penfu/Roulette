@@ -15,7 +15,7 @@ const login = async () => {
 
   if (resp.success) {
     nextTick(() => {
-      router.push("home");
+      router.push("/");
     });
   } else {
     error.value = resp.message;

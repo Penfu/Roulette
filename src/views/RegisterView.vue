@@ -70,7 +70,7 @@ const register = async () => {
 
   if (resp.success) {
     nextTick(() => {
-      router.push("home");
+      router.push("/");
     });
   } else {
     isValidating.value = false;
