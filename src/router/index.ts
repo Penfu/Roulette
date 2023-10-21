@@ -36,19 +36,19 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      component: lazyLoad("auth/LoginView"),
+      component: lazyLoad("LoginView"),
       beforeEnter: [guestGuard],
     },
     {
       path: "/register",
       name: "register",
-      component: lazyLoad("auth/RegisterView"),
+      component: lazyLoad("RegisterView"),
       beforeEnter: [guestGuard],
     },
     {
       path: "/authorize/:provider(github|google)/callback",
       name: "oauth",
-      component: lazyLoad("auth/OAuthView"),
+      component: lazyLoad("OAuthView"),
       props: true,
       beforeEnter: [guestGuard],
     },
