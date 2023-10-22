@@ -4,8 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   body {
-    font-family: 'Inter', sans-serif;
+    @apply font-inter tabular-nums;
   }
 }

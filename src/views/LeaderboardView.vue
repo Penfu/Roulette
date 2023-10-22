@@ -41,7 +41,7 @@ onMounted(async () => {
   <main class="flex flex-col space-y-4">
     <!-- Podium -->
     <div
-      class="h-64 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-white rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out"
+      class="h-48 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-white rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out"
     >
       <RouterLink
         v-motion
@@ -54,14 +54,13 @@ onMounted(async () => {
         v-for="(user, index) in podiumUsers"
         :key="user.name"
         :to="`/profile/${user.name}`"
-        class="group px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-center space-x-16 bg-white first:bg-green-400"
+        class="group px-6 xs:px-8 sm:px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-between sm:justify-center space-x-8 sm:space-x-16 bg-white first:bg-green-400"
       >
-        <span class="text-6xl font-bold">{{ index + 1 }}</span>
+        <span class="text-4xl md:text-6xl font-bold">{{ index + 1 }}</span>
         <div class="grow flex flex-col">
-          <span
-            class="font-semibold text-xl group-hover:text-3xl transform transition-all duration-300 ease-in-out"
-            >{{ user.name }}</span
-          >
+          <span class="font-semibold text-lg sm:text-xl sm:group-hover:text-3xl transform transition-all duration-300 ease-in-out">
+            {{ user.name }}
+          </span>
           <span>{{ user.balance }}</span>
         </div>
       </RouterLink>
@@ -74,15 +73,15 @@ onMounted(async () => {
       <input
         v-model="search"
         type="text"
-        class="grow py-4 px-8 rounded-lg outline-none"
+        class="grow pl-4 py-4 rounded-lg outline-none text-ellipsis overflow-hidden"
         placeholder="Search for a user..."
       />
-      <div class="p-4 w-24 bg-gray-200 rounded-r-lg text-center">
+      <span class="px-2 py-4 bg-gray-200 rounded-r-lg text-center">
         <span v-if="loading" class="text-xl animate-pulse">...</span>
-        <span v-else class="text-lg font-semibold">
+        <span v-else class="text-lg font-semibold whitespace-nowrap">
           {{ searchUsers.length }} / {{ rankedUsers.length - podiumUsers.length }}
         </span>
-      </div>
+      </span>
     </div>
 
     <!-- Ranking -->
