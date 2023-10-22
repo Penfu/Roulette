@@ -10,11 +10,12 @@ import CrossIcon from "@/components/icons/CrossIcon.vue";
 
 const props = defineProps<{
   bets: {
-    red: Bet;
-    black: Bet;
-    green: Bet;
+    red?: Bet;
+    black?: Bet;
+    green?: Bet;
   };
 }>();
+const { red, black, green } = props.bets;
 
 const game = useGameStore();
 
@@ -41,43 +42,32 @@ onUnmounted(() => {
   clearInterval(intervalId);
 });
 
-const wins = computed(() => {
-  const { red, black, green } = props.bets;
-
-  switch (game.result?.color) {
-    case Color.RED:
-      return red;
-    case Color.BLACK:
-      return black;
-    case Color.GREEN:
-      return green;
-  }
-});
-const losses = computed(() => {
-  const { red, black, green } = props.bets;
-
-  switch (game.result?.color) {
-    case Color.RED:
-      return [black, green];
-    case Color.BLACK:
-      return [red, green];
-    case Color.GREEN:
-      return [red, black];
-  }
-});
-
 const winsAmount = computed(() => {
-  return wins
-    ? wins.value?.color === Color.GREEN
-      ? wins.value?.amount * 13
-      : wins.value?.amount
-    : 0;
+  if (game.result?.color === Color.RED) {
+    return red?.amount ?? 0;
+  }
+
+  if (game.result?.color === Color.BLACK) {
+    return black?.amount ?? 0;
+  }
+
+  if (game.result?.color === Color.GREEN) {
+    return green?.amount ?? 0 * 13;
+  }
 });
+
 const lossesAmount = computed(() => {
-  if (!losses?.value) return 0;
-  return losses.value.reduce((acc, curr) => {
-    return curr !== null ? acc + curr.amount : acc;
-  }, 0);
+  if (game.result?.color === Color.RED) {
+    return (black?.amount ?? 0) + (green?.amount ?? 0);
+  }
+
+  if (game.result?.color === Color.BLACK) {
+    return (red?.amount ?? 0) + (green?.amount ?? 0);
+  }
+
+  if (game.result?.color === Color.GREEN) {
+    return (red?.amount ?? 0) + (black?.amount ?? 0);
+  }
 });
 
 const totalAmount = computed(() => (winsAmount?.value || 0) - (lossesAmount?.value || 0));
@@ -92,15 +82,17 @@ const active = ref(true);
 </script>
 
 <template>
-  <div v-show="active" class="px-4 py-2 h-auto space-y-4 bg-white rounded-lg shadow shadow-gray-300">
+  <div
+    v-show="active"
+    class="px-4 py-2 h-auto space-y-4 bg-white rounded-lg shadow shadow-gray-300"
+  >
     <div class="flex">
       <div class="grow text-2xl">
         <span v-if="result == Result.EQUAL">😐 No wins no losses &nbsp</span>
         <div v-else>
           <span v-if="result == Result.WIN">😁 Congratulations you won &nbsp</span>
           <span v-else-if="result == Result.LOSE">😥 No luck you lost &nbsp</span>
-          <span class="font-bold">{{ totalAmount }}&nbsp</span>
-          <span>coins on this roll</span>
+          <span class="font-bold">{{ totalAmount }} <span>coins on this roll</span></span>
         </div>
       </div>
       <button @click="active = false" class="p-1 bg-gray-200 hover:bg-gray-300 rounded">
@@ -109,8 +101,10 @@ const active = ref(true);
     </div>
 
     <div class="h-5 bg-gray-300 rounded shadow-md shadow-gray-300">
-      <div class="h-full bg-gray-800 rounded transition-width duration-75 ease-in-out"
-        :style="{ width: `${progress}%` }"></div>
+      <div
+        class="h-full bg-gray-800 rounded transition-width duration-75 ease-in-out"
+        :style="{ width: `${progress}%` }"
+      ></div>
     </div>
   </div>
 </template>

@@ -46,14 +46,18 @@ const bets = ref({
   black: [] as Bet[],
   green: [] as Bet[],
 });
-const myBets = ref({
-  red: null as Bet | null,
-  black: null as Bet | null,
-  green: null as Bet | null,
-});
-const hasBet = computed(() => {
-  return myBets.value.red !== null || myBets.value.black !== null || myBets.value.green !== null;
-});
+
+const myBetOnRed = computed(
+  () => bets.value.red.find((bet: Bet) => bet.user == auth.user.name) as Bet
+);
+const myBetOnBlack = computed(
+  () => bets.value.black.find((bet: Bet) => bet.user == auth.user.name) as Bet
+);
+const myBetOnGreen = computed(
+  () => bets.value.green.find((bet: Bet) => bet.user == auth.user.name) as Bet
+);
+
+const hasBet = computed(() => myBetOnRed.value || myBetOnBlack.value || myBetOnGreen.value);
 
 const balanceInput = ref(HTMLInputElement);
 
@@ -64,9 +68,15 @@ onMounted(async () => {
   window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
     game.timer = e.timer;
     bets.value = {
-      red: e.bets.red.map((bet: Bet) => { return { color: Color.RED, amount: bet.amount, user: bet.user } }),
-      black: e.bets.black.map((bet: Bet) => { return { color: Color.BLACK, amount: bet.amount, user: bet.user } }),
-      green: e.bets.green.map((bet: Bet) => { return { color: Color.GREEN, amount: bet.amount, user: bet.user } }),
+      red: e.bets.red.map((bet: Bet) => {
+        return { color: Color.RED, amount: bet.amount, user: bet.user };
+      }),
+      black: e.bets.black.map((bet: Bet) => {
+        return { color: Color.BLACK, amount: bet.amount, user: bet.user };
+      }),
+      green: e.bets.green.map((bet: Bet) => {
+        return { color: Color.GREEN, amount: bet.amount, user: bet.user };
+      }),
     };
     game.result = e.result;
 
@@ -109,33 +119,16 @@ onMounted(async () => {
         }
         game.histories.unshift(game.result);
 
-        // List player bets
-        bets.value.red
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.red = bet;
-          });
-        bets.value.black
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.black = bet;
-          });
-        bets.value.green
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.green = bet;
-          });
-
         // Give money if the player won
         switch (game.result.color) {
           case Color.RED:
-            if (myBets.value.red != null) auth.user.balance += myBets.value.red.amount * 2;
+            if (myBetOnRed.value) auth.user.balance += myBetOnRed.value.amount * 2;
             break;
           case Color.BLACK:
-            if (myBets.value.black != null) auth.user.balance += myBets.value.black.amount * 2;
+            if (myBetOnBlack.value) auth.user.balance += myBetOnBlack.value.amount * 2;
             break;
           case Color.GREEN:
-            if (myBets.value.green != null) auth.user.balance += myBets.value.green.amount * 13;
+            if (myBetOnGreen.value) auth.user.balance += myBetOnGreen.value.amount * 14;
             break;
         }
 
@@ -150,12 +143,6 @@ const reset = () => {
   bets.value.red = [];
   bets.value.black = [];
   bets.value.green = [];
-
-  myBets.value = {
-    red: null,
-    black: null,
-    green: null,
-  };
 };
 </script>
 
@@ -168,7 +155,7 @@ const reset = () => {
       :leave="{ opacity: 0, y: 100 }"
       class="mb-2"
       v-if="game.step == RollStep.DISPLAY_RESULT && hasBet"
-      :bets="(myBets as any)"
+      :bets="{ red: myBetOnRed, black: myBetOnBlack, green: myBetOnGreen }"
     />
 
     <div class="grow flex flex-col space-y-8">
