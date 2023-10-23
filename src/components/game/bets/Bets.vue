@@ -2,9 +2,11 @@
 import { computed, ref } from "vue";
 
 import { useGameStore } from "@/stores/game";
-import type Bet from "@/interfaces/bet";
-import getClassFromColor from "@/helpers/color";
+
 import { RollStep } from "@/enums/step";
+import type Bet from "@/interfaces/bet";
+
+import getClassFromColor from "@/helpers/color";
 
 import BetCard from "@/components/game/bets/Bet.vue";
 

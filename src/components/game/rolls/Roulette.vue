@@ -5,7 +5,7 @@ import anime from "animejs";
 import { useGameStore } from "@/stores/game";
 
 import { RollStep } from "@/enums/step";
-import Color from "@/enums/color";
+import { Color } from "@/enums/color";
 import getClassFromColor from "@/helpers/color";
 
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";

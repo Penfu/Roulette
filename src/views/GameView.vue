@@ -2,22 +2,20 @@
 import { computed, onMounted, ref, watch } from "vue";
 import anime from "animejs";
 
-import Color from "@/enums/color";
-
 import { useAuthStore } from "@/stores/auth";
 import { useGameStore } from "@/stores/game";
 
 import { useRoll } from "@/composables/useRoll";
 
+import { Color } from "@/enums/color";
 import { RollStep } from "@/enums/step";
+import type Bet from "@/interfaces/bet";
 
 import RollResultBanner from "@/components/game/result/RollResultBanner.vue";
 import Roulette from "@/components/game/rolls/Roulette.vue";
 import AmountButton from "@/components/game/AmountButton.vue";
 import Bets from "@/components/game/bets/Bets.vue";
-
 import CrossIcon from "@/components/icons/CrossIcon.vue";
-import type Bet from "@/interfaces/bet";
 
 const auth = useAuthStore();
 const game = useGameStore();

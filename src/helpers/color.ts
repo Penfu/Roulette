@@ -1,4 +1,4 @@
-import Color from "@/enums/color";
+import { Color } from "@/enums/color";
 
 export default function getClassFromColor(color: string, hover?: boolean): string {
   switch (color) {

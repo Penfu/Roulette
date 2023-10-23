@@ -1,7 +1,5 @@
-const Color = Object.freeze({
-  RED: "red",
-  BLACK: "black",
-  GREEN: "green",
-});
-
-export default Color;
+export enum Color {
+  RED = "red",
+  BLACK = "black",
+  GREEN = "green",
+};

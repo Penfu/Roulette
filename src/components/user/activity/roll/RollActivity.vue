@@ -2,12 +2,14 @@
 import { computed } from "vue";
 
 
+import { useRoll } from "@/composables/useRoll";
+
+import { Color } from "@/enums/color";
 import type Bet from "@/interfaces/bet";
-import Color from "@/enums/color";
+
 import { useNumberHelper } from "@/helpers/number";
 
 import BetsOnColor from "@/components/user/activity/bet/BetsOnColor.vue";
-import { useRoll } from "@/composables/useRoll";
 
 const props = defineProps<{
   bet: Bet;
