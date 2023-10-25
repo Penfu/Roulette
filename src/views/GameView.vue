@@ -22,18 +22,18 @@ const game = useGameStore();
 
 const { rolls, fetchRolls } = useRoll();
 
+const amountButtons = [1, 10, 100, 1000];
+const balanceToDisplay = ref(0);
 watch(
   () => game.balance,
   (newBalance, oldBalance) => {
-    if (newBalance > oldBalance) {
-      anime({
-        targets: balanceInput.value,
-        value: [oldBalance, newBalance],
-        round: 1,
-        duration: 500,
-        easing: "linear",
-      });
-    }
+    anime({
+      targets: balanceToDisplay,
+      value: [oldBalance, newBalance],
+      round: 1,
+      duration: 500,
+      easing: "linear",
+    });
   }
 );
 
@@ -56,8 +56,6 @@ const myBetOnGreen = computed(
 );
 
 const hasBet = computed(() => myBetOnRed.value || myBetOnBlack.value || myBetOnGreen.value);
-
-const balanceInput = ref(HTMLInputElement);
 
 onMounted(async () => {
   await fetchRolls();
@@ -165,29 +163,34 @@ const reset = () => {
       <!-- Amount buttons -->
       <div>
         <h3 class="pb-1 text-xl font-bold uppercase">Choose a bet</h3>
-        <div class="mt-2 min-h-20 bg-white rounded-lg shadow shadow-gray-300">
-          <div class="w-full h-full px-4 py-2 flex text-xl">
-            <div class="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-              <AmountButton :value="1" />
-              <AmountButton :value="10" />
-              <AmountButton :value="100" />
-              <AmountButton :value="1000" />
-              <AmountButton />
-              <input
-                v-bind="{ value: game.balance }"
-                ref="balanceInput"
-                type="number"
-                readonly
-                class="px-4 h-12 w-full lg:w-32 outline outline-2 outline-gray-200 rounded shadow shadow-gray-300"
-              />
+        <div class="mt-2 bg-white rounded-lg shadow shadow-gray-300">
+          <div
+            class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl"
+          >
+            <div class="w-full flex flex-wrap gap-2">
+              <AmountButton v-for="amount in amountButtons" :key="amount" :value="amount" />
             </div>
-            <div class="grow flex justify-end">
-              <button
-                @click="game.resetBalance()"
-                class="h-12 px-8 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-md shadow-red-300"
+
+            <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
+              <label
+                class="px-2 md:px-4 h-12 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded outline outline-2 outline-gray-200 shadow shadow-gray-300"
               >
-                <CrossIcon />
-              </button>
+                {{ balanceToDisplay }}
+              </label>
+              <div class="flex space-x-2">
+                <button
+                  @click="game.allInBalance()"
+                  class="basis-1/2 px-4 h-12 bg-gray-100 hover:bg-gray-300 font-semibold whitespace-nowrap rounded shadow-md shadow-gray-300"
+                >
+                  {{ "All In" }}
+                </button>
+                <button
+                  @click="game.resetBalance()"
+                  class="basis-1/2 px-4 h-12 flex justify-center items-center bg-red-500 hover:bg-red-600 text-white stroke-2 rounded shadow-md shadow-red-300"
+                >
+                  <CrossIcon />
+                </button>
+              </div>
             </div>
           </div>
         </div>

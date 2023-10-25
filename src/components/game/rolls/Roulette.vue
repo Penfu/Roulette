@@ -130,7 +130,7 @@ watch(
       </div>
 
       <div class="justify-end items-center xl:items-end">
-        <Histories class="basis-1/3" :rolls="game.histories" />
+        <Histories :rolls="game.histories" />
       </div>
     </div>
   </div>
