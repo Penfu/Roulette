@@ -173,20 +173,20 @@ const reset = () => {
 
             <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
               <label
-                class="px-2 md:px-4 h-12 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded outline outline-2 outline-gray-200 shadow shadow-gray-300"
+                class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded outline outline-2 outline-gray-200 shadow shadow-gray-300"
               >
                 {{ balanceToDisplay }}
               </label>
               <div class="flex space-x-2">
                 <button
                   @click="game.allInBalance()"
-                  class="basis-1/2 px-4 h-12 bg-gray-100 hover:bg-gray-300 font-semibold whitespace-nowrap rounded shadow-md shadow-gray-300"
+                  class="basis-1/2 px-4 py-3 bg-gray-100 hover:bg-gray-200 font-semibold whitespace-nowrap rounded shadow shadow-gray-300"
                 >
                   {{ "All In" }}
                 </button>
                 <button
                   @click="game.resetBalance()"
-                  class="basis-1/2 px-4 h-12 flex justify-center items-center bg-red-500 hover:bg-red-600 text-white stroke-2 rounded shadow-md shadow-red-300"
+                  class="basis-1/2 px-4 py-3 flex justify-center items-center bg-red-500 hover:bg-red-600 text-white stroke-2 rounded shadow-md shadow-red-300"
                 >
                   <CrossIcon />
                 </button>

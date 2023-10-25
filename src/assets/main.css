@@ -9,4 +9,8 @@
   body {
     @apply font-inter tabular-nums;
   }
+
+  button, input {
+    @apply tabular-nums;
+  }
 }
