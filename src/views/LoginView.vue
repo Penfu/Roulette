@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import router from "@/router";
 import { nextTick, ref } from "vue";
+import router from "@/router";
 
 import { useAuthStore } from "@/stores/auth";
 
-const userStore = useAuthStore();
+const { login, loginOAuth } = useAuthStore();
 
 const email = ref("");
 const password = ref("");
 const error = ref("");
 
-const login = async () => {
-  const resp = await userStore.login(email.value, password.value);
+const handleLogin = async () => {
+  const response = await login(email.value, password.value);
 
-  if (resp.success) {
+  if (response.success) {
     nextTick(() => {
       router.push("/");
     });
   } else {
-    error.value = resp.message;
+    error.value = response.message;
   }
 };
 </script>
@@ -32,13 +32,13 @@ const login = async () => {
         <!-- OAuth -->
         <div class="flex space-x-2 font-semibold">
           <button
-            @click="userStore.loginOAuth('github')"
+            @click="loginOAuth('github')"
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-gray-800 hover:bg-gray-900 text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
           >
             Github
           </button>
           <button
-            @click="userStore.loginOAuth('google')"
+            @click="loginOAuth('google')"
             class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
           >
             Google
@@ -46,7 +46,7 @@ const login = async () => {
         </div>
 
         <!-- Manuel -->
-        <form @submit.prevent="login" class="space-y-8">
+        <form @submit.prevent="handleLogin" class="space-y-8">
           <div class="h-64 space-y-2">
             <label class="block text-red-500">{{ error }}</label>
 

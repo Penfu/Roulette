@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { nextTick, onMounted } from "vue";
 import router from "@/router";
 
 import { useAuthStore } from "@/stores/auth";
-import { onMounted } from "vue";
 
 const props = defineProps({
   provider: {
@@ -11,17 +11,19 @@ const props = defineProps({
   },
 });
 
-const userStore = useAuthStore();
+const { loginOAuthCallback } = useAuthStore();
 
 onMounted(async () => {
   const code = router.currentRoute.value.query.code as string;
 
   if (code) {
-    await userStore.loginOAuthCallback(props.provider, code);
-  }
+    const response = await loginOAuthCallback(props.provider, code);
 
-  if (userStore.isAuth) {
-    router.push("/");
+    if (response.success) {
+      nextTick(() => {
+        router.push("/");
+      });
+    }
   }
 });
 </script>

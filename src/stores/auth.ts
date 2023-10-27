@@ -84,11 +84,16 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function loginOAuthCallback(provider: string, code: string) {
-    const response = await axios.get(`/authorize/${provider}/callback`, {
-      params: { code },
-    });
+    try {
+      const response = await axios.get(`/authorize/${provider}/callback`, {
+        params: { code },
+      });
+      logUser(response.data.user, response.data.token);
 
-    logUser(response.data.user, response.data.token);
+      return { success: true, message: "success" };
+    } catch (error) {
+      return { success: false, message: "error" };
+    }
   }
 
   function logout() {
