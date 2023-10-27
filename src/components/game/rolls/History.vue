@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div
+  <label
     v-motion
     :initial="{ opacity: 0, x: -100 }"
     :enter="{ opacity: 1, x: 0 }"
@@ -17,6 +17,6 @@ defineProps<{
     class="flex justify-center items-center text-center h-12 w-12 text-white font-semibold text-xl rounded shadow-md"
     :class="getClassFromColor(roll.color)"
   >
-    <label>{{ roll.value }}</label>
-  </div>
+    {{ roll.value }}
+  </label>
 </template>

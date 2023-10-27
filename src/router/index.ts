@@ -34,6 +34,12 @@ const router = createRouter({
       props: true,
     },
     {
+      path: "/settings",
+      name: "settings",
+      component: lazyLoad("SettingsView"),
+      beforeEnter: [authGuard],
+    },
+    {
       path: "/login",
       name: "login",
       component: lazyLoad("LoginView"),

@@ -14,7 +14,7 @@ const auth = useAuthStore();
 </script>
 
 <template>
-  <nav class="rounded-b-lg py-4 text-gray-700 bg-white shadow shadow-gray-300">
+  <nav class="rounded-b-lg py-2 text-gray-700 bg-white shadow shadow-gray-300">
     <div class="px-4 flex flex-row justify-center items-center gap-4">
 
       <!-- Title -->
@@ -53,9 +53,13 @@ const auth = useAuthStore();
             <div
               class="z-20 absolute right-0 mt-2 py-4 flex flex-col justify-end items-center transition-all transition-slowest duration-500 ease">              <div class="w-36 bg-white rounded-lg shadow shadow-gray-300 drop-shadow">
                 <div class="m-2 flex flex-col">
-                  <RouterLink :to="'/profile/' + auth.user.name" class="py-2 hover:bg-gray-200 rounded text-left">
+                  <RouterLink :to="'/profile/' + auth.user.name" class="py-2 hover:bg-gray-100 rounded text-left">
                     <span class="ml-4">{{ auth.user.name }}</span>
                   </RouterLink>
+                   <RouterLink to="/settings" class="py-2 hover:bg-gray-100 rounded text-left">
+                    <span class="ml-4">Settings</span>
+                  </RouterLink>
+
                   <button @click="auth.logout" class="py-2 hover:bg-red-500 hover:text-white rounded text-left">
                     <span class="ml-4">Logout</span>
                   </button>

@@ -2,7 +2,7 @@
 import { useGameStore } from '@/stores/game';
 
 defineProps<{
-  value?: number;
+  value: number;
 }>();
 
 const game = useGameStore();
@@ -10,9 +10,9 @@ const game = useGameStore();
 
 <template>
   <button
-    @click="value ? game.addBalance(value) : game.allInBalance()"
-    class="h-12 w-full lg:w-32 bg-gray-100 hover:bg-gray-300 font-semibold rounded shadow-md shadow-gray-300"
+    @click="game.addBalance(value)"
+    class="grow px-4 h-[3.25rem] bg-gray-100 hover:bg-gray-200 font-semibold rounded shadow shadow-gray-300"
   >
-    {{ value ?? "All In" }}
+    {{ value }}
   </button>
 </template>
