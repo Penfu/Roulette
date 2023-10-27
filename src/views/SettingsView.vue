@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useSettingsStore } from "@/stores/settings";
+
+const input = ref<HTMLInputElement | null>(null);
+
+const { amountButtons: amountButtonsStored, setAmounts } = useSettingsStore();
 
 const selectedButtonIndex = ref(0);
 const selectedButton = computed(() =>
@@ -7,10 +12,10 @@ const selectedButton = computed(() =>
 );
 
 const amountButtons = ref([
-  { index: 0, value: 1 },
-  { index: 1, value: 10 },
-  { index: 2, value: 100 },
-  { index: 3, value: 1000 },
+  { index: 0, value: amountButtonsStored[0] },
+  { index: 1, value: amountButtonsStored[1] },
+  { index: 2, value: amountButtonsStored[2] },
+  { index: 3, value: amountButtonsStored[3] },
 ]);
 const sortedAmountButtons = computed(() => amountButtons.value.sort((a, b) => a.value - b.value));
 
@@ -29,6 +34,18 @@ const error = computed(() => {
 
   return "";
 });
+
+const handleSelectAmountButton = (index: number) => {
+  selectedButtonIndex.value = index;
+  input.value?.focus();
+};
+
+const handleSaveAmounts = () => {
+  if (error.value) return;
+
+  const amounts = amountButtons.value.map((btn) => btn.value);
+  setAmounts(amounts);
+};
 </script>
 
 <template>
@@ -46,7 +63,7 @@ const error = computed(() => {
             <button
               v-for="amount in sortedAmountButtons"
               :key="amount.index"
-              @click="selectedButtonIndex = amount.index"
+              @click="handleSelectAmountButton(amount.index)"
               class="px-4 xs:px-6 sm:px-8 py-3 grow font-semibold bg-gray-100 hover:bg-gray-200 rounded shadow shadow-gray-300"
               :class="{
                 'outline outline-2 outline-green-400': selectedButtonIndex === amount.index,
@@ -58,6 +75,7 @@ const error = computed(() => {
 
           <input
             v-model="selectedButton!.value"
+            ref="input"
             type="number"
             min="1"
             max="10000000000"
@@ -66,6 +84,7 @@ const error = computed(() => {
         </div>
 
         <button
+          @click="handleSaveAmounts"
           class="px-6 py-3 text-white font-bold whitespace-nowrap bg-green-400 hover:bg-green-500 rounded-lg"
         >
           Save amounts
