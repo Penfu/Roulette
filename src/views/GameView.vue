@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import anime from "animejs";
 
+import { useSettingsStore } from "@/stores/settings";
 import { useAuthStore } from "@/stores/auth";
 import { useGameStore } from "@/stores/game";
 
@@ -19,10 +20,10 @@ import CrossIcon from "@/components/icons/CrossIcon.vue";
 
 const auth = useAuthStore();
 const game = useGameStore();
+const { amountButtons } = useSettingsStore();
 
 const { rolls, fetchRolls } = useRoll();
 
-const amountButtons = [1, 10, 100, 1000];
 const balanceToDisplay = ref(0);
 watch(
   () => game.balance,
