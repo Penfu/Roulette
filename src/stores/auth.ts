@@ -2,18 +2,10 @@ import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
 
-export const useAuthStore = defineStore("auth", () => {
-  type User = {
-    name: string;
-    email: string;
-    balance: number;
-  };
+import type User from "@/interfaces/user";
 
-  const user = ref<User>({
-    name: "",
-    email: "",
-    balance: 0,
-  });
+export const useAuthStore = defineStore("auth", () => {
+  const user = ref({} as User);
 
   const token = ref(null as string | null);
   const isAuth = computed(() => token.value != null);
@@ -36,7 +28,6 @@ export const useAuthStore = defineStore("auth", () => {
         email,
         password,
       });
-
       logUser(response.data.user, response.data.token);
 
       return { success: true, message: "success" };
@@ -97,20 +88,19 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   function logout() {
-    logUser({ name: "", email: "", balance: 0 }, null);
+    user.value = {} as User;
+    token.value = null;
+
+    localStorage.removeItem("token");
+    delete axios.defaults.headers.common["Authorization"];
   }
 
-  function logUser(newUser: User, newToken: string | null) {
+  function logUser(newUser: User, newToken: string) {
     user.value = newUser;
     token.value = newToken;
 
-    if (newToken) {
-      localStorage.setItem("token", newToken);
-      axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
-    } else {
-      localStorage.removeItem("token");
-      delete axios.defaults.headers.common["Authorization"];
-    }
+    localStorage.setItem("token", newToken);
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
   }
 
   return {

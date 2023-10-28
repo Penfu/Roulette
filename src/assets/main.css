@@ -13,4 +13,12 @@
   button, input {
     @apply tabular-nums;
   }
+
+  input {
+    @apply w-full px-4 py-3 rounded-lg text-lg border-2 border-gray-200;
+  }
+
+  .btn-primary {
+    @apply px-4 py-3 rounded-lg text-lg font-medium tracking-wide text-white bg-green-400 hover:bg-green-500 border-2 border-green-600;
+  }
 }

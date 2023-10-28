@@ -53,11 +53,12 @@ const handleSaveAmounts = () => {
     <h1 class="text-4xl font-bold">Game preferences</h1>
 
     <div class="px-4 sm:px-8 py-3 sm:py-6 bg-white rounded-lg space-y-4">
-      <h2 class="text-2xl font-bold">Bet</h2>
+      <h2 class="text-xl font-semibold">Bet</h2>
 
       <div class="space-y-6">
-        <div class="space-y-4">
-          <h3 class="text-xl">Amount buttons</h3>
+        <div class="space-y-2">
+          <h3>Amount buttons</h3>
+
           <p v-if="error" class="text-red-500">{{ error }}</p>
           <div class="flex flex-wrap gap-2 xs:gap-x-6">
             <button
@@ -79,16 +80,10 @@ const handleSaveAmounts = () => {
             type="number"
             min="1"
             max="10000000000"
-            class="block px-4 py-3 w-full border-2 border-gray-300 rounded-lg"
           />
         </div>
 
-        <button
-          @click="handleSaveAmounts"
-          class="px-6 py-3 text-white font-bold whitespace-nowrap bg-green-400 hover:bg-green-500 rounded-lg"
-        >
-          Save amounts
-        </button>
+        <button @click="handleSaveAmounts" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">Save amounts</button>
 
         <p class="text-gray-500">
           The amount buttons are the buttons that you can click to bet a certain amount of coins.

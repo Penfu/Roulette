@@ -18,7 +18,11 @@ const handleLogin = async () => {
       router.push("/");
     });
   } else {
-    error.value = response.message;
+    if (response.message === "invalid_credentials") {
+      error.value = "Invalid credentials";
+    } else {
+      error.value = "An error occured";
+    }
   }
 };
 </script>
@@ -53,13 +57,7 @@ const handleLogin = async () => {
             <div class="space-y-6">
               <div class="space-y-2">
                 <label class="block">Email</label>
-                <input
-                  v-model="email"
-                  type="email"
-                  autocomplete="email"
-                  required
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-lg"
-                />
+                <input v-model="email" type="email" autocomplete="email" required />
               </div>
               <div class="space-y-2">
                 <label class="block">Password</label>
@@ -68,18 +66,12 @@ const handleLogin = async () => {
                   type="password"
                   autocomplete="current-password"
                   required
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-lg"
                 />
               </div>
             </div>
           </div>
 
-          <button
-            type="submit"
-            class="w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-lg"
-          >
-            Login
-          </button>
+          <button type="submit" class="btn-primary w-full">Login</button>
         </form>
       </div>
 

@@ -119,14 +119,14 @@ const handleRegister = async () => {
             v-if="!isReadyToSubmit"
             type="button"
             @click="handleNextStep()"
-            class="w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded"
+            class="btn-primary w-full"
           >
             Next Step
           </button>
           <button
             v-else
             type="submit"
-            class="w-full relative px-4 py-3 flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white rounded"
+            class="btn-primary w-full relative flex justify-center items-center"
           >
             Register
             <SpinnerIcon v-if="isValidating" class="absolute right-4" />
