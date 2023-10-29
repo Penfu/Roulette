@@ -5,7 +5,7 @@ import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 
 export function useUserSettings() {
-  const error = ref(null);
+  const error = ref<string | null>(null);
   const auth = useAuthStore();
 
   async function updateName(name: string) {
@@ -34,14 +34,16 @@ export function useUserSettings() {
     }
   }
 
-  async function deleteAccount() {
+  async function deleteAccount(password: string) {
     try {
-      await axios.delete("/users/me");
+      await axios.delete("/users/me", { data: { password } });
       error.value = null;
 
       auth.logout();
     } catch (err) {
       if (axios.isAxiosError(err)) {
+        console.log("err", err.response?.data.message);
+
         error.value = err.response?.data.message;
       }
     }

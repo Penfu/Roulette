@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import { useAuthStore } from "@/stores/auth";
 import { useUserSettings } from "@/composables/useUserSettings";
@@ -10,10 +10,12 @@ const auth = useAuthStore();
 const email = ref(auth.user.email);
 const password = ref("");
 
+const formIsValid = computed(() => {
+  return email.value && email.value !== auth.user.email && password.value;
+});
+
 const handleUpdateEmail = () => {
-  if (email.value === auth.user.email) {
-    return;
-  }
+  if (!formIsValid) return;
 
   updateEmail(email.value, password.value);
   password.value = "";
@@ -39,7 +41,11 @@ const handleUpdateEmail = () => {
         <input v-model="password" type="password" />
       </div>
 
-      <button type="submit" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">
+      <button
+        :disabled="!formIsValid"
+        type="submit"
+        class="btn-primary w-full sm:w-auto md:w-full lg:w-auto"
+      >
         Change email
       </button>
     </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import { useAuthStore } from "@/stores/auth";
 import { useUserSettings } from "@/composables/useUserSettings";
@@ -9,10 +9,12 @@ const auth = useAuthStore();
 
 const name = ref(auth.user.name);
 
+const formIsValid = computed(() => {
+  return name.value && name.value !== auth.user.name;
+});
+
 const handleUpdateName = () => {
-  if (name.value === auth.user.name) {
-    return;
-  }
+  if (!formIsValid) return;
 
   updateName(name.value);
 };
@@ -32,7 +34,11 @@ const handleUpdateName = () => {
         <input v-model="name" type="text" />
       </div>
 
-      <button type="submit" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">
+      <button
+        :disabled="!formIsValid"
+        type="submit"
+        class="btn-primary w-full sm:w-auto md:w-full lg:w-auto"
+      >
         Change name
       </button>
     </div>
