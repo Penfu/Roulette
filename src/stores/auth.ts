@@ -69,7 +69,7 @@ export const useAuthStore = defineStore("auth", () => {
     const response = await axios.get(`/authorize/${provider}/redirect`);
 
     if (response.data.redirect) {
-      window.location.href = response.data.redirect;
+      location.href = response.data.redirect;
       return;
     }
   }
@@ -93,6 +93,8 @@ export const useAuthStore = defineStore("auth", () => {
 
     localStorage.removeItem("token");
     delete axios.defaults.headers.common["Authorization"];
+
+    location.reload();
   }
 
   function logUser(newUser: User, newToken: string) {
