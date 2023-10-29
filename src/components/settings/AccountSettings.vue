@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UpdateName from "@/components/settings/account/UpdateName.vue";
 import UpdateEmail from "@/components/settings/account/UpdateEmail.vue";
+import UpdatePassword from "@/components/settings/account/UpdatePassword.vue";
 import DeleteAccount from "@/components/settings/account/DeleteAccount.vue";
 </script>
 
@@ -11,6 +12,7 @@ import DeleteAccount from "@/components/settings/account/DeleteAccount.vue";
     <div class="space-y-8 drop-shadow-md">
       <UpdateName />
       <UpdateEmail />
+      <UpdatePassword />
       <DeleteAccount />
     </div>
   </div>

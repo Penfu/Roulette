@@ -23,6 +23,8 @@ const handleLogin = async () => {
     } else {
       error.value = "An error occured";
     }
+
+    password.value = "";
   }
 };
 </script>

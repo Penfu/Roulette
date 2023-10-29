@@ -34,6 +34,23 @@ export function useUserSettings() {
     }
   }
 
+  async function updatePassword(password: string, newPassword: string, newPasswordConfirmation: string) {
+    try {
+      const response = await axios.patch("/users/me/password", {
+        password,
+        new_password: newPassword,
+        new_password_confirmation: newPasswordConfirmation,
+      });
+
+      auth.user = response.data;
+      error.value = null;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        error.value = err.response?.data.message;
+      }
+    }
+  }
+
   async function deleteAccount(password: string) {
     try {
       await axios.delete("/users/me", { data: { password } });
@@ -49,5 +66,5 @@ export function useUserSettings() {
     }
   }
 
-  return { error, updateName, updateEmail, deleteAccount };
+  return { error, updateName, updateEmail, updatePassword, deleteAccount };
 }
