@@ -3,11 +3,11 @@ import axios from "axios";
 
 import type User from "@/interfaces/user";
 
-export function useUser() {
+export const useUser = () => {
   const error = ref(null);
   const users = ref<User[]>([]);
 
-  async function fetchUsers() {
+  const fetchUsers = async () => {
     const response = await axios.get("/users");
     users.value = response.data;
   }

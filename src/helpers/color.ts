@@ -1,6 +1,6 @@
 import { Color } from "@/enums/color";
 
-export default function getClassFromColor(color: string, hover?: boolean): string {
+export const classFromColor = (color: string, hover?: boolean): string => {
   switch (color) {
     case Color.RED:
       return `bg-red-500 shadow-red-300 ${hover ? "hover:bg-red-600" : ""}`;

@@ -3,17 +3,17 @@ import axios from "axios";
 
 import type Roll from "@/interfaces/roll";
 
-export function useRoll() {
+export const useRoll = () => {
   const error = ref(null);
   const rolls = ref<Roll[]>([]);
   const roll = ref<Roll>();
 
-  async function fetchRolls() {
+  const fetchRolls = async () => {
     const response = await axios.get("/rolls");
     rolls.value = response.data;
-  }
+  };
 
-  async function fetchRollFromBet(bet: number) {
+  const fetchRollFromBet = async (bet: number) => {
     const response = await axios.get(`/bets/${bet}/roll`);
     roll.value = {
       betCount: response.data.bet_count,
@@ -22,7 +22,7 @@ export function useRoll() {
       greenBetCount: response.data.green_bet_count,
       ...response.data,
     };
-  }
+  };
 
   return { error, fetchRolls, rolls, fetchRollFromBet, roll };
 }

@@ -5,9 +5,9 @@ import { useMotions } from "@vueuse/motion";
 
 import { useAuthStore } from "@/stores/auth";
 
-const auth = useAuthStore();
-
 import { useUserSettings } from "@/composables/useUserSettings";
+
+const auth = useAuthStore();
 
 const { error, deleteAccount } = useUserSettings();
 

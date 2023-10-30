@@ -3,7 +3,7 @@ import { defineAsyncComponent, ref } from "vue";
 import moment from "moment";
 
 import type Bet from "@/interfaces/bet";
-import getClassFromColor from "@/helpers/color";
+import { classFromColor } from "@/helpers/color";
 
 import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoading.vue";
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
@@ -27,7 +27,7 @@ const isOpen = ref(false);
     >
       <!-- Bet info -->
       <div class="grow flex items-center space-x-4">
-        <div class="w-8 h-8 rounded shadow-md" :class="getClassFromColor(bet.color)" />
+        <div class="w-8 h-8 rounded shadow-md" :class="classFromColor(bet.color)" />
         <span>{{ bet.amount }}</span>
       </div>
 

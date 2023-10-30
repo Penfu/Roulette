@@ -4,11 +4,11 @@ import axios from "axios";
 
 import { useAuthStore } from "@/stores/auth";
 
-export function useUserSettings() {
+export const useUserSettings = () => {
   const error = ref<string | null>(null);
   const auth = useAuthStore();
 
-  async function updateName(name: string) {
+  const updateName = async (name: string) => {
     try {
       const response = await axios.patch("/users/me/name", { name });
 
@@ -19,9 +19,9 @@ export function useUserSettings() {
         error.value = err.response?.data.message;
       }
     }
-  }
+  };
 
-  async function updateEmail(email: string, password: string) {
+  const updateEmail = async (email: string, password: string) => {
     try {
       const response = await axios.patch("/users/me/email", { email, password });
 
@@ -32,9 +32,13 @@ export function useUserSettings() {
         error.value = err.response?.data.message;
       }
     }
-  }
+  };
 
-  async function updatePassword(password: string, newPassword: string, newPasswordConfirmation: string) {
+  const updatePassword = async (
+    password: string,
+    newPassword: string,
+    newPasswordConfirmation: string
+  ) => {
     try {
       const response = await axios.patch("/users/me/password", {
         password,
@@ -49,9 +53,9 @@ export function useUserSettings() {
         error.value = err.response?.data.message;
       }
     }
-  }
+  };
 
-  async function unlinkProvider() {
+  const unlinkProvider = async () => {
     try {
       const response = await axios.delete("/users/me/provider");
 
@@ -62,9 +66,9 @@ export function useUserSettings() {
         error.value = err.response?.data.message;
       }
     }
-  }
+  };
 
-  async function deleteAccount(keyword: string) {
+  const deleteAccount = async (keyword: string) => {
     try {
       await axios.delete("/users/me", { data: { keyword } });
       error.value = null;
@@ -77,7 +81,7 @@ export function useUserSettings() {
         error.value = err.response?.data.message;
       }
     }
-  }
+  };
 
   return { error, updateName, updateEmail, updatePassword, unlinkProvider, deleteAccount };
 }

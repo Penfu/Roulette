@@ -10,16 +10,11 @@ export const useAuthStore = defineStore("auth", () => {
   const token = ref(null as string | null);
   const isAuth = computed(() => token.value != null);
 
-  if (localStorage.getItem("token")) {
-    token.value = localStorage.getItem("token");
-    loginFromToken();
-  }
-
-  async function csrfToken() {
+  const csrfToken = async () => {
     await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");
-  }
+  };
 
-  async function register(name: string, email: string, password: string) {
+  const register = async (name: string, email: string, password: string) => {
     await csrfToken();
 
     try {
@@ -39,9 +34,9 @@ export const useAuthStore = defineStore("auth", () => {
 
       return { success: false, message: "error" };
     }
-  }
+  };
 
-  async function login(email: string, password: string) {
+  const login = async (email: string, password: string) => {
     await csrfToken();
 
     try {
@@ -56,25 +51,25 @@ export const useAuthStore = defineStore("auth", () => {
 
       return { success: false, message: "error" };
     }
-  }
+  };
 
-  async function loginFromToken() {
+  const loginFromToken = async () => {
     axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
     const response = await axios.get("/users/me");
 
     user.value = response.data;
-  }
+  };
 
-  async function loginOAuth(provider: string) {
+  const loginOAuth = async (provider: string) => {
     const response = await axios.get(`/authorize/${provider}/redirect`);
 
     if (response.data.redirect) {
       location.href = response.data.redirect;
       return;
     }
-  }
+  };
 
-  async function loginOAuthCallback(provider: string, code: string) {
+  const loginOAuthCallback = async (provider: string, code: string) => {
     try {
       const response = await axios.get(`/authorize/${provider}/callback`, {
         params: { code },
@@ -85,9 +80,9 @@ export const useAuthStore = defineStore("auth", () => {
     } catch (error) {
       return { success: false, message: "error" };
     }
-  }
+  };
 
-  function logout() {
+  const logout = () => {
     user.value = {} as User;
     token.value = null;
 
@@ -95,14 +90,20 @@ export const useAuthStore = defineStore("auth", () => {
     delete axios.defaults.headers.common["Authorization"];
 
     location.reload();
-  }
+  };
 
-  function logUser(newUser: User, newToken: string) {
+  const logUser = (newUser: User, newToken: string) => {
     user.value = newUser;
     token.value = newToken;
 
     localStorage.setItem("token", newToken);
     axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
+  };
+
+  // Auto login
+  if (localStorage.getItem("token")) {
+    token.value = localStorage.getItem("token");
+    loginFromToken();
   }
 
   return {

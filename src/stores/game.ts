@@ -18,7 +18,7 @@ export const useGameStore = defineStore("game", () => {
   const result = ref<Roll>();
   const histories = ref<Roll[]>([]);
 
-  function addBalance(amount: number) {
+  const addBalance = (amount: number) => {
     if (auth.user.balance < amount) {
       console.log("You don't have enough money!");
       return;
@@ -28,16 +28,16 @@ export const useGameStore = defineStore("game", () => {
     balance.value += amount;
   }
 
-  function allInBalance() {
+  const allInBalance = () => {
     addBalance(auth.user.balance);
   }
 
-  function resetBalance() {
+  const resetBalance = () => {
     auth.user.balance += balance.value;
     balance.value = 0;
   }
 
-  async function makeBet(color: string) {
+  const makeBet = async (color: string) => {
     if (step.value !== RollStep.BET) {
       console.log("Bets are closed!");
       return;

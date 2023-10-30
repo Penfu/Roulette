@@ -6,7 +6,7 @@ import { useGameStore } from "@/stores/game";
 import { RollStep } from "@/enums/step";
 import type Bet from "@/interfaces/bet";
 
-import getClassFromColor from "@/helpers/color";
+import { classFromColor } from "@/helpers/color";
 
 import BetCard from "@/components/game/bets/Bet.vue";
 
@@ -35,7 +35,7 @@ const makeBet = () => {
   <div class="w-full grow h-80 md:h-auto flex flex-col space-y-4">
     <button :disable="() => !isActive" @click="makeBet" @mouseover="hovered = true" @mouseout="hovered = false"
       class="py-4 w-full font-semibold rounded shadow-md transition-transform duration-300 ease-in-out cursor-default"
-      :class="getClassFromColor(color, true),
+      :class="classFromColor(color, true),
         {
          'hover:scale-105 cursor-pointer': isActive,
         }">
