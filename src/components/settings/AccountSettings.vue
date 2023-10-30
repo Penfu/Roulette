@@ -16,7 +16,7 @@ const auth = useAuthStore();
 
     <div class="space-y-8 drop-shadow-md">
       <UpdateName />
-      <ProviderInfo v-show="auth.user.provider" />
+      <ProviderInfo />
       <UpdateEmail v-show="!auth.user.provider" />
       <UpdatePassword v-show="!auth.user.provider" />
       <DeleteAccount />

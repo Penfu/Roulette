@@ -84,7 +84,7 @@ const handleSaveAmounts = () => {
         Save amounts
       </button>
 
-      <p class="text-gray-500">
+      <p class="text-gray-600">
         The amount buttons are the buttons that you can click to bet a certain amount of coins.
       </p>
     </div>
