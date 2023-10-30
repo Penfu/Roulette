@@ -5,8 +5,8 @@ import anime from "animejs";
 import { useGameStore } from "@/stores/game";
 
 import { RollStep } from "@/enums/step";
-import Color from "@/enums/color";
-import getClassFromColor from "@/helpers/color";
+import { Color } from "@/enums/color";
+import { classFromColor } from "@/helpers/color";
 
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 import Histories from "@/components/game/rolls/Histories.vue";
@@ -111,7 +111,9 @@ watch(
     </div>
 
     <div class="basis-1/3 flex flex-col justify-end space-y-4 lg:space-y-8 xl:space-y-0">
-      <div class="h-14 flex grow justify-center items-center text-center text-3xl xl:text-5xl font-semibold uppercase">
+      <div
+        class="h-14 flex grow justify-center items-center text-center text-3xl xl:text-5xl font-semibold uppercase"
+      >
         <span v-show="game.step === RollStep.BET">{{ message }}</span>
         <span v-show="game.step === RollStep.ROLL || game.step === RollStep.ROLL_TO_RESULT">
           Rolling...
@@ -123,14 +125,14 @@ watch(
           <span>Result</span>
           <span
             class="h-12 w-12 xl:h-20 xl:w-20 flex items-center justify-center text-white rounded text-center shadow-md"
-            :class="getClassFromColor(game.result.color)"
+            :class="classFromColor(game.result.color)"
             >{{ game.result.value }}</span
           >
         </div>
       </div>
 
       <div class="justify-end items-center xl:items-end">
-        <Histories class="basis-1/3" :rolls="game.histories" />
+        <Histories :rolls="game.histories" />
       </div>
     </div>
   </div>

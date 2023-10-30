@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 import App from "./App.vue";
 import router from "./router";
@@ -29,6 +30,8 @@ window.Echo = new Echo({
 });
 
 app.use(pinia);
+pinia.use(piniaPluginPersistedstate);
+
 app.use(router);
 app.use(MotionPlugin);
 

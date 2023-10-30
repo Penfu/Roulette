@@ -4,11 +4,11 @@ import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 import type Bet from "@/interfaces/bet";
 
-export function useBet() {
+export const useBet = () => {
   const { token } = useAuthStore();
   const error = ref(null);
 
-  async function addBet(bet: Bet) {
+  const addBet = async (bet: Bet) => {
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
     await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");

@@ -28,10 +28,17 @@ const router = createRouter({
       component: lazyLoad("LeaderboardView"),
     },
     {
-      path: "/profile/:name?",
+      path: "/profile/:name",
       name: "profile",
       component: lazyLoad("ProfileView"),
       props: true,
+    },
+    {
+      path: "/settings/:tab(game)?",
+      name: "settings",
+      component: lazyLoad("SettingsView"),
+      props: true,
+      beforeEnter: [authGuard],
     },
     {
       path: "/login",

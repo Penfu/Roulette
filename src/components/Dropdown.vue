@@ -4,11 +4,11 @@ import { onMounted, onUnmounted, ref } from 'vue';
 const open = ref(false);
 
 onMounted(() => {
-  window.addEventListener('click', close);
+  addEventListener('click', close);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('click', close);
+  removeEventListener('click', close);
 });
 
 const toggle = () => {

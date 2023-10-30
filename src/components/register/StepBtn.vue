@@ -12,7 +12,7 @@ defineProps<{
     <div
       class="flex items-center justify-center w-12 h-12 md:w-10 md:h-10 rounded-lg text-gray-800 shadow"
       :class="[
-        { [hasError ? 'bg-red-500 shadow-gray-500' : 'bg-blue-500 shadow-gray-300']: isActive },
+        { [hasError ? 'bg-red-500 shadow-gray-500' : 'bg-green-400 shadow-gray-300']: isActive },
         { [hasError ? 'bg-red-200 shadow-red-500' : 'bg-gray-200 shadow-gray-300']: !isActive },
         { [hasError ? 'hover:bg-red-300' : 'hover:bg-gray-300']: !isActive },
       ]"

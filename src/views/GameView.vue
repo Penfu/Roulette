@@ -2,40 +2,39 @@
 import { computed, onMounted, ref, watch } from "vue";
 import anime from "animejs";
 
-import Color from "@/enums/color";
-
+import { useSettingsStore } from "@/stores/settings";
 import { useAuthStore } from "@/stores/auth";
 import { useGameStore } from "@/stores/game";
 
 import { useRoll } from "@/composables/useRoll";
 
+import { Color } from "@/enums/color";
 import { RollStep } from "@/enums/step";
+import type Bet from "@/interfaces/bet";
 
 import RollResultBanner from "@/components/game/result/RollResultBanner.vue";
 import Roulette from "@/components/game/rolls/Roulette.vue";
 import AmountButton from "@/components/game/AmountButton.vue";
 import Bets from "@/components/game/bets/Bets.vue";
-
 import CrossIcon from "@/components/icons/CrossIcon.vue";
-import type Bet from "@/interfaces/bet";
 
 const auth = useAuthStore();
 const game = useGameStore();
+const { amountButtons } = useSettingsStore();
 
 const { rolls, fetchRolls } = useRoll();
 
+const balanceToDisplay = ref(0);
 watch(
   () => game.balance,
   (newBalance, oldBalance) => {
-    if (newBalance > oldBalance) {
-      anime({
-        targets: balanceInput.value,
-        value: [oldBalance, newBalance],
-        round: 1,
-        duration: 500,
-        easing: "linear",
-      });
-    }
+    anime({
+      targets: balanceToDisplay,
+      value: [oldBalance, newBalance],
+      round: 1,
+      duration: 500,
+      easing: "linear",
+    });
   }
 );
 
@@ -46,16 +45,18 @@ const bets = ref({
   black: [] as Bet[],
   green: [] as Bet[],
 });
-const myBets = ref({
-  red: null as Bet | null,
-  black: null as Bet | null,
-  green: null as Bet | null,
-});
-const hasBet = computed(() => {
-  return myBets.value.red !== null || myBets.value.black !== null || myBets.value.green !== null;
-});
 
-const balanceInput = ref(HTMLInputElement);
+const myBetOnRed = computed(
+  () => bets.value.red.find((bet: Bet) => bet.user == auth.user.name) as Bet
+);
+const myBetOnBlack = computed(
+  () => bets.value.black.find((bet: Bet) => bet.user == auth.user.name) as Bet
+);
+const myBetOnGreen = computed(
+  () => bets.value.green.find((bet: Bet) => bet.user == auth.user.name) as Bet
+);
+
+const hasBet = computed(() => myBetOnRed.value || myBetOnBlack.value || myBetOnGreen.value);
 
 onMounted(async () => {
   await fetchRolls();
@@ -64,9 +65,15 @@ onMounted(async () => {
   window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
     game.timer = e.timer;
     bets.value = {
-      red: e.bets.red.map((bet: Bet) => { return { color: Color.RED, amount: bet.amount, user: bet.user } }),
-      black: e.bets.black.map((bet: Bet) => { return { color: Color.BLACK, amount: bet.amount, user: bet.user } }),
-      green: e.bets.green.map((bet: Bet) => { return { color: Color.GREEN, amount: bet.amount, user: bet.user } }),
+      red: e.bets.red.map((bet: Bet) => {
+        return { color: Color.RED, amount: bet.amount, user: bet.user };
+      }),
+      black: e.bets.black.map((bet: Bet) => {
+        return { color: Color.BLACK, amount: bet.amount, user: bet.user };
+      }),
+      green: e.bets.green.map((bet: Bet) => {
+        return { color: Color.GREEN, amount: bet.amount, user: bet.user };
+      }),
     };
     game.result = e.result;
 
@@ -109,33 +116,16 @@ onMounted(async () => {
         }
         game.histories.unshift(game.result);
 
-        // List player bets
-        bets.value.red
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.red = bet;
-          });
-        bets.value.black
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.black = bet;
-          });
-        bets.value.green
-          .filter((bet: any) => bet.user == auth.user.name)
-          .map((bet: any) => {
-            myBets.value.green = bet;
-          });
-
         // Give money if the player won
         switch (game.result.color) {
           case Color.RED:
-            if (myBets.value.red != null) auth.user.balance += myBets.value.red.amount * 2;
+            if (myBetOnRed.value) auth.user.balance += myBetOnRed.value.amount * 2;
             break;
           case Color.BLACK:
-            if (myBets.value.black != null) auth.user.balance += myBets.value.black.amount * 2;
+            if (myBetOnBlack.value) auth.user.balance += myBetOnBlack.value.amount * 2;
             break;
           case Color.GREEN:
-            if (myBets.value.green != null) auth.user.balance += myBets.value.green.amount * 13;
+            if (myBetOnGreen.value) auth.user.balance += myBetOnGreen.value.amount * 14;
             break;
         }
 
@@ -150,12 +140,6 @@ const reset = () => {
   bets.value.red = [];
   bets.value.black = [];
   bets.value.green = [];
-
-  myBets.value = {
-    red: null,
-    black: null,
-    green: null,
-  };
 };
 </script>
 
@@ -168,7 +152,7 @@ const reset = () => {
       :leave="{ opacity: 0, y: 100 }"
       class="mb-2"
       v-if="game.step == RollStep.DISPLAY_RESULT && hasBet"
-      :bets="(myBets as any)"
+      :bets="{ red: myBetOnRed, black: myBetOnBlack, green: myBetOnGreen }"
     />
 
     <div class="grow flex flex-col space-y-8">
@@ -180,29 +164,34 @@ const reset = () => {
       <!-- Amount buttons -->
       <div>
         <h3 class="pb-1 text-xl font-bold uppercase">Choose a bet</h3>
-        <div class="mt-2 min-h-20 bg-white rounded-lg shadow shadow-gray-300">
-          <div class="w-full h-full px-4 py-2 flex text-xl">
-            <div class="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-              <AmountButton :value="1" />
-              <AmountButton :value="10" />
-              <AmountButton :value="100" />
-              <AmountButton :value="1000" />
-              <AmountButton />
-              <input
-                v-bind="{ value: game.balance }"
-                ref="balanceInput"
-                type="number"
-                readonly
-                class="px-4 h-12 w-full lg:w-32 outline outline-2 outline-gray-200 rounded shadow shadow-gray-300"
-              />
+        <div class="mt-2 bg-white rounded-lg shadow shadow-gray-300">
+          <div
+            class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl"
+          >
+            <div class="w-full flex flex-wrap gap-2">
+              <AmountButton v-for="amount in amountButtons" :key="amount" :value="amount" />
             </div>
-            <div class="grow flex justify-end">
-              <button
-                @click="game.resetBalance()"
-                class="h-12 px-8 xl:px-4 ml-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-md shadow-red-300"
+
+            <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
+              <label
+                class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded outline outline-2 outline-gray-200 shadow shadow-gray-300"
               >
-                <CrossIcon />
-              </button>
+                {{ balanceToDisplay }}
+              </label>
+              <div class="flex space-x-2">
+                <button
+                  @click="game.allInBalance()"
+                  class="basis-1/2 px-4 py-3 bg-gray-100 hover:bg-gray-200 font-semibold whitespace-nowrap rounded shadow shadow-gray-300"
+                >
+                  {{ "All In" }}
+                </button>
+                <button
+                  @click="game.resetBalance()"
+                  class="basis-1/2 px-4 py-3 flex justify-center items-center bg-red-500 hover:bg-red-600 text-white stroke-2 rounded shadow-md shadow-red-300"
+                >
+                  <CrossIcon />
+                </button>
+              </div>
             </div>
           </div>
         </div>
