@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
 
+import { useUserSettings } from "@/composables/useUserSettings";
+
 const auth = useAuthStore();
+const { error, unlinkProvider } = useUserSettings();
 
 const handleLogin = () => {
   auth.logout();
@@ -20,6 +23,16 @@ const handleLogin = () => {
         }}</span
         >. Your account is linked so you can't change your email or password.
       </p>
+
+      <p>
+        You can unlink your account from this provider and will receive your credentials by email at
+        <span class="text-green-400 font-semibold">{{ auth.user.email }}</span
+        >. Then you will be able to change your email and password.
+      </p>
+
+      <button @click="unlinkProvider" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">
+        Unlink provider
+      </button>
     </div>
     <div v-else class="space-y-6">
       <p>

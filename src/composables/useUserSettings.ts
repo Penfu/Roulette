@@ -51,6 +51,19 @@ export function useUserSettings() {
     }
   }
 
+  async function unlinkProvider() {
+    try {
+      const response = await axios.delete("/users/me/provider");
+
+      auth.user = response.data;
+      error.value = null;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        error.value = err.response?.data.message;
+      }
+    }
+  }
+
   async function deleteAccount(keyword: string) {
     try {
       await axios.delete("/users/me", { data: { keyword } });
@@ -66,5 +79,5 @@ export function useUserSettings() {
     }
   }
 
-  return { error, updateName, updateEmail, updatePassword, deleteAccount };
+  return { error, updateName, updateEmail, updatePassword, unlinkProvider, deleteAccount };
 }
