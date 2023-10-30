@@ -51,9 +51,9 @@ export function useUserSettings() {
     }
   }
 
-  async function deleteAccount(password: string) {
+  async function deleteAccount(keyword: string) {
     try {
-      await axios.delete("/users/me", { data: { password } });
+      await axios.delete("/users/me", { data: { keyword } });
       error.value = null;
 
       auth.logout();
