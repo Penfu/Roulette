@@ -11,6 +11,7 @@ import Pusher from "pusher-js";
 
 import { MotionPlugin } from "@vueuse/motion";
 
+
 import "./assets/main.css";
 
 const app = createApp(App);

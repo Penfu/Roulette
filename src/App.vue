@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { inject } from "@vercel/analytics";
+
 import NavBar from "@/components/layout/NavBar.vue";
+
+inject();
 </script>
 
 <template>
