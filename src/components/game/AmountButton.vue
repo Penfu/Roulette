@@ -11,7 +11,7 @@ const game = useGameStore();
 <template>
   <button
     @click="game.addBalance(value)"
-    class="grow px-4 h-[3.25rem] bg-gray-100 hover:bg-gray-200 font-semibold rounded shadow shadow-gray-300"
+    class="grow px-4 h-[3.25rem] bg-gray-200 hover:bg-gray-300 font-semibold rounded shadow shadow-gray-300"
   >
     {{ value }}
   </button>

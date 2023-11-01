@@ -37,14 +37,14 @@ const handleConfirm = async () => {
 </script>
 
 <template>
-  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-red-100 rounded-lg border-2 border-red-600 space-y-4">
+  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-red-100 rounded-lg border-2 border-red-dark space-y-4">
     <div class="space-y-2">
-      <h2 class="text-xl font-semibold">Delete your account</h2>
+      <h2 class="text-xl dark:!text-black font-semibold">Delete your account</h2>
       <p>
-        <span class="text-red-600 font-semibold">
+        <span class="text-red-dark font-semibold">
           This action is irreversible. All your data will be lost.
         </span>
-        <span>You’ll get a chance to confirm your choice.</span>
+        <span class="dark:text-black">You’ll get a chance to confirm your choice.</span>
       </p>
     </div>
 
@@ -68,22 +68,22 @@ const handleConfirm = async () => {
             :leave="
               sm ? { opacity: 0, y: 600, transition } : { opacity: 0, scale: 0.8, transition }
             "
-            class="sm:mx-8 px-6 py-8 md:px-8 md:py-10 max-w-2xl w-full bg-white rounded-t-3xl sm:rounded-lg space-y-12"
+            class="sm:mx-8 px-6 py-8 md:px-8 md:py-10 max-w-2xl w-full bg-bkg-1 rounded-t-3xl sm:rounded-lg space-y-12"
           >
             <div class="space-y-8">
               <h2 class="text-3xl font-bold">You're about to delete your account</h2>
 
-              <p v-if="error" class="text-red-500">{{ error }}</p>
+              <p v-if="error" class="text-red">{{ error }}</p>
 
               <p class="text-gray-700">
-                This is <span class="text-red-500 font-semibold">irreversible</span>. All your data
-                will be deleted including your balance, bets, and profile.
+                This is <span class="text-red font-semibold">irreversible</span>. All your data will
+                be deleted including your balance, bets, and profile.
               </p>
 
               <div class="space-y-2">
                 <label for="keyword" class="font-semibold"
                   >Enter your name
-                  <span class="px-2 py-1 font-bold text-green-400 bg-green-100 rounded-lg">{{
+                  <span class="px-2 py-1 text-green-dark bg-green-100 rounded-md">{{
                     auth.user.name
                   }}</span>
                   to continue:
@@ -94,7 +94,11 @@ const handleConfirm = async () => {
 
             <div class="flex flex-col-reverse md:flex-row gap-2 mt-4">
               <button @click="cancel" class="btn-secondary w-full">Cancel</button>
-              <button @click="handleConfirm" :disabled="!keyword" class="btn-danger w-full">
+              <button
+                @click="handleConfirm"
+                :disabled="keyword !== auth.user.name"
+                class="btn-danger w-full"
+              >
                 Delete account
               </button>
             </div>

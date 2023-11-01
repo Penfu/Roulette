@@ -20,22 +20,22 @@ const isOpen = ref(false);
 </script>
 
 <template>
-  <div class="flex flex-col bg-gray-50 rounded-lg border border-gray-300 overflow-hidden">
+  <div class="flex flex-col bg-gray-100 rounded-lg border-2 border-gray-300 overflow-hidden">
     <div
       @click="isOpen = !isOpen"
       class="px-2 sm:px-4 md:px-6 py-4 md:py-6 flex items-center gap-4 xs:gap-6 sm:gap-8 lg:gap-12 xl:gap-14 cursor-pointer"
     >
       <!-- Bet info -->
       <div class="grow flex items-center space-x-4">
-        <div class="w-8 h-8 rounded shadow-md" :class="classFromColor(bet.color)" />
+        <div class="w-8 h-8 rounded shadow" :class="classFromColor(bet.color)" />
         <span>{{ bet.amount }}</span>
       </div>
 
       <!-- Bet result -->
-      <span class="px-2 uppercase text-gray-800 font-bold rounded shadow-md"
+      <span class="px-2 lowercase text-black-light font-semibold rounded shadow"
         :class="{
-          'bg-green-300  shadow-green-400': bet.isWin,
-          'bg-red-300  shadow-red-500': !bet.isWin,
+          'bg-green shadow-green': bet.isWin,
+          'bg-red shadow-red': !bet.isWin,
         }"
       >
         {{ bet.isWin ? "Win" : "Lose" }}

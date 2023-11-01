@@ -40,13 +40,13 @@ const handleLogin = async () => {
           <div class="flex space-x-2 font-semibold">
             <button
               @click="loginOAuth('github')"
-              class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-gray-800 hover:bg-gray-900 text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+              class="btn w-full bg-black hover:bg-black-dark border-gray-300 shadow"
             >
               Github
             </button>
             <button
               @click="loginOAuth('google')"
-              class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+              class="btn w-full text-gray-700 bg-bkg-1 hover:bg-gray-200 border-gray-300 shadow"
             >
               Google
             </button>
@@ -55,12 +55,18 @@ const handleLogin = async () => {
           <!-- Manuel -->
           <form @submit.prevent="handleLogin" class="space-y-8">
             <div class="h-64 space-y-2">
-              <label class="block text-red-500">{{ error }}</label>
+              <label class="block text-red">{{ error }}</label>
 
               <div class="space-y-6">
                 <div class="space-y-2">
                   <label class="block">Email</label>
-                  <input v-model="email" type="email" autocomplete="email" required />
+                  <input
+                    v-model="email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                    class="bg-bkg-1"
+                  />
                 </div>
                 <div class="space-y-2">
                   <label class="block">Password</label>
@@ -69,6 +75,7 @@ const handleLogin = async () => {
                     type="password"
                     autocomplete="current-password"
                     required
+                    class="bg-bkg-1"
                   />
                 </div>
               </div>
@@ -78,9 +85,12 @@ const handleLogin = async () => {
           </form>
         </div>
 
-        <router-link to="/register" class="block text-center text-gray-600 hover:text-gray-800">
-          Not already register ?
-        </router-link>
+        <div class="flex flex-wrap justify-center gap-2 text-gray-700">
+          <span>Don't have an account?</span>
+          <router-link to="/register" class="text-green hover:text-green-dark">
+            Register
+          </router-link>
+        </div>
       </div>
     </div>
   </main>

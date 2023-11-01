@@ -124,7 +124,7 @@ watch(
         >
           <span>Result</span>
           <span
-            class="h-12 w-12 xl:h-20 xl:w-20 flex items-center justify-center text-white rounded text-center shadow-md"
+            class="h-12 w-12 xl:h-20 xl:w-20 flex items-center justify-center text-white rounded text-center shadow"
             :class="classFromColor(game.result.color)"
             >{{ game.result.value }}</span
           >

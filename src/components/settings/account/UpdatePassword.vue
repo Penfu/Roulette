@@ -33,11 +33,11 @@ const handleUpdatePassword = async () => {
 <template>
   <form
     @submit.prevent="handleUpdatePassword"
-    class="px-4 sm:px-8 py-3 sm:py-6 bg-white rounded-lg space-y-4"
+    class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4"
   >
     <h2 class="text-xl font-semibold">Change your password</h2>
 
-    <p v-if="error || passwordMismatch" class="text-red-500">
+    <p v-if="error || passwordMismatch" class="text-red">
       {{ passwordMismatch ? "Passwords don't match" : error }}
     </p>
     <div class="space-y-6">

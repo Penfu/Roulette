@@ -41,7 +41,7 @@ onMounted(async () => {
   <main class="flex flex-col space-y-4">
     <!-- Podium -->
     <div
-      class="h-48 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-white rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out"
+      class="h-48 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-bkg-1 rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out"
     >
       <RouterLink
         v-motion
@@ -54,7 +54,7 @@ onMounted(async () => {
         v-for="(user, index) in podiumUsers"
         :key="user.name"
         :to="`/profile/${user.name}`"
-        class="group px-6 xs:px-8 sm:px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-between sm:justify-center space-x-8 sm:space-x-16 bg-white first:bg-green-400"
+        class="group px-6 xs:px-8 sm:px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-between sm:justify-center space-x-8 sm:space-x-16 bg-bkg-1 first:bg-green"
       >
         <span class="text-4xl md:text-6xl font-bold">{{ index + 1 }}</span>
         <div class="grow flex flex-col">
@@ -65,18 +65,18 @@ onMounted(async () => {
         </div>
       </RouterLink>
 
-      <div v-if="loading" class="grow bg-gray-500 rounded-xl animate-pulse" />
+      <div v-if="loading" class="grow bg-skeleton rounded-xl animate-pulse" />
     </div>
 
     <!-- Search bar -->
-    <div class="flex items-center bg-white rounded-lg shadow shadow-gray-300">
+    <div class="flex items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 border-2 border-gray-300 overflow-hidden">
       <input
         v-model="search"
         type="text"
-        class="grow pl-4 py-4 rounded-lg outline-none text-ellipsis overflow-hidden"
+        class="grow pl-4 bg-white rounded-none outline-none text-ellipsis border-none"
         placeholder="Search for a user..."
       />
-      <span class="px-2 py-4 bg-gray-200 rounded-r-lg text-center">
+      <span class="px-2 py-3 bg-gray-200 text-center">
         <span v-if="loading" class="text-xl animate-pulse">...</span>
         <span v-else class="text-lg font-semibold whitespace-nowrap">
           {{ searchUsers.length }} / {{ rankedUsers.length - podiumUsers.length }}
@@ -87,29 +87,29 @@ onMounted(async () => {
     <!-- Ranking -->
     <div
       v-if="loading"
-      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-white rounded-lg shadow shadow-gray-300 overflow-y-auto animate-pulse"
+      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 overflow-y-auto animate-pulse"
     >
       <div
         v-for="i in 10"
         :key="i"
         class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
       >
-        <span class="w-6 h-5 bg-gray-500 rounded-xl"></span>
+        <span class="w-6 h-5 bg-skeleton rounded-xl"></span>
         <div class="grow flex">
-          <span class="w-32 h-5 bg-gray-500 rounded-xl"></span>
+          <span class="w-32 h-5 bg-skeleton rounded-xl"></span>
         </div>
-        <span class="w-24 h-5 bg-gray-500 rounded-xl"></span>
+        <span class="w-24 h-5 bg-skeleton rounded-xl"></span>
       </div>
     </div>
     <div
       v-else
-      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-white rounded-lg shadow shadow-gray-300 overflow-y-auto"
+      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 overflow-y-auto"
     >
       <RouterLink
         v-for="user in searchUsers"
         :key="user.rank"
         :to="`/profile/${user.name}`"
-        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded-lg hover:bg-green-200"
+        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded-lg hover:bg-green-200 dark:hover:bg-green-600"
       >
         <span class="w-6">{{ user.rank }}</span>
         <span class="grow">{{ user.name }}</span>

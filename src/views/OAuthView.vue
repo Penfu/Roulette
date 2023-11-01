@@ -39,7 +39,7 @@ onMounted(async () => {
           class="text-4xl xs:text-6xl sm:text-7xl md:text-8xl xl:text-9xl font-extrabold uppercase leading-normal"
         >
           Wait...
-          <span class="block px-2 w-min bg-green-400 text-white shadow-lg shadow-green-300">{{
+          <span class="block px-2 w-min bg-green text-white shadow shadow-green-300">{{
             props.provider
           }}</span>
         </h2>

@@ -6,7 +6,7 @@ import BetAmounts from "@/components/settings/game/BetAmounts.vue";
   <div class="space-y-5">
     <h1 class="text-4xl font-bold">Game preferences</h1>
 
-    <div class="drop-shadow-md">
+    <div class="drop-shadow">
       <BetAmounts />
     </div>
   </div>
