@@ -7,7 +7,7 @@ inject();
 </script>
 
 <template>
-  <div class="bg-gray-100">
+  <div class="bg-bkg">
     <div class="mx-auto max-w-[100rem] px-4 flex flex-col min-h-screen">
       <NavBar />
 

@@ -85,7 +85,7 @@ const active = ref(true);
 <template>
   <div
     v-show="active"
-    class="px-4 py-2 h-auto space-y-4 bg-white rounded-lg shadow shadow-gray-300"
+    class="px-4 py-2 h-auto space-y-4 bg-bkg-1 rounded-lg shadow shadow-gray-300"
   >
     <div class="flex">
       <div class="grow text-2xl">
@@ -101,9 +101,9 @@ const active = ref(true);
       </button>
     </div>
 
-    <div class="h-5 bg-gray-300 rounded shadow-md shadow-gray-300">
+    <div class="h-5 bg-gray-300 rounded shadow shadow-gray-300">
       <div
-        class="h-full bg-gray-800 rounded transition-width duration-75 ease-in-out"
+        class="h-full bg-black rounded transition-width duration-75 ease-in-out"
         :style="{ width: `${progress}%` }"
       ></div>
     </div>

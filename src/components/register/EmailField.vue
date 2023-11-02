@@ -9,6 +9,6 @@ defineProps<{
 <template>
   <div class="space-y-2">
     <label class="block">Email</label>
-    <input v-model="user.email" type="email" autocomplete="email" required />
+    <input v-model="user.email" type="email" autocomplete="email" required class="bg-bkg-1" />
   </div>
 </template>

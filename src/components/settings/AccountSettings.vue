@@ -14,7 +14,7 @@ const auth = useAuthStore();
   <div class="space-y-5">
     <h1 class="text-4xl font-bold">Account Settings</h1>
 
-    <div class="space-y-8 drop-shadow-md">
+    <div class="space-y-8 drop-shadow">
       <UpdateName />
       <ProviderInfo />
       <UpdateEmail v-show="!auth.user.provider" />

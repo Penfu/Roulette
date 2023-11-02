@@ -25,11 +25,11 @@ const handleUpdateEmail = () => {
 <template>
   <form
     @submit.prevent="handleUpdateEmail"
-    class="px-4 sm:px-8 py-3 sm:py-6 bg-white rounded-lg space-y-4"
+    class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4"
   >
     <h2 class="text-xl font-semibold">Change your email</h2>
 
-    <p v-if="error" class="text-red-500">{{ error }}</p>
+    <p v-if="error" class="text-red">{{ error }}</p>
     <div class="space-y-6">
       <div class="space-y-2">
         <label class="block" for="email">Your email</label>

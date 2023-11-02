@@ -100,7 +100,7 @@ const handleRegister = async () => {
           </div>
 
           <div class="h-64 space-y-2">
-            <span class="text-red-500">{{ activeStep.errors?.[0] }}</span>
+            <span class="text-red">{{ activeStep.errors?.[0] }}</span>
             <component :is="activeStep.component" :user="user" />
           </div>
 
@@ -110,7 +110,7 @@ const handleRegister = async () => {
               v-if="activeStepIndex > 0"
               type="button"
               @click="handlePreviousStep"
-              class="w-full px-4 py-3 hover:bg-gray-50 border border-gray-400 rounded"
+              class="btn-secondary w-full"
               :class="{ 'basis-2/5': isReadyToSubmit }"
             >
               Back
@@ -134,9 +134,10 @@ const handleRegister = async () => {
           </div>
         </form>
 
-        <router-link to="/login" class="block text-center text-gray-600 hover:text-gray-800">
-          Already register ?
-        </router-link>
+        <div class="flex flex-wrap justify-center gap-2 text-gray-700">
+          <span>Already have an account?</span>
+          <router-link to="/login" class="text-green hover:text-green-dark"> Login </router-link>
+        </div>
       </div>
     </div>
   </main>

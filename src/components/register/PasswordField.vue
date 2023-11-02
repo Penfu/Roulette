@@ -11,7 +11,13 @@ defineProps<{
   <div class="space-y-6">
     <div class="space-y-2">
       <label class="block">Password</label>
-      <input v-model="user.password" type="password" autocomplete="new-password" required />
+      <input
+        v-model="user.password"
+        type="password"
+        autocomplete="new-password"
+        required
+        class="bg-bkg-1"
+      />
     </div>
     <div class="space-y-2">
       <label class="block">Password Confirmation</label>
@@ -20,6 +26,7 @@ defineProps<{
         type="password"
         autocomplete="new-password"
         required
+        class="bg-bkg-1"
       />
     </div>
   </div>

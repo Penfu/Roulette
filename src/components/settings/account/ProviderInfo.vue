@@ -12,13 +12,13 @@ const handleLogin = () => {
 </script>
 
 <template>
-  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-white rounded-lg space-y-4">
+  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4">
     <h2 class="text-xl font-semibold">Provider</h2>
 
     <div v-if="auth.user.provider" class="space-y-6">
       <p>
         You are logged in with
-        <span class="px-2 py-1 capitalize font-semibold text-white bg-gray-800 rounded-md">{{
+        <span class="px-2 py-1 capitalize font-semibold text-white bg-black rounded-md">{{
           auth.user.provider
         }}</span
         >. Your account is linked so you can't change your email or password.
@@ -26,7 +26,7 @@ const handleLogin = () => {
 
       <p>
         You can unlink your account from this provider and will receive your credentials by email at
-        <span class="text-green-400 font-semibold">{{ auth.user.email }}</span
+        <span class="text-green font-semibold">{{ auth.user.email }}</span
         >. Then you will be able to change your email and password.
       </p>
 
@@ -37,11 +37,11 @@ const handleLogin = () => {
     <div v-else class="space-y-6">
       <p>
         You can link your account with
-        <span class="px-2 py-1 capitalize font-semibold text-white bg-gray-800 rounded-md"
+        <span class="px-2 py-1 capitalize font-semibold text-white bg-black rounded-md"
           >Github</span
         >
         &nbsp;or
-        <span class="px-2 py-1 capitalize font-semibold text-white bg-gray-800 rounded-md"
+        <span class="px-2 py-1 capitalize font-semibold text-white bg-black rounded-md"
           >Google</span
         >
         &nbsp;to login with them.
@@ -50,14 +50,14 @@ const handleLogin = () => {
         To link your account you need to
         <span
           @click="handleLogin"
-          class="font-semibold text-green-400 hover:text-green-500 cursor-pointer"
+          class="font-semibold text-green hover:text-green-dark cursor-pointer"
         >
           login
         </span>
         with a provider account which has the same email as below. If you want to login with a
         provider account which has a different email, you can change your email here to match.
       </p>
-      <p class="text-gray-600">
+      <p class="text-gray-700">
         You can unlink your account from a provider at any time. Linking or unlinking your account
         will conserve all your data !
       </p>
