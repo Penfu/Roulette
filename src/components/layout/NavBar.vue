@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import { CubeIcon, TrophyIcon, BanknotesIcon, UserIcon } from "@heroicons/vue/24/outline";
 
 import Dropdown from "@/components/Dropdown.vue";
+import DarkModeSwitch from "@/components/DarkModeSwitch.vue";
 
 const auth = useAuthStore();
 </script>
@@ -30,28 +31,29 @@ const auth = useAuthStore();
         </div>
       </div>
 
-      <div class="flex items-center gap-2 md:gap-4 xl:gap-6">
+      <div class="flex items-center gap-2 md:gap-4">
         <!-- Balance -->
-        <label v-show="auth.isAuth" class="p-3 flex justify-center items-center gap-2 rounded">
+        <label v-show="auth.isAuth" class="hidden sm:flex p-3 justify-center items-center gap-2">
           <BanknotesIcon class="h-8 w-8 text-green" />
           <span class="text-xl">{{ auth.user.balance }}</span>
         </label>
 
+        <DarkModeSwitch />
+
         <!-- User Profile Dropdown -->
         <Dropdown v-if="auth.isAuth">
           <template #trigger>
-            <div
-              class="p-3 flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 rounded"
-            >
+            <div class="btn p-2 flex items-center justify-center bg-gray-200 hover:bg-gray-300">
               <UserIcon class="w-6 h-6" />
-              <span class="hidden font-medium">{{ auth.user.name }}</span>
             </div>
           </template>
           <template #content>
             <div
               class="z-20 absolute right-0 mt-2 py-4 flex flex-col justify-end items-center transition-all transition-slowest duration-500 ease"
             >
-              <div class="w-36 bg-bkg-1 dark:bg-gray-200 rounded-lg shadow shadow-gray-300 drop-shadow">
+              <div
+                class="w-36 bg-bkg-1 dark:bg-gray-200 rounded-lg shadow shadow-gray-300 drop-shadow"
+              >
                 <div class="m-2 flex flex-col">
                   <RouterLink
                     :to="'/profile/' + auth.user.name"
@@ -76,11 +78,7 @@ const auth = useAuthStore();
         </Dropdown>
 
         <!-- Login btn -->
-        <RouterLink
-          v-else
-          to="/login"
-          class="py-2 px-4 text-lg font-semibold bg-gray-200 hover:bg-gray-300 rounded"
-        >
+        <RouterLink v-else to="/login" class="btn py-2 bg-gray-200 hover:bg-gray-300">
           Login
         </RouterLink>
       </div>
