@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -28,33 +28,26 @@
 		--color-black-light: 24 24 27;
 		--color-black-dark: 10 10 11;
 
-		--color-skeleton: 226 232 240;
+		--color-skeleton: 206 212 220;
 	}
-	@media (prefers-color-scheme: dark) {
-		:root {
-			--color-bg: 18 18 19;
-			--color-bg-1: 25 25 25;
-			
-			--color-white: 255, 255, 255, 90%;
-			
-			--color-gray-100: 23 23 23;
-			--color-gray-200: 38 38 38;
-			--color-gray-300: 64 64 64;
-			--color-gray-700: 226 232 240;
+	
+	:root[class="dark"] {
+		--color-bg: 18 18 19;
+		--color-bg-1: 25 25 25;
 
-			--color-skeleton: 46 46 46;
+		--color-white: 255, 255, 255, 85%;
 
-			@apply text-white !important;
-		}
+		--color-gray-100: 23 23 23;
+		--color-gray-200: 38 38 38;
+		--color-gray-300: 64 64 64;
+		--color-gray-700: 226 232 240;
+
+		--color-skeleton: 46 46 46;
+
+		@apply !text-white;
 
 		* {
 			@apply !shadow-none;
-		}
-
-		h1,
-		h2,
-		h3 {
-			@apply text-[rgb(255,255,255,95%)] !important;
 		}
 	}
 
@@ -76,18 +69,18 @@
 	}
 
 	.btn {
-		@apply prefab font-medium tracking-wide text-white;
+		@apply prefab font-semibold tracking-wide;
 	}
 
 	.btn-primary {
-		@apply btn bg-green enabled:hover:bg-green-dark border-green-600;
+		@apply btn bg-green enabled:hover:bg-green-dark border-green-600 text-white dark:text-black;
 	}
 
 	.btn-secondary {
-		@apply btn text-black bg-white enabled:hover:bg-gray-200 border-black-dark;
+		@apply btn bg-white enabled:hover:bg-gray-200 text-black dark:enabled:hover:text-white border-black-dark;
 	}
 
 	.btn-danger {
-		@apply btn bg-red enabled:hover:bg-red-dark border-red-700;
+		@apply btn bg-red enabled:hover:bg-red-dark text-white border-red-700;
 	}
 }

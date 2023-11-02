@@ -37,9 +37,9 @@ const handleConfirm = async () => {
 </script>
 
 <template>
-  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-red-100 rounded-lg border-2 border-red-dark space-y-4">
+  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-red-100 dark:bg-opacity-90 rounded-lg border-2 border-red-dark space-y-4">
     <div class="space-y-2">
-      <h2 class="text-xl dark:!text-black font-semibold">Delete your account</h2>
+      <h2 class="text-xl text-black font-semibold">Delete your account</h2>
       <p>
         <span class="text-red-dark font-semibold">
           This action is irreversible. All your data will be lost.

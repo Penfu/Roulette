@@ -65,7 +65,7 @@ onMounted(async () => {
         </div>
       </RouterLink>
 
-      <div v-if="loading" class="grow bg-skeleton rounded-xl animate-pulse" />
+      <div v-if="loading" class="bg-skeleton animate-pulse" />
     </div>
 
     <!-- Search bar -->
@@ -73,7 +73,7 @@ onMounted(async () => {
       <input
         v-model="search"
         type="text"
-        class="grow pl-4 bg-white rounded-none outline-none text-ellipsis border-none"
+        class="bg-bkg-1 rounded-none outline-none text-ellipsis border-none"
         placeholder="Search for a user..."
       />
       <span class="px-2 py-3 bg-gray-200 text-center">
@@ -87,12 +87,12 @@ onMounted(async () => {
     <!-- Ranking -->
     <div
       v-if="loading"
-      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 overflow-y-auto animate-pulse"
+      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 overflow-y-auto"
     >
       <div
         v-for="i in 10"
         :key="i"
-        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
+        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded animate-pulse"
       >
         <span class="w-6 h-5 bg-skeleton rounded-xl"></span>
         <div class="grow flex">
