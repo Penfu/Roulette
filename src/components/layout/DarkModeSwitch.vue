@@ -9,7 +9,7 @@ const toggleDark = useToggle(isDark);
 <template>
   <button
     @click="toggleDark()"
-    class="btn p-2 flex justify-center items-center bg-gray-200 hover:bg-gray-300"
+    class="btn p-3 flex justify-center items-center bg-gray-200 hover:bg-gray-300"
   >
     <MoonIcon v-if="isDark" class="w-6 h-6" />
     <SunIcon v-else class="w-6 h-6" />
