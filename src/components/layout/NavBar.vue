@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
 
-import { CubeIcon, TrophyIcon, BanknotesIcon, UserIcon } from "@heroicons/vue/24/outline";
+import { CubeIcon, TrophyIcon, BanknotesIcon } from "@heroicons/vue/24/outline";
 
 import DarkModeSwitch from "@/components/layout/DarkModeSwitch.vue";
 import DropdownMenu from "@/components/layout/DropdownMenu.vue";
@@ -10,8 +10,10 @@ const auth = useAuthStore();
 </script>
 
 <template>
-  <nav class="rounded-b-lg py-2 text-gray-700 bg-bkg-1 shadow shadow-gray-300">
-    <div class="px-4 flex flex-row justify-center items-center gap-4">
+  <div>
+    <nav
+      class="xs:rounded-b-lg px-4 py-2 flex flex-row justify-center items-center gap-4 text-gray-700 bg-bkg-1 shadow shadow-gray-300"
+    >
       <!-- Title -->
       <RouterLink to="/" class="flex justify-center items-center space-x-2 text-lg">
         <CubeIcon class="w-6 h-6" />
@@ -31,6 +33,7 @@ const auth = useAuthStore();
         </div>
       </div>
 
+      <!-- User Info / Actions -->
       <div class="flex items-center gap-2 md:gap-4">
         <!-- Balance -->
         <label v-show="auth.isAuth" class="hidden sm:flex p-3 justify-center items-center gap-2">
@@ -48,6 +51,6 @@ const auth = useAuthStore();
           Login
         </RouterLink>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </div>
 </template>

@@ -151,7 +151,7 @@ onMounted(async () => {
     </div>
 
     <!-- Bet history -->
-    <div class="grow flex flex-col space-y-4">
+    <div class="flex flex-col space-y-4">
       <h2 class="text-3xl font-bold">Bets</h2>
       <div class="p-4 grow bg-bkg-1 rounded-lg shadow shadow-gray-300 space-y-6">
         <!-- Bets Activity -->

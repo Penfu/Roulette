@@ -22,13 +22,13 @@ const auth = useAuthStore();
       leave-to-class="transform scale-95 opacity-0"
     >
       <div
-        class="absolute z-40 mt-2 right-0 w-full xs:w-56 xs:origin-top-right transition-width duration-300 ease-in"
+        class="absolute z-40 mt-4 right-0 w-full xs:w-56 xs:origin-top-right transition-width duration-300 ease-in"
       >
         <MenuItems
           class="mx-4 xs:mx-0 divide-y-2 divide-gray-100 rounded-md bg-gray-200 shadow-lg focus:outline-none"
         >
           <div class="px-1 py-1">
-            <MenuItem v-slot="{ active }" as="div">
+            <MenuItem v-slot="{ active, close }" as="div">
               <span
                 v-if="auth.loading"
                 class="block mx-1 my-1 py-4 rounded bg-gray-300 animate-pulse"
@@ -36,6 +36,7 @@ const auth = useAuthStore();
               <RouterLink
                 v-else
                 :to="'/profile/' + auth.user.name"
+                @click="close"
                 class="block p-2 rounded whitespace-nowrap"
                 :class="{ 'bg-gray-300': active }"
               >
@@ -43,10 +44,11 @@ const auth = useAuthStore();
               </RouterLink>
             </MenuItem>
 
-            <MenuItem v-slot="{ active }">
+            <MenuItem v-slot="{ active, close }" as="div">
               <RouterLink
                 to="/settings"
-                class="block p-2 rounded overflow-hidden"
+                @click="close"
+                class="block p-2 rounded"
                 :class="{ 'bg-gray-300': active }"
               >
                 Settings
