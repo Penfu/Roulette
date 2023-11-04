@@ -1,36 +1,29 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
-import { breakpointsTailwind, useBreakpoints, useConfirmDialog } from "@vueuse/core";
-import { useMotions } from "@vueuse/motion";
 
 import { useAuthStore } from "@/stores/auth";
 
 import { useUserSettings } from "@/composables/useUserSettings";
 
 const auth = useAuthStore();
+const { user } = storeToRefs(auth);
+
 const { error, deleteAccount } = useUserSettings();
 
 const isOpen = ref(false);
 const keyword = ref("");
 
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const sm = breakpoints.smaller("sm");
-const motions = useMotions();
-const transition = { type: "spring", stiffness: 250, damping: 25, mass: 0.5 };
-
 const closeModal = () => {
   isOpen.value = false;
 };
+
 const openModal = () => {
   error.value = null;
   keyword.value = "";
 
   isOpen.value = true;
-};
-
-const handleCancel = () => {
-  closeModal();
 };
 
 const handleConfirm = async () => {
@@ -41,7 +34,7 @@ const handleConfirm = async () => {
     return;
   }
 
-  confirm();
+  closeModal();
 };
 </script>
 
@@ -70,23 +63,28 @@ const handleConfirm = async () => {
 
   <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
-      <TransitionChild>
-        <div class="fixed inset-0 bg-black/50" />
+      <TransitionChild
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black/75" />
       </TransitionChild>
 
       <div class="fixed inset-0">
         <div class="min-h-full flex justify-center items-end sm:items-center">
           <TransitionChild
-            :css="false"
-            @leave="(_: any, done: any) => motions.transition.leave(done)"
+            enter="duration-300 ease-out"
+            enter-from="translate-y-12 sm:opacity-0 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100"
+            leave="duration-200 ease-in"
+            leave-from="translate-y-0 sm:opacity-100 sm:scale-100"
+            leave-to="translate-y-12 sm:opacity-0 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              v-motion="'transition'"
-              :initial="sm ? { opacity: 0, y: 600 } : { opacity: 0.75, scale: 0.8 }"
-              :enter="sm ? { opacity: 1, y: 0, transition } : { opacity: 1, scale: 1, transition }"
-              :leave="
-                sm ? { opacity: 0, y: 600, transition } : { opacity: 0, scale: 0.8, transition }
-              "
               class="sm:mx-8 px-6 py-8 md:px-8 md:py-10 max-w-2xl w-full bg-bkg-1 rounded-t-3xl sm:rounded-lg space-y-12"
             >
               <DialogTitle as="h2" class="text-3xl font-bold">
@@ -103,7 +101,7 @@ const handleConfirm = async () => {
                   <label for="keyword" class="font-semibold space-x-2">
                     <span>Enter your name</span>
                     <span class="px-2 py-1 text-green-dark bg-green-100 rounded-md">
-                      {{ auth.user.name }}
+                      {{ user.name }}
                     </span>
                     <span>to continue:</span>
                   </label>
@@ -113,10 +111,10 @@ const handleConfirm = async () => {
               </div>
 
               <div class="flex flex-col-reverse md:flex-row gap-2 mt-4">
-                <button @click="handleCancel" class="btn-secondary w-full">Cancel</button>
+                <button @click="closeModal" class="btn-secondary w-full">Cancel</button>
                 <button
                   @click="handleConfirm"
-                  :disabled="keyword !== auth.user.name"
+                  :disabled="keyword !== user.name"
                   class="btn-danger w-full"
                 >
                   Delete account
