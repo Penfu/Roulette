@@ -40,7 +40,7 @@ const handleLogin = async () => {
           <div class="flex space-x-2 font-semibold">
             <button
               @click="loginOAuth('github')"
-              class="btn w-full bg-black hover:bg-black-dark border-gray-300 shadow"
+              class="btn w-full text-white bg-black hover:bg-black-dark border-gray-300 shadow"
             >
               Github
             </button>
