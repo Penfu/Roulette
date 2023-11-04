@@ -26,12 +26,12 @@ const close = (e: any) => {
   <div class="relative">
     <!-- Dropdown toggle button -->
     <button @click="toggle" class="w-full dropdown">
-      <slot name="trigger"></slot>
+      <slot name="trigger" />
     </button>
 
     <!-- Dropdown menu -->
     <div v-show="open">
-      <slot name="content"></slot>
+      <slot name="content" />
     </div>
   </div>
 </template>
