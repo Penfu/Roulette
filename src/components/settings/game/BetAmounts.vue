@@ -74,6 +74,7 @@ const handleSaveAmounts = () => {
         <input
           v-model="selectedButton!.value"
           ref="input"
+          name="amount"
           type="number"
           min="1"
           max="10000000000"

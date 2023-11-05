@@ -42,18 +42,18 @@ const handleUpdatePassword = async () => {
     </p>
     <div class="space-y-6">
       <div class="space-y-2">
-        <label class="block" for="name">Your current password</label>
-        <input v-model="password" type="password" />
+        <label for="current_password" class="block">Your current password</label>
+        <input v-model="password" id="current_password" type="password" />
       </div>
 
       <div class="space-y-2">
-        <label class="block" for="name">Your new password</label>
-        <input v-model="newPassword" type="password" />
+        <label for="new_password" class="block">Your new password</label>
+        <input v-model="newPassword" id="new_password" type="password" />
       </div>
 
       <div class="space-y-2">
-        <label class="block" for="name">Confirm your new password</label>
-        <input v-model="newPasswordConfirmation" type="password" />
+        <label for="new_password_confirmation" class="block">Confirm your new password</label>
+        <input v-model="newPasswordConfirmation" id="new_password_confirmation" type="password" />
       </div>
 
       <button

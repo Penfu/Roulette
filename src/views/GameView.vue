@@ -173,11 +173,11 @@ const reset = () => {
             </div>
 
             <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
-              <label
+              <span
                 class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded box-border border-2 border-gray-200 shadow shadow-gray-300"
               >
                 {{ balanceToDisplay }}
-              </label>
+              </span>
               <div class="flex space-x-2">
                 <button
                   @click="game.allInBalance()"
@@ -187,6 +187,7 @@ const reset = () => {
                 </button>
                 <button
                   @click="game.resetBalance()"
+                  aria-label="Reset balance"
                   class="btn basis-1/2 flex justify-center items-center bg-red hover:bg-red-dark text-white stroke-2 rounded border-red shadow shadow-red-300"
                 >
                   <CrossIcon />

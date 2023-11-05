@@ -36,10 +36,10 @@ const auth = useAuthStore();
       <!-- User Info / Actions -->
       <div class="flex items-center gap-2 md:gap-4">
         <!-- Balance -->
-        <label v-show="auth.isAuth" class="hidden sm:flex p-3 justify-center items-center gap-2">
+        <span v-show="auth.isAuth" class="hidden sm:flex p-3 justify-center items-center gap-2">
           <BanknotesIcon class="h-8 w-8 text-green" />
           <span class="text-xl">{{ auth.user.balance }}</span>
-        </label>
+        </span>
 
         <DarkModeSwitch />
 

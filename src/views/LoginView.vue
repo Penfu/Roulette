@@ -52,16 +52,16 @@ const handleLogin = async () => {
             </button>
           </div>
 
-          <!-- Manuel -->
           <form @submit.prevent="handleLogin" class="space-y-8">
             <div class="h-64 space-y-2">
-              <label class="block text-red">{{ error }}</label>
+              <span class="block text-red">{{ error }}</span>
 
               <div class="space-y-6">
                 <div class="space-y-2">
-                  <label class="block">Email</label>
+                  <label for="email" class="block">Email</label>
                   <input
                     v-model="email"
+                    id="email"
                     type="email"
                     autocomplete="email"
                     required
@@ -69,9 +69,10 @@ const handleLogin = async () => {
                   />
                 </div>
                 <div class="space-y-2">
-                  <label class="block">Password</label>
+                  <label for="password" class="block">Password</label>
                   <input
                     v-model="password"
+                    id="password"
                     type="password"
                     autocomplete="current-password"
                     required

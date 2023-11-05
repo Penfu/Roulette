@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <label
+  <span
     v-motion
     :initial="{ opacity: 0, x: -100 }"
     :enter="{ opacity: 1, x: 0 }"
@@ -18,5 +18,5 @@ defineProps<{
     :class="classFromColor(roll.color)"
   >
     {{ roll.value }}
-  </label>
+  </span>
 </template>

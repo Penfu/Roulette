@@ -30,8 +30,8 @@ const handleUpdateName = () => {
     <p v-if="error" class="text-red">{{ error }}</p>
     <div class="space-y-6">
       <div class="space-y-2">
-        <label class="block" for="name">Your name</label>
-        <input v-model="name" type="text" />
+        <label for="name" class="block">Your name</label>
+        <input v-model="name" id="name" type="text" autocomplete="username" />
       </div>
 
       <button
