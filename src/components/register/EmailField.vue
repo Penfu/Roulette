@@ -8,7 +8,14 @@ defineProps<{
 
 <template>
   <div class="space-y-2">
-    <label class="block">Email</label>
-    <input v-model="user.email" type="email" autocomplete="email" required />
+    <label for="email" class="block">Email</label>
+    <input
+      v-model="user.email"
+      id="email"
+      type="email"
+      autocomplete="email"
+      required
+      class="bg-bkg-1"
+    />
   </div>
 </template>

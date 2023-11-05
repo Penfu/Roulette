@@ -10,16 +10,25 @@ defineProps<{
 <template>
   <div class="space-y-6">
     <div class="space-y-2">
-      <label class="block">Password</label>
-      <input v-model="user.password" type="password" autocomplete="new-password" required />
-    </div>
-    <div class="space-y-2">
-      <label class="block">Password Confirmation</label>
+      <label for="password" class="block">Password</label>
       <input
-        v-model="user.passwordConfirmation"
+        v-model="user.password"
+        id="password"
         type="password"
         autocomplete="new-password"
         required
+        class="bg-bkg-1"
+      />
+    </div>
+    <div class="space-y-2">
+      <label for="password_confirmation" class="block">Password Confirmation</label>
+      <input
+        v-model="user.passwordConfirmation"
+        id="password_confirmation"
+        type="password"
+        autocomplete="new-password"
+        required
+        class="bg-bkg-1"
       />
     </div>
   </div>

@@ -157,14 +157,14 @@ const reset = () => {
 
     <div class="grow flex flex-col space-y-8">
       <!-- Roll -->
-      <div class="px-2 py-4 bg-white rounded-lg shadow shadow-gray-300">
+      <div class="px-2 py-4 bg-bkg-1 rounded-lg shadow shadow-gray-300">
         <Roulette :message="message" />
       </div>
 
       <!-- Amount buttons -->
       <div>
         <h3 class="pb-1 text-xl font-bold uppercase">Choose a bet</h3>
-        <div class="mt-2 bg-white rounded-lg shadow shadow-gray-300">
+        <div class="mt-2 bg-bkg-1 rounded-lg shadow shadow-gray-300">
           <div
             class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl"
           >
@@ -173,21 +173,22 @@ const reset = () => {
             </div>
 
             <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
-              <label
-                class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded outline outline-2 outline-gray-200 shadow shadow-gray-300"
+              <span
+                class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded box-border border-2 border-gray-200 shadow shadow-gray-300"
               >
                 {{ balanceToDisplay }}
-              </label>
+              </span>
               <div class="flex space-x-2">
                 <button
                   @click="game.allInBalance()"
-                  class="basis-1/2 px-4 py-3 bg-gray-100 hover:bg-gray-200 font-semibold whitespace-nowrap rounded shadow shadow-gray-300"
+                  class="btn basis-1/2 bg-gray-200 hover:bg-gray-300 whitespace-nowrap rounded shadow shadow-gray-300"
                 >
-                  {{ "All In" }}
+                  All In
                 </button>
                 <button
                   @click="game.resetBalance()"
-                  class="basis-1/2 px-4 py-3 flex justify-center items-center bg-red-500 hover:bg-red-600 text-white stroke-2 rounded shadow-md shadow-red-300"
+                  aria-label="Reset balance"
+                  class="btn basis-1/2 flex justify-center items-center bg-red hover:bg-red-dark text-white stroke-2 rounded border-red shadow shadow-red-300"
                 >
                   <CrossIcon />
                 </button>

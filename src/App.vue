@@ -7,11 +7,10 @@ inject();
 </script>
 
 <template>
-  <div class="bg-gray-100">
-    <div class="mx-auto max-w-[100rem] px-4 flex flex-col min-h-screen">
-      <NavBar />
-
-      <RouterView class="z-10 py-4 grow" />
+  <div class="bg-bkg">
+    <div class="min-h-screen flex flex-col">
+      <NavBar class="xs:mx-auto xs:max-w-[100rem] xs:px-4 w-full" />
+      <RouterView class="grow mx-auto max-w-[100rem] p-4 w-full" />
     </div>
   </div>
 </template>

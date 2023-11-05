@@ -49,14 +49,14 @@ const handleSaveAmounts = () => {
 </script>
 
 <template>
-  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-white rounded-lg space-y-4">
+  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4">
     <h2 class="text-xl font-semibold">Bet</h2>
 
     <div class="space-y-6">
       <div class="space-y-2">
         <h3>Amount buttons</h3>
 
-        <p v-if="error" class="text-red-500">{{ error }}</p>
+        <p v-if="error" class="text-red">{{ error }}</p>
         <div class="flex flex-wrap gap-2 xs:gap-x-6">
           <button
             v-for="amount in sortedAmountButtons"
@@ -64,7 +64,7 @@ const handleSaveAmounts = () => {
             @click="handleSelectAmountButton(amount.index)"
             class="px-4 xs:px-6 sm:px-8 py-3 grow font-semibold bg-gray-100 hover:bg-gray-200 rounded shadow shadow-gray-300"
             :class="{
-              'outline outline-2 outline-green-400': selectedButtonIndex === amount.index,
+              'outline outline-2 outline-green': selectedButtonIndex === amount.index,
             }"
           >
             {{ amount.value }}
@@ -74,6 +74,7 @@ const handleSaveAmounts = () => {
         <input
           v-model="selectedButton!.value"
           ref="input"
+          name="amount"
           type="number"
           min="1"
           max="10000000000"
@@ -84,7 +85,7 @@ const handleSaveAmounts = () => {
         Save amounts
       </button>
 
-      <p class="text-gray-600">
+      <p class="text-gray-700">
         The amount buttons are the buttons that you can click to bet a certain amount of coins.
       </p>
     </div>

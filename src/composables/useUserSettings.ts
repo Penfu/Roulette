@@ -76,8 +76,6 @@ export const useUserSettings = () => {
       auth.logout();
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.log("err", err.response?.data.message);
-
         error.value = err.response?.data.message;
       }
     }

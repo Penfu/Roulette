@@ -6,9 +6,10 @@ import type User from "@/interfaces/user";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref({} as User);
-
   const token = ref(null as string | null);
+
   const isAuth = computed(() => token.value != null);
+  const loading = computed(() => isAuth.value && !user.value.id);
 
   const csrfToken = async () => {
     await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");
@@ -108,8 +109,8 @@ export const useAuthStore = defineStore("auth", () => {
 
   return {
     user,
-    token,
     isAuth,
+    loading,
     register,
     login,
     loginOAuth,
