@@ -9,7 +9,7 @@ import { Color } from "@/enums/color";
 import { classFromColor } from "@/helpers/color";
 
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
-import Histories from "@/components/game/rolls/Histories.vue";
+import HistoryLayout from "@/components/game/rolls/HistoryLayout.vue";
 
 defineProps<{
   message: string;
@@ -17,7 +17,7 @@ defineProps<{
 
 const game = useGameStore();
 
-const wheel = ref(HTMLInputElement);
+const wheel = ref(null);
 
 watch(
   () => game.step,
@@ -127,13 +127,14 @@ watch(
             <span
               class="h-12 w-12 xl:h-20 xl:w-20 flex items-center justify-center text-white rounded text-center shadow"
               :class="classFromColor(game.result.color)"
-              >{{ game.result.value }}</span
             >
+              {{ game.result.value }}
+            </span>
           </div>
         </div>
 
         <div class="justify-end items-center xl:items-end">
-          <Histories :rolls="game.histories" />
+          <HistoryLayout />
         </div>
       </div>
     </div>

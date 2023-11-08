@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 
 import { useAuthStore } from "@/stores/auth";
 import { useGameStore } from "@/stores/game";
-
-import { useRoll } from "@/composables/useRoll";
 
 import { Color } from "@/enums/color";
 import { RollStep } from "@/enums/step";
@@ -21,12 +19,9 @@ const auth = useAuthStore();
 const { user } = storeToRefs(auth);
 
 const game = useGameStore();
-const { bets, histories, timer, step, result } = storeToRefs(game);
-
-const { rolls, fetchRolls } = useRoll();
+const { bets, history, timer, step, result } = storeToRefs(game);
 
 const message = ref("");
-
 
 const myBetOnRed = computed(
   () => bets.value.red.find((bet: Bet) => bet.user === user.value.name) as Bet
@@ -41,9 +36,6 @@ const myBetOnGreen = computed(
 const hasBet = computed(() => myBetOnRed.value || myBetOnBlack.value || myBetOnGreen.value);
 
 onMounted(async () => {
-  await fetchRolls();
-  histories.value = rolls.value;
-
   window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
     timer.value = e.timer;
     bets.value = {
@@ -57,6 +49,11 @@ onMounted(async () => {
         return { color: Color.GREEN, amount: bet.amount, user: bet.user };
       }),
     };
+
+    if (!history.value) {
+      history.value = e.history;
+    }
+
     result.value = e.result;
 
     switch (e.status) {
@@ -88,16 +85,9 @@ onMounted(async () => {
           return;
         }
 
-        if (!result) {
-          return;
-        }
-
         step.value = RollStep.DISPLAY_RESULT;
 
-        if (histories.value.length >= 10) {
-          histories.value.pop();
-        }
-        histories.value.unshift(result.value!);
+        history.value = e.history;
 
         // Give money if the player won
         switch (result.value?.color) {
@@ -111,7 +101,6 @@ onMounted(async () => {
             if (myBetOnGreen.value) user.value.balance += myBetOnGreen.value.amount * 14;
             break;
         }
-
         break;
     }
   });

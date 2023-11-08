@@ -16,9 +16,8 @@ export const useGameStore = defineStore("game", () => {
   const timer = ref(0);
   const balance = ref(0);
   const result = ref<Roll>();
-  const histories = ref<Roll[]>([]);
-
   const bets = ref({ red: [], black: [], green: [] } as Record<string, Bet[]>);
+  const history = ref<Roll[] | null>(null);
 
   const addBalance = (amount: number) => {
     if (auth.user.balance < amount) {
@@ -65,6 +64,6 @@ export const useGameStore = defineStore("game", () => {
     bets,
     makeBet,
     result,
-    histories,
+    history,
   };
 });

@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
-import type Roll from "@/interfaces/roll";
+import { useGameStore } from "@/stores/game";
 
-import History from "@/components/game/rolls/History.vue";
+import HistoryCard from "@/components/game/rolls/HistoryCard.vue";
 
-defineProps<{
-  rolls: Roll[];
-}>();
+const game = useGameStore();
+const { history } = storeToRefs(game);
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const md = breakpoints.smaller("md");
@@ -15,16 +15,16 @@ const md = breakpoints.smaller("md");
 
 <template>
   <div class="p-2 flex space-x-2">
-    <template v-if="rolls.length === 0">
+    <template v-if="!history">
       <div
         v-for="x in md ? 5 : 10"
         :key="x"
         class="flex justify-center items-center text-center h-12 w-12 bg-black rounded shadow animate-pulse"
-      ></div>
+      />
     </template>
     <template v-else>
-      <History
-        v-for="roll in md ? rolls.slice(0, 5) : rolls.slice(0, 10)"
+      <HistoryCard
+        v-for="roll in md ? history.slice(0, 5) : history.slice(0, 10)"
         :key="roll.id"
         :roll="roll"
       />
