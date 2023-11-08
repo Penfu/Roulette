@@ -84,15 +84,19 @@ const active = ref(true);
 
 <template>
   <div
+    v-motion
+    :initial="{ opacity: 0, y: -100 }"
+    :enter="{ opacity: 1, y: 0 }"
     v-show="active"
-    class="px-4 py-2 h-auto space-y-4 bg-bkg-1 rounded-lg shadow shadow-gray-300"
+    class="mb-2 px-4 py-2 h-auto space-y-4 bg-bkg-1 rounded-lg shadow shadow-gray-300"
   >
     <div class="flex">
       <div class="grow text-2xl">
-        <span v-if="result == Result.EQUAL">😐 No wins no losses &nbsp</span>
+        <span v-if="result === Result.EQUAL">😐 No wins no losses &nbsp</span>
         <div v-else>
-          <span v-if="result == Result.WIN">😁 Congratulations you won &nbsp</span>
-          <span v-else-if="result == Result.LOSE">😥 No luck you lost &nbsp</span>
+          <span v-if="result === Result.WIN">😁 Congratulations you won &nbsp</span>
+          <span v-else>😥 No luck you lost &nbsp</span>
+
           <span class="font-bold">{{ totalAmount }} <span>coins on this roll</span></span>
         </div>
       </div>
@@ -105,7 +109,7 @@ const active = ref(true);
       <div
         class="h-full bg-black rounded transition-width duration-75 ease-in-out"
         :style="{ width: `${progress}%` }"
-      ></div>
+      />
     </div>
   </div>
 </template>

@@ -15,24 +15,18 @@ import RollResultBanner from "@/components/game/result/RollResultBanner.vue";
 
 import RouletteSection from "@/components/game/rolls/RouletteSection.vue";
 import BalanceSection from "@/components/game/balance/BalanceSection.vue";
-
-import Bets from "@/components/game/bets/Bets.vue";
+import BetSection from "@/components/game/bets/BetSection.vue";
 
 const auth = useAuthStore();
 const { user } = storeToRefs(auth);
 
 const game = useGameStore();
-const { histories, timer, step, result } = storeToRefs(game);
+const { bets, histories, timer, step, result } = storeToRefs(game);
 
 const { rolls, fetchRolls } = useRoll();
 
 const message = ref("");
 
-const bets = ref({
-  red: [] as Bet[],
-  black: [] as Bet[],
-  green: [] as Bet[],
-});
 
 const myBetOnRed = computed(
   () => bets.value.red.find((bet: Bet) => bet.user === user.value.name) as Bet
@@ -135,29 +129,14 @@ const reset = () => {
 <template>
   <main class="flex flex-col">
     <RollResultBanner
-      v-motion
-      :initial="{ opacity: 0, y: -100 }"
-      :enter="{ opacity: 1, y: 0 }"
-      :leave="{ opacity: 0, y: 100 }"
-      class="mb-2"
       v-if="step === RollStep.DISPLAY_RESULT && hasBet"
       :bets="{ red: myBetOnRed, black: myBetOnBlack, green: myBetOnGreen }"
     />
 
     <div class="grow flex flex-col space-y-8">
       <RouletteSection :message="message" />
-
       <BalanceSection />
-
-      <!-- Bet buttons -->
-      <div
-        class="grow flex flex-col md:flex-row gap-x-4 gap-y-8 text-center text-white text-2xl transition-all duration-300"
-        :class="{ 'scale-95': step !== RollStep.BET }"
-      >
-        <Bets ref="betsRed" color="red" :value="2" :bets="bets[Color.RED]" />
-        <Bets ref="betsGreen" color="green" :value="13" :bets="bets[Color.GREEN]" />
-        <Bets ref="betsBlack" color="black" :value="2" :bets="bets[Color.BLACK]" />
-      </div>
+      <BetSection />
     </div>
   </main>
 </template>

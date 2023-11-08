@@ -18,6 +18,8 @@ export const useGameStore = defineStore("game", () => {
   const result = ref<Roll>();
   const histories = ref<Roll[]>([]);
 
+  const bets = ref({ red: [], black: [], green: [] } as Record<string, Bet[]>);
+
   const addBalance = (amount: number) => {
     if (auth.user.balance < amount) {
       console.log("You don't have enough money!");
@@ -26,16 +28,16 @@ export const useGameStore = defineStore("game", () => {
 
     auth.user.balance -= amount;
     balance.value += amount;
-  }
+  };
 
   const allInBalance = () => {
     addBalance(auth.user.balance);
-  }
+  };
 
   const resetBalance = () => {
     auth.user.balance += balance.value;
     balance.value = 0;
-  }
+  };
 
   const makeBet = async (color: string) => {
     if (step.value !== RollStep.BET) {
@@ -51,7 +53,7 @@ export const useGameStore = defineStore("game", () => {
     balance.value = 0;
 
     await addBet(bet);
-  }
+  };
 
   return {
     step,
@@ -60,6 +62,7 @@ export const useGameStore = defineStore("game", () => {
     addBalance,
     allInBalance,
     resetBalance,
+    bets,
     makeBet,
     result,
     histories,
