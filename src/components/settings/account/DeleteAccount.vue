@@ -12,6 +12,7 @@ const { user } = storeToRefs(auth);
 
 const { error, deleteAccount } = useUserSettings();
 
+const closeBtnElement = ref(null);
 const isOpen = ref(false);
 const keyword = ref("");
 
@@ -62,7 +63,7 @@ const handleConfirm = async () => {
   </div>
 
   <TransitionRoot appear :show="isOpen" as="template">
-    <Dialog as="div" @close="closeModal" class="relative z-10">
+    <Dialog :initialFocus="closeBtnElement" as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
         enter="duration-300 ease-out"
         enter-from="opacity-0"
@@ -112,7 +113,9 @@ const handleConfirm = async () => {
             </div>
 
             <div class="flex flex-col-reverse md:flex-row gap-2 mt-4">
-              <button @click="closeModal" class="btn-secondary w-full">Cancel</button>
+              <button ref="closeBtnElement" @click="closeModal" class="btn-secondary w-full">
+                Cancel
+              </button>
               <button
                 @click="handleConfirm"
                 :disabled="keyword !== user.name"
