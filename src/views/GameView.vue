@@ -60,9 +60,11 @@ onMounted(async () => {
       case "BET":
         message.value = Math.round(e.timer / 1000) + " seconds left";
 
-        if (step.value !== RollStep.BET) {
-          step.value = RollStep.BET;
+        if (step.value === RollStep.BET) {
+          return;
         }
+
+        step.value = RollStep.BET;
         break;
       case "ROLL":
         if (game.step === RollStep.ROLL) {
@@ -72,21 +74,16 @@ onMounted(async () => {
         step.value = RollStep.ROLL;
         message.value = "Rolling";
         break;
-      case "ROLL_TO_RESULT":
-        if (step.value !== RollStep.ROLL_TO_RESULT) {
-          step.value = RollStep.ROLL_TO_RESULT;
-        }
-        break;
       case "DISPLAY_RESULT":
-        if (step.value === RollStep.DISPLAY_RESULT) {
-          if (timer.value === 0) {
-            reset();
-          }
+        if (timer.value === 0) {
+          step.value = RollStep.RESET;
+        }
+
+        if (step.value === RollStep.DISPLAY_RESULT || step.value === RollStep.RESET) {
           return;
         }
 
         step.value = RollStep.DISPLAY_RESULT;
-
         history.value = e.history;
 
         // Give money if the player won
@@ -105,14 +102,6 @@ onMounted(async () => {
     }
   });
 });
-
-const reset = () => {
-  step.value = RollStep.RESET;
-
-  bets.value.red = [];
-  bets.value.black = [];
-  bets.value.green = [];
-};
 </script>
 
 <template>

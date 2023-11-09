@@ -22,36 +22,7 @@ const wheel = ref(null);
 watch(
   () => game.step,
   (step) => {
-    if (step === RollStep.RESET) {
-      anime
-        .timeline()
-        .add({
-          targets: wheel.value,
-          scale: [1, 0],
-          opacity: [1, 0],
-          duration: 925,
-        })
-        .add({
-          targets: wheel.value,
-          rotate: 0,
-          duration: 50,
-        })
-        .add({
-          targets: wheel.value,
-          scale: [0, 1],
-          opacity: [0, 1],
-          duration: 925,
-        });
-    } else if (step === RollStep.ROLL) {
-      // Make the wheel spin
-      anime({
-        targets: wheel.value,
-        rotate: 360 * 6,
-        duration: 6000,
-        easing: "linear",
-        paused: false,
-      });
-    } else if (step === RollStep.ROLL_TO_RESULT && game.result) {
+    if (step === RollStep.ROLL && game.result) {
       // Stop the wheel at the winning case
       const caseSize = 360 / 11; // 11 cases
       const halfCaseSize = caseSize / 2;
@@ -80,15 +51,35 @@ watch(
 
       anime({
         targets: wheel.value,
-        rotate: finalAngle,
-        duration: 2000,
-        easing: "easeOutQuad",
+        rotate: 360 * 3 + finalAngle,
+        duration: 5500,
+        easing: "easeInOutQuad",
         paused: false,
 
         begin: function () {
           anime.set(wheel.value, { rotate: currentRotation });
         },
       });
+    } else if (step === RollStep.RESET) {
+      anime
+        .timeline()
+        .add({
+          targets: wheel.value,
+          scale: [1, 0],
+          opacity: [1, 0],
+          duration: 925,
+        })
+        .add({
+          targets: wheel.value,
+          rotate: 0,
+          duration: 50,
+        })
+        .add({
+          targets: wheel.value,
+          scale: [0, 1],
+          opacity: [0, 1],
+          duration: 925,
+        });
     }
   }
 );
@@ -105,9 +96,6 @@ watch(
           src="@/assets/roulette.png"
           alt="Roulette"
           class="w-60 h-60 md:w-80 md:h-80 object-contain transition-width duration-500"
-          :class="{
-            ' !rotate-0': game.step === RollStep.BET,
-          }"
         />
       </div>
 
@@ -116,9 +104,7 @@ watch(
           class="h-14 flex grow justify-center items-center text-center text-3xl xl:text-5xl font-semibold uppercase"
         >
           <span v-show="game.step === RollStep.BET">{{ message }}</span>
-          <span v-show="game.step === RollStep.ROLL || game.step === RollStep.ROLL_TO_RESULT">
-            Rolling...
-          </span>
+          <span v-show="game.step === RollStep.ROLL"> Rolling... </span>
           <div
             v-if="game.step === RollStep.DISPLAY_RESULT && game.result"
             class="flex items-center justify-center space-x-4"
