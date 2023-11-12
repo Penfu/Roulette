@@ -5,13 +5,7 @@ import type Roll from "@/interfaces/roll";
 
 export const useRoll = () => {
   const error = ref(null);
-  const rolls = ref<Roll[]>([]);
   const roll = ref<Roll>();
-
-  const fetchRolls = async () => {
-    const response = await axios.get("/rolls");
-    rolls.value = response.data;
-  };
 
   const fetchRollFromBet = async (bet: number) => {
     const response = await axios.get(`/bets/${bet}/roll`);
@@ -24,5 +18,5 @@ export const useRoll = () => {
     };
   };
 
-  return { error, fetchRolls, rolls, fetchRollFromBet, roll };
+  return { error, fetchRollFromBet, roll };
 }
