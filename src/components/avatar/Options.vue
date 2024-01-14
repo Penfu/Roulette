@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import { capitalCase } from "change-case";
 
 import useAvatarStore from "@/stores/avatar";
 import type { SelectedStyleOptions } from "@/types";
@@ -22,12 +23,6 @@ const tabs = computed(() => {
     }>
   > = {};
 
-  result["style"] = Object.keys(avatar.availableStyles).map((styleName) => ({
-    avatar: avatar.availableStyles[styleName][0].avatar.toString(),
-    active: avatar.selectedStyleName === styleName,
-    onClick: () => changeStyleName(styleName),
-  }));
-
   for (const key in avatar.selectedStyleCombinations) {
     result[key] = avatar.selectedStyleCombinations[key].map((combination) => ({
       avatar: combination.avatar.toString(),
@@ -38,10 +33,6 @@ const tabs = computed(() => {
 
   return result;
 });
-
-function changeStyleName(styleName: string) {
-  avatar.selectedStyleName = styleName;
-}
 
 function changeOptions(options: SelectedStyleOptions) {
   avatar.selectedStyleOptions = options;
@@ -58,7 +49,7 @@ function changeOptions(options: SelectedStyleOptions) {
           :disabled="tabs[key].length <= 1"
           class="px-2 h-8 rounded-lg bg-gray-200 enabled:hover:bg-gray-300 disabled:hidden"
         >
-          {{ key }}
+          {{ capitalCase(key) }}
         </Tab>
       </TabList>
 

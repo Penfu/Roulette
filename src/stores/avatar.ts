@@ -45,26 +45,6 @@ const useAvatarStore = defineStore("avatar", () => {
     );
   });
 
-  const availableStyles = computed(() => {
-    const result: SelectedStyleCombinations = {};
-
-    for (const key in styleCollection) {
-      if (false === styleCollection.hasOwnProperty(key)) {
-        continue;
-      }
-
-      result[key] = [
-        {
-          active: selectedStyleName.value === key,
-          avatar: createAvatar(key, selectedStyleOptionsCollection.value[key]),
-          options: selectedStyleOptionsCollection.value[key],
-        },
-      ];
-    }
-
-    return result;
-  });
-
   const selectedStylePreview = computed(() => {
     return createAvatar(
       selectedStyleName.value,
@@ -73,7 +53,6 @@ const useAvatarStore = defineStore("avatar", () => {
   });
 
   return {
-    availableStyles,
     selectedStyleName,
     selectedStylePreview,
     selectedStyleCombinations,
