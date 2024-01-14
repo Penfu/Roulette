@@ -2,22 +2,23 @@
 import { ref } from "vue";
 import { SparklesIcon } from "@heroicons/vue/24/outline";
 
-import useMainStore from "@/stores/main";
+import useAvatarStore from "@/stores/avatar";
+
 import availableStyles from "@/config/styles";
 import getRandomOptions from "@/utils/getRandomOptions";
 import getApiUrl from "@/utils/getApiUrl";
 
-const store = useMainStore();
+const avatar = useAvatarStore();
 const show = ref(false);
 
 function onShuffle() {
-  store.selectedStyleOptions = getRandomOptions(availableStyles[store.selectedStyleName].options);
+  avatar.selectedStyleOptions = getRandomOptions(availableStyles[avatar.selectedStyleName].options);
 }
 
 async function onDownload() {
   show.value = true;
 
-  const apiUrl = getApiUrl(store.selectedStyleName, store.selectedStyleOptions, "png");
+  const apiUrl = getApiUrl(avatar.selectedStyleName, avatar.selectedStyleOptions, "png");
 
   const response = await fetch(apiUrl);
   const blob = await response.blob();
@@ -26,7 +27,7 @@ async function onDownload() {
 
   const link = document.createElement("a");
   link.href = file;
-  link.download = `${store.selectedStyleName}-${timestamp}.png`;
+  link.download = `${avatar.selectedStyleName}-${timestamp}.png`;
   link.target = "_blank";
   link.click();
   link.remove();

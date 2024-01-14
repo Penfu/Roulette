@@ -2,12 +2,12 @@
 import { computed, ref } from "vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 
-import useMainStore from "@/stores/main";
+import useAvatarStore from "@/stores/avatar";
 import type { SelectedStyleOptions } from "@/types";
 
 import Avatar from "./Avatar.vue";
 
-const store = useMainStore();
+const avatar = useAvatarStore();
 
 const selectedTabIndex = ref(0);
 const selectedTab = computed(() => tabs.value[Object.keys(tabs.value)[selectedTabIndex.value]]);
@@ -22,14 +22,14 @@ const tabs = computed(() => {
     }>
   > = {};
 
-  result["style"] = Object.keys(store.availableStyles).map((styleName) => ({
-    avatar: store.availableStyles[styleName][0].avatar.toString(),
-    active: store.selectedStyleName === styleName,
+  result["style"] = Object.keys(avatar.availableStyles).map((styleName) => ({
+    avatar: avatar.availableStyles[styleName][0].avatar.toString(),
+    active: avatar.selectedStyleName === styleName,
     onClick: () => changeStyleName(styleName),
   }));
 
-  for (const key in store.selectedStyleCombinations) {
-    result[key] = store.selectedStyleCombinations[key].map((combination) => ({
+  for (const key in avatar.selectedStyleCombinations) {
+    result[key] = avatar.selectedStyleCombinations[key].map((combination) => ({
       avatar: combination.avatar.toString(),
       active: combination.active,
       onClick: () => changeOptions(combination.options),
@@ -39,13 +39,12 @@ const tabs = computed(() => {
   return result;
 });
 
-
 function changeStyleName(styleName: string) {
-  store.selectedStyleName = styleName;
+  avatar.selectedStyleName = styleName;
 }
 
 function changeOptions(options: SelectedStyleOptions) {
-  store.selectedStyleOptions = options;
+  avatar.selectedStyleOptions = options;
 }
 </script>
 

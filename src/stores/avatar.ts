@@ -12,7 +12,7 @@ import getAvatarCombinations from "@/utils/getAvatarCombinations";
 
 import styleCollection from "@/config/styles";
 
-const useMainStore = defineStore("main", () => {
+const useAvatarStore = defineStore("avatar", () => {
   const selectedStyleName = useLocalStorage(
     "editor_style",
     Object.keys(styleCollection)[0]
@@ -81,4 +81,4 @@ const useMainStore = defineStore("main", () => {
   };
 });
 
-export default useMainStore;
+export default useAvatarStore;

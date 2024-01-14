@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import useMainStore from "@/stores/main";
+import useAvatarStore from "@/stores/avatar";
+
 import Avatar from "./Avatar.vue";
 
-const store = useMainStore();
+const avatar = useAvatarStore();
 </script>
 
 <template>
   <div class="preview">
-    <Avatar :svg="store.selectedStylePreview.toString()" class="preview-image" />
+    <Avatar :svg="avatar.selectedStylePreview.toString()" class="preview-image" />
   </div>
 </template>
 
