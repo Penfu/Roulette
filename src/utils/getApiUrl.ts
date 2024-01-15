@@ -1,4 +1,4 @@
-import { pascalCase } from "change-case";
+import { camelCase } from "change-case";
 
 import type { SelectedStyleOptions } from "@/types";
 import getAvatarOptions from "@/utils/getAvatarOptions";
@@ -30,5 +30,5 @@ export default function getApiUrl(
     })
     .join("&");
 
-  return `https://api.dicebear.com/6.x/${pascalCase(styleName)}/${format}${qs ? `?${qs}` : ""}`;
+  return `https://api.dicebear.com/7.x/${camelCase(styleName)}/${format}${qs ? `?${qs}` : ""}`;
 }

@@ -1,10 +1,7 @@
 import { computed } from "vue";
 import { useLocalStorage, useStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
-import type {
-  SelectedStyleCombinations,
-  SelectedStyleOptionsCollection,
-} from "@/types";
+import type { SelectedStyleOptionsCollection } from "@/types";
 
 import getRandomOptions from "@/utils/getRandomOptions";
 import { createAvatar } from "@/utils/createAvatar";

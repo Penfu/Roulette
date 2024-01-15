@@ -8,31 +8,22 @@ import availableStyles from "@/config/styles";
 import getRandomOptions from "@/utils/getRandomOptions";
 import getApiUrl from "@/utils/getApiUrl";
 
+import { useUserSettings } from "@/composables/useUserSettings";
+
 const avatar = useAvatarStore();
+const { updateAvatar } = useUserSettings();
+
 const show = ref(false);
 
 function onShuffle() {
   avatar.selectedStyleOptions = getRandomOptions(availableStyles[avatar.selectedStyleName].options);
 }
 
-async function onDownload() {
+async function onSave() {
   show.value = true;
 
-  const apiUrl = getApiUrl(avatar.selectedStyleName, avatar.selectedStyleOptions, "png");
-
-  const response = await fetch(apiUrl);
-  const blob = await response.blob();
-  const file = URL.createObjectURL(blob);
-  const timestamp = new Date().getTime();
-
-  const link = document.createElement("a");
-  link.href = file;
-  link.download = `${avatar.selectedStyleName}-${timestamp}.png`;
-  link.target = "_blank";
-  link.click();
-  link.remove();
-
-  URL.revokeObjectURL(file);
+  const avatarUrl = getApiUrl(avatar.selectedStyleName, avatar.selectedStyleOptions);
+  updateAvatar(avatarUrl);
 }
 </script>
 
@@ -41,7 +32,7 @@ async function onDownload() {
     <button class="header-shuffle" @click="onShuffle" title="shuffle">
       <SparklesIcon />
     </button>
-    <button class="header-save" @click="onDownload">save</button>
+    <button class="header-save" @click="onSave">save</button>
   </div>
 </template>
 

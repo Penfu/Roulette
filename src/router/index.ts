@@ -71,6 +71,7 @@ const router = createRouter({
       name: "avatar-editor",
       meta: { title: "Avatar Editor" },
       component: lazyLoad("AvatarEditorView"),
+      beforeEnter: [authGuard],
     }
   ],
 });

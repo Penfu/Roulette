@@ -1,12 +1,26 @@
 import { ref } from "vue";
-import router from "@/router";
 import axios from "axios";
+
+import type { SelectedStyleOptions } from "@/types";
 
 import { useAuthStore } from "@/stores/auth";
 
 export const useUserSettings = () => {
   const error = ref<string | null>(null);
   const auth = useAuthStore();
+
+  const updateAvatar = async (avatar: string) => {
+    try {
+      const response = await axios.patch("/users/me/avatar", { avatar });
+
+      auth.user = response.data;
+      error.value = null;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        error.value = err.response?.data.message;
+      }
+    }
+  };
 
   const updateName = async (name: string) => {
     try {
@@ -81,5 +95,13 @@ export const useUserSettings = () => {
     }
   };
 
-  return { error, updateName, updateEmail, updatePassword, unlinkProvider, deleteAccount };
-}
+  return {
+    error,
+    updateAvatar,
+    updateName,
+    updateEmail,
+    updatePassword,
+    unlinkProvider,
+    deleteAccount,
+  };
+};
