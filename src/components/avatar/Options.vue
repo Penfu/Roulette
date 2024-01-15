@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { capitalCase } from "change-case";
 
-import useAvatarStore from "@/stores/avatar";
+import { useAvatarStore } from "@/stores/avatar";
 import type { SelectedStyleOptions } from "@/types";
 
 import Avatar from "@/components/avatar/Avatar.vue";
@@ -34,7 +34,7 @@ const tabs = computed(() => {
   return result;
 });
 
-function changeOptions(options: SelectedStyleOptions) {
+const changeOptions = (options: SelectedStyleOptions) => {
   avatar.selectedStyleOptions = options;
 }
 </script>

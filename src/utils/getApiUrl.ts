@@ -1,13 +1,14 @@
 import { camelCase } from "change-case";
 
 import type { SelectedStyleOptions } from "@/types";
-import getAvatarOptions from "@/utils/getAvatarOptions";
 
-export default function getApiUrl(
+import { getAvatarOptions } from "@/utils/getAvatarOptions";
+
+export const getApiUrl = (
   styleName: string,
   options: SelectedStyleOptions,
   format: string = "svg"
-) {
+) => {
   const qs = Object.entries(getAvatarOptions(styleName, options))
     .map(([k, v]) => {
       if (Array.isArray(v)) {

@@ -1,20 +1,15 @@
-import availableStyles from "@/config/styles";
-import type {
-  SelectedStyleCombinations,
-  SelectedStyleOptions,
-} from "@/types";
-import { createAvatar } from "./createAvatar";
+import type { SelectedStyleCombinations, SelectedStyleOptions } from "@/types";
 
-export default function getAvatarCombinations(
+import availableStyles from "@/config/styles";
+import { createAvatar } from "@/utils/createAvatar";
+
+export const getAvatarCombinations = (
   styleName: string,
   selectedStyleOptions: SelectedStyleOptions
-): SelectedStyleCombinations {
+): SelectedStyleCombinations => {
   const combinations: SelectedStyleCombinations = {};
 
-  const currentAvatar = createAvatar(
-    styleName,
-    selectedStyleOptions
-  ).toString();
+  const currentAvatar = createAvatar(styleName, selectedStyleOptions).toString();
 
   const configStyleOptions = availableStyles[styleName].options;
 
@@ -49,4 +44,4 @@ export default function getAvatarCombinations(
   }
 
   return combinations;
-}
+};

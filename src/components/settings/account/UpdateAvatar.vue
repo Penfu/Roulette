@@ -2,10 +2,10 @@
 import { storeToRefs } from "pinia";
 
 import { useAuthStore } from "@/stores/auth";
-import useAvatarStore from "@/stores/avatar";
+import { useAvatarStore } from "@/stores/avatar";
 
 import { useUserSettings } from "@/composables/useUserSettings";
-import getApiUrl from "@/utils/getApiUrl";
+import  { getApiUrl } from "@/utils/getApiUrl";
 
 import Avatar from "@/components/avatar/Avatar.vue";
 import Options from "@/components/avatar/Options.vue";

@@ -22,9 +22,9 @@ const defaultBackgroundColors = [
   ...[gray[100], gray[200], gray[300], gray[400], gray[500]],
 ].map((color) => color.replace("#", ""));
 
-export default function getSchemaOptions(
+export const getSchemaOptions = (
   schema: JSONSchema7
-): ConfigStyleOptions {
+): ConfigStyleOptions => {
   const result: ConfigStyleOptions = {};
   const properties: Record<string, JSONSchema7Definition> = {
     backgroundColor: {

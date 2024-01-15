@@ -1,3 +1,2 @@
-export default function getRandomBoolean(probability: number): boolean {
-  return Math.random() * 100 <= probability;
-}
+export const getRandomBoolean = (probability: number): boolean =>
+  Math.random() * 100 <= probability;

@@ -1,11 +1,12 @@
-import type { SelectedStyleOptions } from "@/types";
 import type { StyleOptions } from "@dicebear/core";
+import type { SelectedStyleOptions } from "@/types";
+
 import styleCollection from "@/config/styles";
 
-export default function getAvatarOptions(
+export const getAvatarOptions = (
   styleName: string,
   options: SelectedStyleOptions
-): Record<string, unknown> {
+): Record<string, unknown> => {
   const result: StyleOptions<any> = {
     size: 512,
   };

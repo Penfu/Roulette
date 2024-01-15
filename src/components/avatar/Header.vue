@@ -2,11 +2,11 @@
 import { ref } from "vue";
 import { SparklesIcon } from "@heroicons/vue/24/outline";
 
-import useAvatarStore from "@/stores/avatar";
+import { useAvatarStore } from "@/stores/avatar";
 
+import { getRandomOptions } from "@/utils/getRandomOptions";
+import { getApiUrl } from "@/utils/getApiUrl";
 import availableStyles from "@/config/styles";
-import getRandomOptions from "@/utils/getRandomOptions";
-import getApiUrl from "@/utils/getApiUrl";
 
 import { useUserSettings } from "@/composables/useUserSettings";
 
@@ -15,11 +15,11 @@ const { updateAvatar } = useUserSettings();
 
 const show = ref(false);
 
-function handleShuffle() {
+const handleShuffle = () => {
   avatar.selectedStyleOptions = getRandomOptions(availableStyles[avatar.selectedStyleName].options);
 }
 
-async function handleSave() {
+const handleSave = () => {
   show.value = true;
 
   const avatarUrl = getApiUrl(avatar.selectedStyleName, avatar.selectedStyleOptions);
