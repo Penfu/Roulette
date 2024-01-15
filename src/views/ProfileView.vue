@@ -40,6 +40,7 @@ const loadBets = async () => {
 
 onMounted(async () => {
   await fetchUser(props.name);
+
   await fetchUserStats(props.name);
   userStatsAreLoad.value = true;
 
@@ -56,7 +57,7 @@ onMounted(async () => {
         <div class="grow flex space-x-8">
           <!-- Avatar -->
           <div class="hidden sm:block">
-            <div class="w-32 h-32 bg-gray-600 rounded-lg"></div>
+            <img :src="user.avatar" class="w-48 rounded-xl" alt="Avatar" />
           </div>
 
           <!-- Description -->
@@ -73,7 +74,7 @@ onMounted(async () => {
 
         <!-- Balance -->
         <div class="flex flex-col justify-center items-center">
-          <span class="text-3xl font-bold">{{ user?.balance }} coins</span>
+          <span class="text-3xl font-bold uppercase">{{ user?.balance }} coins</span>
         </div>
       </div>
       <!-- User Skeleton -->
