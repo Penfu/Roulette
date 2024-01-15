@@ -6,7 +6,7 @@ import { capitalCase } from "change-case";
 import useAvatarStore from "@/stores/avatar";
 import type { SelectedStyleOptions } from "@/types";
 
-import Avatar from "./Avatar.vue";
+import Avatar from "@/components/avatar/Avatar.vue";
 
 const avatar = useAvatarStore();
 
@@ -40,7 +40,7 @@ function changeOptions(options: SelectedStyleOptions) {
 </script>
 
 <template>
-  <div class="p-4 bg-white rounded-lg">
+  <div class="p-4">
     <TabGroup :selectedIndex="selectedTabIndex" @change="selectedTabIndex = $event">
       <TabList class="flex flex-wrap gap-4">
         <Tab
@@ -54,13 +54,13 @@ function changeOptions(options: SelectedStyleOptions) {
       </TabList>
 
       <TabPanels class="mt-8">
-        <TabPanel v-for="(key, i) in Object.keys(tabs)" :key="i"
+        <TabPanel v-for="(_key, i) in Object.keys(tabs)" :key="i"
         >
           <div class="options-body-slide">
             <div class="options-body-grid">
               <button
-                v-for="(combination, ci) in selectedTab"
-                :key="ci"
+                v-for="(combination, z) in selectedTab"
+                :key="z"
                 :class="{
                   'options-body-avatar': true,
                   'options-body-avatar-active': combination.active,

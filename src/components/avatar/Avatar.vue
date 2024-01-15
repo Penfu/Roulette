@@ -26,7 +26,7 @@ watch(
 </script>
 
 <template>
-  <img v-if="src" :src="src" loading="lazy" />
+  <img v-if="src" :src="src" loading="lazy" class="rounded-xl" />
   <div v-else class="avatar-invisible"></div>
 </template>
 

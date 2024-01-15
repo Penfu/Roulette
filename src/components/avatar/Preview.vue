@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import useAvatarStore from "@/stores/avatar";
 
-import Avatar from "./Avatar.vue";
+import Avatar from "@/components/avatar/Avatar.vue";
 
 const avatar = useAvatarStore();
 </script>

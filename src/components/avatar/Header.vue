@@ -15,11 +15,11 @@ const { updateAvatar } = useUserSettings();
 
 const show = ref(false);
 
-function onShuffle() {
+function handleShuffle() {
   avatar.selectedStyleOptions = getRandomOptions(availableStyles[avatar.selectedStyleName].options);
 }
 
-async function onSave() {
+async function handleSave() {
   show.value = true;
 
   const avatarUrl = getApiUrl(avatar.selectedStyleName, avatar.selectedStyleOptions);
@@ -29,10 +29,10 @@ async function onSave() {
 
 <template>
   <div class="header">
-    <button class="header-shuffle" @click="onShuffle" title="shuffle">
+    <button class="header-shuffle" @click="handleShuffle" title="shuffle">
       <SparklesIcon />
     </button>
-    <button class="header-save" @click="onSave">save</button>
+    <button class="header-save" @click="handleSave">save</button>
   </div>
 </template>
 
