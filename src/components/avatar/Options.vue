@@ -1,130 +1,48 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import {type Options, createAvatar } from "@dicebear/core";
+import { adventurer } from "@dicebear/collection";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { capitalCase } from "change-case";
 
 import { useAvatarStore } from "@/stores/avatar";
-import type { SelectedStyleOptions } from "@/types";
 
 import Avatar from "@/components/avatar/Avatar.vue";
 
-const avatar = useAvatarStore();
-
-const selectedTabIndex = ref(0);
-const selectedTab = computed(() => tabs.value[Object.keys(tabs.value)[selectedTabIndex.value]]);
-
-const tabs = computed(() => {
-  const result: Record<
-    string,
-    Array<{
-      avatar: string;
-      active?: boolean;
-      onClick: () => void;
-    }>
-  > = {};
-
-  for (const key in avatar.selectedStyleCombinations) {
-    result[key] = avatar.selectedStyleCombinations[key].map((combination) => ({
-      avatar: combination.avatar.toString(),
-      active: combination.active,
-      onClick: () => changeOptions(combination.options),
-    }));
-  }
-
-  return result;
-});
-
-const changeOptions = (options: SelectedStyleOptions) => {
-  avatar.selectedStyleOptions = options;
-}
+const store = useAvatarStore();
 </script>
 
 <template>
-  <div class="p-4">
-    <TabGroup :selectedIndex="selectedTabIndex" @change="selectedTabIndex = $event">
+  <div>
+    <TabGroup>
       <TabList class="flex flex-wrap gap-4">
         <Tab
-          v-for="(key, i) in Object.keys(tabs)"
+          v-for="(option, i) in store.availableOptions"
           :key="i"
-          :disabled="tabs[key].length <= 1"
+          :disabled="option.values.length <= 1"
           class="px-2 h-8 rounded-lg bg-gray-200 enabled:hover:bg-gray-300 disabled:hidden"
         >
-          {{ capitalCase(key) }}
+          {{ capitalCase(i) }}
         </Tab>
       </TabList>
 
       <TabPanels class="mt-8">
-        <TabPanel v-for="(_key, i) in Object.keys(tabs)" :key="i"
-        >
-          <div class="options-body-slide">
-            <div class="options-body-grid">
-              <button
-                v-for="(combination, z) in selectedTab"
-                :key="z"
-                :class="{
-                  'options-body-avatar': true,
-                  'options-body-avatar-active': combination.active,
-                }"
-                @click="combination.onClick"
-              >
-                <Avatar
-                  :svg="combination.avatar"
-                  class="options-body-avatar-component"
-                />
-              </button>
-            </div>
+        <TabPanel v-for="(option, k) in store.availableOptions" :key="k">
+          <div class="flex flex-wrap gap-4">
+            <button
+              v-for="value in option.values"
+              :key="value"
+              @click="store.selectedOptions[k] = [value]"
+              class="outline-2 outline-offset-4 outline-green-400 rounded-xl"
+              :class="{ 'outline': store.selectedOptions[k].includes(value) }"
+            >
+              <Avatar
+                class="w-24"
+                :svg="createAvatar(adventurer, { ...store.selectedOptions, [k]: [value] }).toString()"
+              />
+            </button>
           </div>
         </TabPanel>
       </TabPanels>
     </TabGroup>
   </div>
 </template>
-
-<style scoped>
-.options-body {
-  display: flex;
-  overflow: scroll;
-  scroll-snap-type: x mandatory;
-  flex-grow: 1;
-}
-
-.options-body-slide {
-  padding: var(--van-padding-md) var(--van-padding-sm);
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.options-body-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-  gap: 20px;
-  width: 100%;
-}
-
-.options-body-avatar {
-  position: relative;
-}
-
-.options-body-avatar::after {
-  content: "";
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  bottom: -6px;
-  left: -6px;
-  border-radius: 18px;
-  border: 0 solid #1689cc;
-  transition: border-width 0.12s ease-in-out;
-}
-
-.options-body-avatar-active::after {
-  border-width: 3px;
-}
-
-.options-body-avatar-component {
-  border-radius: 12px;
-  overflow: hidden;
-}
-</style>

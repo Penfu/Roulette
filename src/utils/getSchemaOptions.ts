@@ -1,15 +1,5 @@
-import {
-  red,
-  orange,
-  yellow,
-  emerald,
-  sky,
-  violet,
-  pink,
-  gray,
-} from "tailwindcss/colors";
+import { red, orange, yellow, emerald, sky, violet, pink, gray } from "tailwindcss/colors";
 import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
-import type { ConfigStyleOptions } from "@/types";
 
 const defaultBackgroundColors = [
   ...[red[100], red[200], red[300], red[400], red[500]],
@@ -22,10 +12,9 @@ const defaultBackgroundColors = [
   ...[gray[100], gray[200], gray[300], gray[400], gray[500]],
 ].map((color) => color.replace("#", ""));
 
-export const getSchemaOptions = (
-  schema: JSONSchema7
-): ConfigStyleOptions => {
-  const result: ConfigStyleOptions = {};
+export const getSchemaOptions = (schema: JSONSchema7) => {
+  const result: any = {};
+
   const properties: Record<string, JSONSchema7Definition> = {
     backgroundColor: {
       type: "array",
@@ -117,4 +106,4 @@ export const getSchemaOptions = (
   }
 
   return result;
-}
+};

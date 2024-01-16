@@ -1,24 +1,18 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-
-import { useAuthStore } from "@/stores/auth";
 import { useAvatarStore } from "@/stores/avatar";
+import { createAvatar } from "@dicebear/core";
+import { adventurer } from "@dicebear/collection";
 
 import { useUserSettings } from "@/composables/useUserSettings";
-import  { getApiUrl } from "@/utils/getApiUrl";
 
 import Avatar from "@/components/avatar/Avatar.vue";
 import Options from "@/components/avatar/Options.vue";
 
-const avatar = useAvatarStore()
-const { updateAvatar} = useUserSettings();
-
-const auth = useAuthStore();
-const { user } = storeToRefs(auth);
+const store = useAvatarStore();
+const { updateAvatar } = useUserSettings();
 
 const handleUpdateAvatar = () => {
-  const avatarUrl = getApiUrl(avatar.selectedStyleName, avatar.selectedStyleOptions);
-  updateAvatar(avatarUrl);
+  updateAvatar(store.selectedOptions);
 };
 </script>
 
@@ -30,10 +24,8 @@ const handleUpdateAvatar = () => {
     <h2 class="text-xl font-semibold">Change your avatar</h2>
 
     <div class="space-y-6">
-      <div class="flex">
-        <div class="preview">
-          <Avatar :svg="avatar.selectedStylePreview.toString()" class="w-52" />
-        </div>
+      <div class="space-y-8">
+        <Avatar class="w-44" :svg="createAvatar(adventurer, store.selectedOptions).toString()" />
         <Options />
       </div>
 

@@ -1,52 +1,46 @@
-import { computed } from "vue";
-import { useLocalStorage, useStorage } from "@vueuse/core";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
+import { adventurer } from "@dicebear/collection";
+import { createAvatar, type Options } from "@dicebear/core";
 
-import type { SelectedStyleOptionsCollection } from "@/types";
+import { useAuthStore } from "@/stores/auth";
 
-import { createAvatar } from "@/utils/createAvatar";
-import { getRandomOptions } from "@/utils/getRandomOptions";
-import { getAvatarCombinations } from "@/utils/getAvatarCombinations";
-
-import styleCollection from "@/config/styles";
+import { getSchemaOptions } from "@/utils/getSchemaOptions";
 
 export const useAvatarStore = defineStore("avatar", () => {
-  const selectedStyleName = useLocalStorage("editor_style", Object.keys(styleCollection)[0]);
+  const auth = useAuthStore();
+  const options = getSchemaOptions(adventurer.schema);
 
-  const selectedStyleOptionsCollection = useStorage<SelectedStyleOptionsCollection>(
-    `editor_avatar_options`,
-    Object.keys(styleCollection).reduce<SelectedStyleOptionsCollection>((acc, key) => {
-      acc[key] = getRandomOptions(styleCollection[key].options);
+  const availableOptions = {
+    backgroundColor: options.backgroundColor,
+    hair: options.hair,
+    hairColor: options.hairColor,
+    mouth: options.mouth,
+    eyes: options.eyes,
+    eyebrows: options.eyebrows,
+    skinColor: options.skinColor,
+  };
 
-      return acc;
-    }, {})
+  const selectedOptions = ref({
+    backgroundColor: auth.user.avatar?.backgroundColor ?? [availableOptions.backgroundColor[0]],
+    hair: auth.user.avatar?.hair ?? [availableOptions.hair[0]],
+    hairColor: auth.user.avatar?.hairColor ?? [availableOptions.hairColor[0]],
+    mouth: auth.user.avatar?.mouth ?? [availableOptions.mouth[0]],
+    eyes: auth.user.avatar?.eyes ?? [availableOptions.eyes[0]],
+    eyebrows: auth.user.avatar?.eyebrows ?? [availableOptions.eyebrows[0]],
+    skinColor: auth.user.avatar?.skinColor ?? [availableOptions.skinColor[0]],
+    features: [],
+    glasses: [],
+    earrings: [],
+  } as Partial<Options>);
+
+  const selectedOptionsPreview = computed(() =>
+    createAvatar(adventurer, selectedOptions.value)
   );
 
-  const selectedStyleOptions = computed({
-    get: () => selectedStyleOptionsCollection.value[selectedStyleName.value],
-    set: (value) => {
-      selectedStyleOptionsCollection.value[selectedStyleName.value] = value;
-    },
-  });
-
-  const selectedStyleCombinations = computed(() => {
-    return getAvatarCombinations(
-      selectedStyleName.value,
-      selectedStyleOptionsCollection.value[selectedStyleName.value]
-    );
-  });
-
-  const selectedStylePreview = computed(() => {
-    return createAvatar(
-      selectedStyleName.value,
-      selectedStyleOptionsCollection.value[selectedStyleName.value]
-    );
-  });
-
   return {
-    selectedStyleName,
-    selectedStylePreview,
-    selectedStyleCombinations,
-    selectedStyleOptions,
+    availableOptions,
+    selectedOptions,
+    selectedOptionsPreview,
   };
 });

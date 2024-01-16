@@ -66,13 +66,6 @@ const router = createRouter({
       props: true,
       beforeEnter: [guestGuard],
     },
-    {
-      path: "/avatar/editor",
-      name: "avatar-editor",
-      meta: { title: "Avatar Editor" },
-      component: lazyLoad("AvatarEditorView"),
-      beforeEnter: [authGuard],
-    }
   ],
 });
 

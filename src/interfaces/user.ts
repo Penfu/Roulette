@@ -3,7 +3,7 @@ export default interface User {
   name: string;
   email: string;
   balance: number;
-  avatar: string;
+  avatar: any;
   provider?: string;
   created_at: Date;
   updated_at: Date;

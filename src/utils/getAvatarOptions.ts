@@ -1,11 +1,10 @@
 import type { StyleOptions } from "@dicebear/core";
-import type { SelectedStyleOptions } from "@/types";
 
 import styleCollection from "@/config/styles";
 
 export const getAvatarOptions = (
   styleName: string,
-  options: SelectedStyleOptions
+  options: any
 ): Record<string, unknown> => {
   const result: StyleOptions<any> = {
     size: 512,

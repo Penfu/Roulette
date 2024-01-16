@@ -1,7 +1,6 @@
 import { ref } from "vue";
 import axios from "axios";
-
-import type { SelectedStyleOptions } from "@/types";
+import type { Options } from "@dicebear/core";
 
 import { useAuthStore } from "@/stores/auth";
 
@@ -9,7 +8,7 @@ export const useUserSettings = () => {
   const error = ref<string | null>(null);
   const auth = useAuthStore();
 
-  const updateAvatar = async (avatar: string) => {
+  const updateAvatar = async (avatar: Options) => {
     try {
       const response = await axios.patch("/users/me/avatar", { avatar });
 

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
+import { createAvatar } from "@dicebear/core";
+import { adventurer } from "@dicebear/collection";
 import moment from "moment";
 
 import { useProfile } from "@/composables/useProfile";
 
 import { useNumberHelper } from "@/helpers/number";
 
+import Avatar from "@/components/avatar/Avatar.vue";
 import BetStatsOnColor from "@/components/user/stats/bet/BetOnColor.vue";
 import BetActivity from "@/components/user/activity/bet/BetActivity.vue";
 
@@ -47,6 +50,19 @@ onMounted(async () => {
   loadBets();
   betsAreLoad.value = true;
 });
+
+const av = {
+  backgroundColor: ["a7f3d0"],
+  hair: ["short16"],
+  hairColor: ["afafaf"],
+  mouth: ["variant28"],
+  eyes: ["variant24"],
+  eyebrows: ["variant08"],
+  skinColor: ["f2d3b1"],
+  features: [],
+  glasses: [],
+  earrings: [],
+};
 </script>
 
 <template>
@@ -57,7 +73,7 @@ onMounted(async () => {
         <div class="grow flex space-x-8">
           <!-- Avatar -->
           <div class="hidden sm:block">
-            <img :src="user.avatar" class="w-48 rounded-xl" alt="Avatar" />
+            <Avatar class="w-44" :svg="createAvatar(adventurer, user.avatar).toString()" />
           </div>
 
           <!-- Description -->
