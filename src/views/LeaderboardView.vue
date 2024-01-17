@@ -69,7 +69,7 @@ onMounted(async () => {
     </div>
 
     <!-- Search bar -->
-    <div class="flex items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 border-2 border-gray-300 overflow-hidden">
+    <div class="flex items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 border-3 border-gray-300 overflow-hidden">
       <input
         v-model="search"
         type="text"

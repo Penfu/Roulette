@@ -16,24 +16,24 @@ const store = useAvatarStore();
         <Tab
           v-for="(_option, i) in store.availableOptions"
           :key="i"
-          class="tag bg-gray-200 enabled:hover:bg-gray-100 ui-selected:outline outline-2 outline-green-400"
+          class="tag bg-gray-200 enabled:hover:bg-gray-100 ui-selected:outline outline-3 outline-green-400"
         >
           {{ capitalCase(i) }}
         </Tab>
       </TabList>
 
-      <TabPanels class="mt-8">
+      <TabPanels class="p-2 mt-8 max-h-72 md:max-h-none overflow-y-auto">
         <TabPanel v-for="(option, k) in store.availableOptions" :key="k">
           <div class="flex flex-wrap gap-4">
             <button
               v-for="value in option?.values"
               :key="value"
               @click="store.selectedOptions[k] = [value]"
-              class="outline-2 outline-offset-4 outline-green-400 rounded-xl"
+              class="outline-3 outline-offset-4 outline-green-400 rounded-xl"
               :class="{ 'outline': store.selectedOptions[k]?.includes(value) }"
             >
               <Avatar
-                class="w-24"
+                class="w-20 md:w-24"
                 :options="{ ...store.selectedOptions, [k]: [value] }"
               />
             </button>

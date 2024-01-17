@@ -20,7 +20,7 @@ const isOpen = ref(false);
 </script>
 
 <template>
-  <div class="flex flex-col bg-gray-100 rounded-lg border-2 border-gray-300 overflow-hidden">
+  <div class="flex flex-col bg-gray-100 rounded-lg border-3 border-gray-300 overflow-hidden">
     <div
       @click="isOpen = !isOpen"
       class="px-2 sm:px-4 md:px-6 py-4 md:py-6 flex items-center gap-4 xs:gap-6 sm:gap-8 lg:gap-12 xl:gap-14 cursor-pointer"

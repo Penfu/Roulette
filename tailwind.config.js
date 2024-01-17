@@ -44,6 +44,12 @@ module.exports = {
       screens: {
         xs: "475px",
       },
+      borderWidth: {
+        3: "3px",
+      },
+      outlineWidth: {
+        3: "3px",
+      },
       transitionProperty: {
         width: "width",
       },
@@ -72,7 +78,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@headlessui/tailwindcss')({ prefix: 'ui' })
-  ],
+  plugins: [require("@headlessui/tailwindcss")({ prefix: "ui" })],
 };
