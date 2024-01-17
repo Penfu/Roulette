@@ -56,7 +56,7 @@ const handleConfirm = async () => {
     <button
       @click="openModal"
       type="button"
-      class="btn-danger w-full sm:w-auto md:w-full lg:w-auto"
+      class="btn-danger w-full sm:w-auto"
     >
       Delete account
     </button>

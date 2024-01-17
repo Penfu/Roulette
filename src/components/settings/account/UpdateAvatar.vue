@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { useAvatarStore } from "@/stores/avatar";
-import { createAvatar } from "@dicebear/core";
-import { adventurer } from "@dicebear/collection";
 
 import { useUserSettings } from "@/composables/useUserSettings";
 
@@ -25,11 +23,11 @@ const handleUpdateAvatar = () => {
 
     <div class="space-y-6">
       <div class="space-y-8">
-        <Avatar class="w-44" :svg="createAvatar(adventurer, store.selectedOptions).toString()" />
+        <Avatar class="w-44" :options="store.selectedOptions" />
         <Options />
       </div>
 
-      <button type="submit" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">
+      <button type="submit" class="btn-primary w-full sm:w-auto">
         Change avatar
       </button>
     </div>

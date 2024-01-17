@@ -1,38 +1,22 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed } from "vue";
+import { createAvatar } from "@dicebear/core";
+import { adventurer } from "@dicebear/collection";
+
+import { useAvatarStore } from "@/stores/avatar";
 
 const props = defineProps<{
-  svg: string;
+  options?: any;
   invisible?: boolean;
 }>();
 
-const src = ref<string | null>(null);
+const store = useAvatarStore();
 
-watch(
-  () => [props.svg, props.invisible],
-  () => {
-    if (props.invisible) {
-      const timer = setTimeout(() => {
-        src.value = null;
-      }, 250);
-
-      return () => clearTimeout(timer);
-    } else {
-      src.value = `data:image/svg+xml;utf8,${encodeURIComponent(props.svg)}`;
-    }
-  },
-  { immediate: true }
-);
+const src = computed(() => `data:image/svg+xml;utf8,${encodeURIComponent(
+  createAvatar(adventurer, props.options ?? store.defaultOptions).toString()
+)}`);
 </script>
 
 <template>
-  <img v-if="src" :src="src" loading="lazy" class="rounded-xl" />
-  <div v-else class="avatar-invisible"></div>
+  <img :src="src" loading="lazy" class="rounded-xl" />
 </template>
-
-<style scoped>
-.avatar-invisible {
-  aspect-ratio: 1/1;
-  background-color: #f7f7f7;
-}
-</style>

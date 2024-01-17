@@ -83,4 +83,8 @@
 	.btn-danger {
 		@apply btn bg-red enabled:hover:bg-red-dark text-white border-red-700;
 	}
+
+	.tag {
+		@apply px-4 py-2 rounded-md font-semibold;
+	}
 }

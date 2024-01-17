@@ -32,7 +32,7 @@ const isOpen = ref(false);
       </div>
 
       <!-- Bet result -->
-      <span class="px-2 lowercase text-black-light font-semibold rounded shadow"
+      <span class="tag lowercase text-black-light shadow"
         :class="{
           'bg-green shadow-green': bet.isWin,
           'bg-red shadow-red': !bet.isWin,

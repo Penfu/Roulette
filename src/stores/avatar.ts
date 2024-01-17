@@ -1,46 +1,42 @@
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import { adventurer } from "@dicebear/collection";
-import { createAvatar, type Options } from "@dicebear/core";
 
 import { useAuthStore } from "@/stores/auth";
 
 import { getSchemaOptions } from "@/utils/getSchemaOptions";
+
+import type avatarOptions from "@/interfaces/avatarOptions";
 
 export const useAvatarStore = defineStore("avatar", () => {
   const auth = useAuthStore();
   const options = getSchemaOptions(adventurer.schema);
 
   const availableOptions = {
+    skinColor: options.skinColor,
     backgroundColor: options.backgroundColor,
     hair: options.hair,
     hairColor: options.hairColor,
-    mouth: options.mouth,
-    eyes: options.eyes,
-    eyebrows: options.eyebrows,
-    skinColor: options.skinColor,
+    mouth: { ...options.mouth, values: ["", ...options.mouth.values] },
+    eyes: { ...options.eyes, values: ["", ...options.eyes.values] },
+    eyebrows: { ...options.eyebrows, values: ["", ...options.eyebrows.values] },
   };
 
-  const selectedOptions = ref({
-    backgroundColor: auth.user.avatar?.backgroundColor ?? [availableOptions.backgroundColor[0]],
-    hair: auth.user.avatar?.hair ?? [availableOptions.hair[0]],
-    hairColor: auth.user.avatar?.hairColor ?? [availableOptions.hairColor[0]],
-    mouth: auth.user.avatar?.mouth ?? [availableOptions.mouth[0]],
-    eyes: auth.user.avatar?.eyes ?? [availableOptions.eyes[0]],
-    eyebrows: auth.user.avatar?.eyebrows ?? [availableOptions.eyebrows[0]],
-    skinColor: auth.user.avatar?.skinColor ?? [availableOptions.skinColor[0]],
-    features: [],
-    glasses: [],
-    earrings: [],
-  } as Partial<Options>);
+  const defaultOptions = {
+    skinColor: [availableOptions.skinColor.values[0]],
+    backgroundColor: [availableOptions.backgroundColor.values[0]],
+    hair: [availableOptions.hair.values[0]],
+    hairColor: [availableOptions.hairColor.values[0]],
+    mouth: [availableOptions.mouth.values[0]],
+    eyes: [availableOptions.eyes.values[0]],
+    eyebrows: [availableOptions.eyebrows.values[0]],
+  };
 
-  const selectedOptionsPreview = computed(() =>
-    createAvatar(adventurer, selectedOptions.value)
-  );
+  const selectedOptions = ref<avatarOptions>(auth.user?.avatar || defaultOptions);
 
   return {
     availableOptions,
+    defaultOptions,
     selectedOptions,
-    selectedOptionsPreview,
   };
 });

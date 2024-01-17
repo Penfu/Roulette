@@ -4,7 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useUserSettings } from "@/composables/useUserSettings";
 
 const auth = useAuthStore();
-const { error, unlinkProvider } = useUserSettings();
+const { unlinkProvider } = useUserSettings();
 
 const handleLogin = () => {
   auth.logout();
@@ -30,7 +30,7 @@ const handleLogin = () => {
         >. Then you will be able to change your email and password.
       </p>
 
-      <button @click="unlinkProvider" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">
+      <button @click="unlinkProvider" class="btn-primary w-full sm:w-auto">
         Unlink provider
       </button>
     </div>

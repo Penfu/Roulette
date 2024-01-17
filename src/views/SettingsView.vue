@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <main class="my-4 flex flex-col md:flex-row gap-10 md:gap-12 lg:gap-14">
+  <main class="my-4 flex flex-col lg:flex-row gap-10 md:gap-12 lg:gap-14">
     <!-- Navigation -->
     <aside class="w-auto md:w-96 h-min px-4 sm:px-8 py-4 md:py-6 flex flex-col xs:flex-row md:flex-col justify-center gap-x-8 gap-y-3 bg-bkg-1 text-lg md:text-left rounded-lg whitespace-nowrap drop-shadow">
       <router-link to="/settings" active-class="font-bold">

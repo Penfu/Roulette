@@ -81,7 +81,7 @@ const handleSaveAmounts = () => {
         />
       </div>
 
-      <button @click="handleSaveAmounts" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">
+      <button @click="handleSaveAmounts" class="btn-primary w-full sm:w-auto">
         Save amounts
       </button>
 
