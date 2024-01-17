@@ -41,7 +41,7 @@ const handleConfirm = async () => {
 
 <template>
   <div
-    class="px-4 sm:px-8 py-3 sm:py-6 bg-red-100 dark:bg-opacity-90 rounded-lg border-2 border-red-dark space-y-4"
+    class="px-4 sm:px-8 py-3 sm:py-6 bg-red-100 dark:bg-opacity-90 rounded-lg border-3 border-red-dark space-y-4"
   >
     <div class="space-y-2">
       <h2 class="text-xl text-black font-semibold">Delete your account</h2>
@@ -56,7 +56,7 @@ const handleConfirm = async () => {
     <button
       @click="openModal"
       type="button"
-      class="btn-danger w-full sm:w-auto md:w-full lg:w-auto"
+      class="btn-danger w-full sm:w-auto"
     >
       Delete account
     </button>

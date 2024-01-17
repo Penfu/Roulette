@@ -37,7 +37,7 @@ const handleUpdateName = () => {
       <button
         :disabled="!formIsValid"
         type="submit"
-        class="btn-primary w-full sm:w-auto md:w-full lg:w-auto"
+        class="btn-primary w-full sm:w-auto"
       >
         Change name
       </button>

@@ -64,7 +64,7 @@ const handleSaveAmounts = () => {
             @click="handleSelectAmountButton(amount.index)"
             class="px-4 xs:px-6 sm:px-8 py-3 grow font-semibold bg-gray-100 hover:bg-gray-200 rounded shadow shadow-gray-300"
             :class="{
-              'outline outline-2 outline-green': selectedButtonIndex === amount.index,
+              'outline outline-3 outline-green': selectedButtonIndex === amount.index,
             }"
           >
             {{ amount.value }}
@@ -81,9 +81,7 @@ const handleSaveAmounts = () => {
         />
       </div>
 
-      <button @click="handleSaveAmounts" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">
-        Save amounts
-      </button>
+      <button @click="handleSaveAmounts" class="btn-primary w-full sm:w-auto">Save amounts</button>
 
       <p class="text-gray-700">
         The amount buttons are the buttons that you can click to bet a certain amount of coins.

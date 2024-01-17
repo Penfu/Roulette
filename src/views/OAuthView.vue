@@ -29,7 +29,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="mx-4 flex justify-center items-start md:items-center">
+  <main class="px-4 flex justify-center items-start md:items-center">
     <div
       class="py-8 md:py-16 w-full flex flex-col lg:flex-row items-center justify-center gap-12 overflow-hidden"
     >

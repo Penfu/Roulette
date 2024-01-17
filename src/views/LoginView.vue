@@ -30,7 +30,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <main class="mx-4 md:mx-8 lg:mx-16 xl:mx-32">
+  <main class="px-8">
     <div class="mx-auto max-w-lg pt-16 pb-8 space-y-12">
       <h2 class="text-center text-5xl font-semibold uppercase">Login</h2>
 

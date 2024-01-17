@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
 import { ref } from "vue";
+import { defineStore } from "pinia";
 
 export const useSettingsStore = defineStore("settings", () => {
   const amountButtons = ref([1, 10, 100, 1000]);
