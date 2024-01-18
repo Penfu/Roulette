@@ -55,14 +55,11 @@ onMounted(async () => {
     <!-- User info-->
     <div class="p-2 md:p-4 bg-bkg-1 rounded-lg shadow shadow-gray-300">
       <div v-if="user" class="flex flex-col md:flex-row gap-8">
-        <div class="grow flex space-x-8">
-          <!-- Avatar -->
-          <div class="hidden sm:block">
-            <Avatar class="w-44" :options="user.avatar" />
-          </div>
+        <div class="grow h-full flex flex-col sm:flex-row items-center sm:items-stretch gap-8">
+          <Avatar class="w-44" :options="user.avatar" />
 
           <!-- Description -->
-          <div class="grow flex flex-col">
+          <div class="py-4 flex flex-col">
             <div class="grow">
               <h3 class="text-3xl font-bold">
                 {{ user.name }}
