@@ -88,7 +88,7 @@ const handleLogin = async () => {
 
         <div class="flex flex-wrap justify-center gap-2 text-gray-700">
           <span>Don't have an account?</span>
-          <router-link to="/register" class="text-green hover:text-green-dark">
+          <router-link to="/register" class="text-green hover:text-green-dark font-semibold">
             Register
           </router-link>
         </div>

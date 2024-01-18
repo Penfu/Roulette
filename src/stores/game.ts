@@ -20,8 +20,11 @@ export const useGameStore = defineStore("game", () => {
   const history = ref<Roll[] | null>(null);
 
   const addBalance = (amount: number) => {
+    if (!auth.isAuth) {
+      return;
+    }
+
     if (auth.user.balance < amount) {
-      console.log("You don't have enough money!");
       return;
     }
 

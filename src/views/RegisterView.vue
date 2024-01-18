@@ -136,7 +136,7 @@ const handleRegister = async () => {
 
         <div class="flex flex-wrap justify-center gap-2 text-gray-700">
           <span>Already have an account?</span>
-          <router-link to="/login" class="text-green hover:text-green-dark"> Login </router-link>
+          <router-link to="/login" class="text-green hover:text-green-dark font-semibold"> Login </router-link>
         </div>
       </div>
     </div>
