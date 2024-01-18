@@ -22,19 +22,6 @@ export const useUserSettings = () => {
     }
   };
 
-  const updateName = async (name: string) => {
-    try {
-      const response = await axios.patch("/users/me/name", { name });
-
-      auth.user = response.data;
-      error.value = null;
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        error.value = err.response?.data.message;
-      }
-    }
-  };
-
   const updateEmail = async (email: string, password: string) => {
     try {
       const response = await axios.patch("/users/me/email", { email, password });
@@ -98,7 +85,6 @@ export const useUserSettings = () => {
   return {
     error,
     updateAvatar,
-    updateName,
     updateEmail,
     updatePassword,
     unlinkProvider,

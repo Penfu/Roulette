@@ -16,6 +16,7 @@
     "@headlessui/tailwindcss": "^0.2.0",
     "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.0.13",
+    "@tanstack/vue-query": "^5.17.15",
     "@types/animejs": "^3.1.6",
     "@typescript-eslint/parser": "^6.7.4",
     "@vercel/analytics": "^1.1.1",

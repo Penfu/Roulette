@@ -1,22 +1,30 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useMutation } from '@tanstack/vue-query';
+import axios from '@/axios.config';
 
 import { useAuthStore } from "@/stores/auth";
-import { useUserSettings } from "@/composables/useUserSettings";
 
-const { error, updateName } = useUserSettings();
+import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
+
 const auth = useAuthStore();
-
 const name = ref(auth.user.name);
+
+const { isPending, isError, error, isSuccess, mutate } = useMutation({
+  mutationFn: (name: string) => axios.patch("/users/me/name", { name }),
+  onSuccess: (data) => {
+    auth.user = data.data;
+  },
+})
 
 const formIsValid = computed(() => {
   return name.value && name.value !== auth.user.name;
 });
 
-const handleUpdateName = () => {
+const handleUpdateName = async () => {
   if (!formIsValid) return;
 
-  updateName(name.value);
+  mutate(name.value);
 };
 </script>
 
@@ -27,7 +35,7 @@ const handleUpdateName = () => {
   >
     <h2 class="text-xl font-semibold">Change your name</h2>
 
-    <p v-if="error" class="text-red">{{ error }}</p>
+    <p v-if="isError" class="text-red">{{ error?.message }}</p>
     <div class="space-y-6">
       <div class="space-y-2">
         <label for="name" class="block">Your name</label>
@@ -37,9 +45,10 @@ const handleUpdateName = () => {
       <button
         :disabled="!formIsValid"
         type="submit"
-        class="btn-primary w-full sm:w-auto"
+        class="btn-primary w-full sm:w-auto px-14 relative flex items-center"
       >
         Change name
+        <SpinnerIcon v-if="isPending" class="absolute right-4" />
       </button>
     </div>
   </form>
