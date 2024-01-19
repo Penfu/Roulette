@@ -32,7 +32,12 @@ const canSubmit = computed(() => !isPending.value && name.value && name.value !=
         <input v-model="name" id="name" type="text" autocomplete="username" />
       </div>
 
-      <PendingButton :disabled="!canSubmit" :pending="isPending" class="w-full sm:w-auto">
+      <PendingButton
+        type="submit"
+        :disabled="!canSubmit"
+        :pending="isPending"
+        class="btn-primary w-full sm:w-auto"
+      >
         Change name
       </PendingButton>
     </div>

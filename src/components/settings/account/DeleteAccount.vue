@@ -115,6 +115,7 @@ const closeModal = () => {
               <button
                 ref="closeBtnElement"
                 @click="closeModal"
+                type="button"
                 :disabled="!canCancel"
                 class="btn-secondary w-full md:w-1/2"
                 :class="{ 'md:hidden': !canCancel }"
@@ -123,12 +124,12 @@ const closeModal = () => {
               </button>
 
               <PendingButton
+                @click="mutate"
+                type="button"
                 :disabled="!canSubmit"
                 :pending="isPending"
-                :action="mutate"
-                class="w-full md:transition-width md:duration-200 md:ease-in-out"
+                class="btn-danger w-full md:transition-width md:duration-200 md:ease-in-out"
                 :class="[canCancel ? 'md:w-1/2' : 'md:w-full']"
-                type="btn-danger"
               >
                 Delete
               </PendingButton>

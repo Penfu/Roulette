@@ -38,7 +38,12 @@ const canSubmit = computed(() => !isPending.value && !isFirstAndDefault.value &&
         <OptionsEditor />
       </div>
 
-      <PendingButton :disabled="!canSubmit" :pending="isPending" class="w-full sm:w-auto">
+      <PendingButton
+        type="submit"
+        :disabled="!canSubmit"
+        :pending="isPending"
+        class="btn-primary w-full sm:w-auto"
+      >
         Change avatar
       </PendingButton>
     </div>

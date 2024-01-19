@@ -41,9 +41,10 @@ const { isPending, mutate } = useMutation({
       </p>
       <PendingButton
         @click="mutate"
+        type="button"
+        :disabled="isPending"
         :pending="isPending"
-        class="w-full sm:w-auto"
-        type="btn-danger"
+        class="btn-danger w-full sm:w-auto"
       >
         Unlink provider
       </PendingButton>

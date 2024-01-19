@@ -44,7 +44,12 @@ const canSubmit = computed(
         <input v-model="password" id="password" type="password" />
       </div>
 
-      <PendingButton :disabled="!canSubmit" :pending="isPending" class="w-full sm:w-auto">
+      <PendingButton
+        type="submit"
+        :disabled="!canSubmit"
+        :pending="isPending"
+        class="btn-primary w-full sm:w-auto"
+      >
         Change email
       </PendingButton>
     </div>
