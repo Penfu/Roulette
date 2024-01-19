@@ -32,7 +32,7 @@ export const useAvatarStore = defineStore("avatar", () => {
     eyebrows: [availableOptions.eyebrows.values[0]],
   };
 
-  const selectedOptions = ref<avatarOptions>(auth.user?.avatar || defaultOptions);
+  const selectedOptions = ref<avatarOptions>({ ...auth.user?.avatar } ?? defaultOptions);
 
   return {
     availableOptions,

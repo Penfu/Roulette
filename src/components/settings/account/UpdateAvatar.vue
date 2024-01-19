@@ -1,24 +1,31 @@
 <script setup lang="ts">
-import { useAvatarStore } from "@/stores/avatar";
+import { computed } from "vue";
+import { useMutation } from "@tanstack/vue-query";
+import { isEqual } from "lodash";
+import axios from "@/axios.config";
 
-import { useUserSettings } from "@/composables/useUserSettings";
+import { useAuthStore } from "@/stores/auth";
+import { useAvatarStore } from "@/stores/avatar";
 
 import Avatar from "@/components/avatar/Avatar.vue";
 import Options from "@/components/avatar/Options.vue";
+import PendingButton from "@/components/PendingButton.vue";
 
+const auth = useAuthStore();
 const store = useAvatarStore();
-const { updateAvatar } = useUserSettings();
 
-const handleUpdateAvatar = () => {
-  updateAvatar(store.selectedOptions);
-};
+const { isPending, mutate } = useMutation({
+  mutationFn: () => axios.patch("/users/me/avatar", { avatar: store.selectedOptions }),
+  onSuccess: (data) => {
+    auth.user = data.data;
+  },
+});
+
+const canSubmit = computed(() => !isPending.value && !isEqual(store.selectedOptions, auth.user.avatar));
 </script>
 
 <template>
-  <form
-    @submit.prevent="handleUpdateAvatar"
-    class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4"
-  >
+  <form @submit.prevent="mutate()" class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4">
     <h2 class="text-xl font-semibold">Change your avatar</h2>
 
     <div class="space-y-6">
@@ -27,9 +34,7 @@ const handleUpdateAvatar = () => {
         <Options />
       </div>
 
-      <button type="submit" class="btn-primary w-full sm:w-auto">
-        Change avatar
-      </button>
+      <PendingButton :disabled="!canSubmit" :pending="isPending">Change avatar</PendingButton>
     </div>
   </form>
 </template>

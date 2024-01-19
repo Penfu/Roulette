@@ -28,6 +28,7 @@ const store = useAvatarStore();
             <button
               v-for="value in option?.values"
               :key="value"
+              type="button"
               @click="store.selectedOptions[k] = [value]"
               class="outline-3 outline-offset-4 outline-green-400 rounded-xl"
               :class="{ 'outline': store.selectedOptions[k]?.includes(value) }"

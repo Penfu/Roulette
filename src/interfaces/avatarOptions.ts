@@ -6,7 +6,4 @@ export default interface avatarOptions {
   eyes: string[];
   eyebrows: string[];
   skinColor: string[];
-  features?: string[];
-  glasses?: string[];
-  earrings?: string[];
 }
