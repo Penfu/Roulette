@@ -1,28 +1,26 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { useMutation } from '@tanstack/vue-query';
-import axios from '@/axios.config';
+import { useMutation } from "@tanstack/vue-query";
+import axios from "@/axios.config";
 
 import { useAuthStore } from "@/stores/auth";
 
-import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
+import PendingButton from "@/components/PendingButton.vue";
 
 const auth = useAuthStore();
 const name = ref(auth.user.name);
 
-const { isPending, isError, error, isSuccess, mutate } = useMutation({
+const { isPending, isError, error, mutate } = useMutation({
   mutationFn: (name: string) => axios.patch("/users/me/name", { name }),
   onSuccess: (data) => {
     auth.user = data.data;
   },
-})
-
-const formIsValid = computed(() => {
-  return name.value && name.value !== auth.user.name;
 });
 
-const handleUpdateName = async () => {
-  if (!formIsValid) return;
+const canSubmit = computed(() => !isPending.value && name.value && name.value !== auth.user.name);
+
+const handleUpdateName = () => {
+  if (!canSubmit.value) return;
 
   mutate(name.value);
 };
@@ -42,14 +40,7 @@ const handleUpdateName = async () => {
         <input v-model="name" id="name" type="text" autocomplete="username" />
       </div>
 
-      <button
-        :disabled="!formIsValid"
-        type="submit"
-        class="btn-primary w-full sm:w-auto px-14 relative flex items-center"
-      >
-        Change name
-        <SpinnerIcon v-if="isPending" class="absolute right-4" />
-      </button>
+      <PendingButton :disabled="!canSubmit" :pending="isPending">Change name</PendingButton>
     </div>
   </form>
 </template>
