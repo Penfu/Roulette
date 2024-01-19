@@ -2,7 +2,7 @@
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 
 defineProps<{
-  disabled: boolean;
+  disabled?: boolean;
   pending: boolean;
   action?: () => void;
   type?: string;
