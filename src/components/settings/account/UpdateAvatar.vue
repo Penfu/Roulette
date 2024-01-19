@@ -8,7 +8,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useAvatarStore } from "@/stores/avatar";
 
 import Avatar from "@/components/avatar/Avatar.vue";
-import Options from "@/components/avatar/Options.vue";
+import OptionsEditor from "@/components/avatar/OptionsEditor.vue";
 import PendingButton from "@/components/PendingButton.vue";
 
 const auth = useAuthStore();
@@ -35,7 +35,7 @@ const canSubmit = computed(() => !isPending.value && !isFirstAndDefault.value &&
     <div class="space-y-6">
       <div class="space-y-8">
         <Avatar class="w-44" :options="store.selectedOptions" />
-        <Options />
+        <OptionsEditor />
       </div>
 
       <PendingButton :disabled="!canSubmit" :pending="isPending" class="w-full sm:w-auto">

@@ -12,7 +12,8 @@ import AmountButton from "@/components/game/balance/AmountButton.vue";
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 import LoginToPlayDialog from "@/components/game/LoginToPlayDialog.vue";
 
-const { amountButtons } = useSettingsStore();
+const settings = useSettingsStore();
+const { amounts } = storeToRefs(settings);
 
 const auth = useAuthStore();
 const { isAuth, loading } = storeToRefs(auth);
@@ -76,7 +77,7 @@ const handleResetBalance = () => {
     <div class="mt-2 bg-bkg-1 rounded-lg shadow shadow-gray-300">
       <div class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl">
         <div class="w-full flex flex-wrap gap-2">
-          <AmountButton v-for="amount in amountButtons" :key="amount" :enabled="!loading" :value="amount" :onSelect="handleSelectAmount" />
+          <AmountButton v-for="amount in amounts" :key="amount" :enabled="!loading" :value="amount" :onSelect="handleSelectAmount" />
         </div>
 
         <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
