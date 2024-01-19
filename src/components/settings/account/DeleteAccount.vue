@@ -1,41 +1,44 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { storeToRefs } from "pinia";
+import { ref, computed } from "vue";
+import { useMutation } from "@tanstack/vue-query";
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
+import axios from "@/axios.config";
 
 import { useAuthStore } from "@/stores/auth";
 
-import { useUserSettings } from "@/composables/useUserSettings";
+import PendingButton from "@/components/PendingButton.vue";
 
 const auth = useAuthStore();
-const { user } = storeToRefs(auth);
-
-const { error, deleteAccount } = useUserSettings();
 
 const closeBtnElement = ref(null);
 const isOpen = ref(false);
 const keyword = ref("");
 
-const closeModal = () => {
-  isOpen.value = false;
-};
+const { isPending, isSuccess, isError, error, mutate } = useMutation({
+  mutationFn: () => axios.delete("/users/me", { data: { keyword: keyword.value } }),
+  onError: () => {
+    keyword.value = "";
+  },
+  onSuccess: () => {
+    closeModal();
+    auth.logout();
+  },
+});
+
+const canSubmit = computed(() => keyword.value === auth.user.name);
+const canCancel = computed(() => !isPending.value && !isSuccess.value);
 
 const openModal = () => {
-  error.value = null;
-  keyword.value = "";
+  if (error.value?.message) {
+    error.value.message = "";
+  }
 
+  keyword.value = "";
   isOpen.value = true;
 };
 
-const handleConfirm = async () => {
-  await deleteAccount(keyword.value);
-
-  if (error.value) {
-    keyword.value = "";
-    return;
-  }
-
-  closeModal();
+const closeModal = () => {
+  isOpen.value = false;
 };
 </script>
 
@@ -49,15 +52,11 @@ const handleConfirm = async () => {
         <span class="text-red-dark font-semibold">
           This action is irreversible. All your data will be lost.
         </span>
-        <span class="dark:text-black">You’ll get a chance to confirm your choice.</span>
+        <span class="dark:text-black">You'll get a chance to confirm your choice.</span>
       </p>
     </div>
 
-    <button
-      @click="openModal"
-      type="button"
-      class="btn-danger w-full sm:w-auto"
-    >
+    <button @click="openModal" type="button" class="btn-danger w-full sm:w-auto">
       Delete account
     </button>
   </div>
@@ -94,7 +93,7 @@ const handleConfirm = async () => {
             </DialogTitle>
 
             <div class="space-y-8">
-              <p v-if="error" class="text-red">{{ error }}</p>
+              <p v-if="isError" class="text-red">{{ error?.message }}</p>
               <p class="text-gray-700">
                 This is <span class="text-red font-semibold">irreversible</span>. All your data will
                 be deleted including your balance, bets, and profile.
@@ -102,8 +101,8 @@ const handleConfirm = async () => {
               <div class="space-y-2">
                 <label for="keyword" class="font-semibold space-x-2">
                   <span>Enter your name</span>
-                  <span class="px-2 py-1 text-green-dark bg-green-100 rounded-md">
-                    {{ user.name }}
+                  <span class="px-2 py-1 text-green-dark bg-green-100 rounded-md select-all">
+                    {{ auth.user.name }}
                   </span>
                   <span>to continue:</span>
                 </label>
@@ -112,17 +111,27 @@ const handleConfirm = async () => {
               </div>
             </div>
 
-            <div class="flex flex-col-reverse md:flex-row gap-2 mt-4">
-              <button ref="closeBtnElement" @click="closeModal" class="btn-secondary w-full">
+            <div class="mt-4 flex flex-col-reverse md:flex-row md:justify-end gap-2">
+              <button
+                ref="closeBtnElement"
+                @click="closeModal"
+                :disabled="!canCancel"
+                class="btn-secondary w-full md:w-1/2"
+                :class="{ 'md:hidden': !canCancel }"
+              >
                 Cancel
               </button>
-              <button
-                @click="handleConfirm"
-                :disabled="keyword !== user.name"
-                class="btn-danger w-full"
+
+              <PendingButton
+                :disabled="!canSubmit"
+                :pending="isPending"
+                :action="mutate"
+                class="w-full md:transition-width md:duration-200 md:ease-in-out"
+                :class="[canCancel ? 'md:w-1/2' : 'md:w-full']"
+                type="btn-danger"
               >
-                Delete account
-              </button>
+                Delete
+              </PendingButton>
             </div>
           </DialogPanel>
         </TransitionChild>

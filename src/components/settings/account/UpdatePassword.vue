@@ -58,7 +58,9 @@ const { isPending, isError, error, mutate } = useMutation({
         <input v-model="newPasswordConfirmation" id="new_password_confirmation" type="password" />
       </div>
 
-      <PendingButton :disabled="!canSubmit" :pending="isPending">Change password</PendingButton>
+      <PendingButton :disabled="!canSubmit" :pending="isPending" class="w-full sm:w-auto">
+        Change password
+      </PendingButton>
     </div>
   </form>
 </template>

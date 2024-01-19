@@ -20,22 +20,8 @@ export const useUserSettings = () => {
     }
   };
 
-  const deleteAccount = async (keyword: string) => {
-    try {
-      await axios.delete("/users/me", { data: { keyword } });
-      error.value = null;
-
-      auth.logout();
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        error.value = err.response?.data.message;
-      }
-    }
-  };
-
   return {
     error,
     unlinkProvider,
-    deleteAccount,
   };
 };

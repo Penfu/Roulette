@@ -13,7 +13,8 @@ const email = ref(auth.user.email);
 const password = ref("");
 
 const { isPending, isError, error, mutate } = useMutation({
-  mutationFn: () => axios.patch("/users/me/email", { email: email.value, password: password.value }),
+  mutationFn: () =>
+    axios.patch("/users/me/email", { email: email.value, password: password.value }),
   onSettled: () => {
     password.value = "";
   },
@@ -43,7 +44,9 @@ const canSubmit = computed(
         <input v-model="password" id="password" type="password" />
       </div>
 
-      <PendingButton :disabled="!canSubmit" :pending="isPending">Change email</PendingButton>
+      <PendingButton :disabled="!canSubmit" :pending="isPending" class="w-full sm:w-auto">
+        Change email
+      </PendingButton>
     </div>
   </form>
 </template>
