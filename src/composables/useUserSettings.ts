@@ -22,19 +22,6 @@ export const useUserSettings = () => {
     }
   };
 
-  const updateEmail = async (email: string, password: string) => {
-    try {
-      const response = await axios.patch("/users/me/email", { email, password });
-
-      auth.user = response.data;
-      error.value = null;
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        error.value = err.response?.data.message;
-      }
-    }
-  };
-
   const updatePassword = async (
     password: string,
     newPassword: string,
@@ -85,7 +72,6 @@ export const useUserSettings = () => {
   return {
     error,
     updateAvatar,
-    updateEmail,
     updatePassword,
     unlinkProvider,
     deleteAccount,

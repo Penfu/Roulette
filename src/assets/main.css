@@ -61,7 +61,7 @@
 	}
 
 	.prefab {
-		@apply px-6 h-14 rounded-lg text-lg border-3 disabled:opacity-50 dark:disabled:opacity-70;
+		@apply px-6 py-3 rounded-lg text-lg border-3 disabled:opacity-50 dark:disabled:opacity-70;
 	}
 
 	input {
