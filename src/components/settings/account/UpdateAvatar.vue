@@ -16,12 +16,16 @@ const store = useAvatarStore();
 
 const { isPending, mutate } = useMutation({
   mutationFn: () => axios.patch("/users/me/avatar", { avatar: store.selectedOptions }),
-  onSuccess: (data) => {
-    auth.user = data.data;
+  onSuccess: () => {
+    auth.user.avatar = store.selectedOptions;
   },
 });
 
-const canSubmit = computed(() => !isPending.value && !isEqual(store.selectedOptions, auth.user.avatar));
+const isDefault = computed(() => isEqual(store.selectedOptions, store.defaultOptions));
+const isFirstAndDefault = computed(() => !auth.user.avatar && isDefault.value);
+const hasChanged = computed(() => !isEqual(store.selectedOptions, auth.user.avatar));
+
+const canSubmit = computed(() => !isPending.value && !isFirstAndDefault.value && hasChanged.value);
 </script>
 
 <template>
@@ -34,7 +38,9 @@ const canSubmit = computed(() => !isPending.value && !isEqual(store.selectedOpti
         <Options />
       </div>
 
-      <PendingButton :disabled="!canSubmit" :pending="isPending">Change avatar</PendingButton>
+      <PendingButton :disabled="!canSubmit" :pending="isPending" class="w-full sm:w-auto">
+        Change avatar
+      </PendingButton>
     </div>
   </form>
 </template>
