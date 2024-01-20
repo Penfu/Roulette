@@ -42,7 +42,7 @@ const { isPending: userIsPending, data: user } = useQuery({
               </h3>
               <h4>{{ user.email }}</h4>
             </div>
-            <span>Joined {{ moment(user.created_at).fromNow() }}</span>
+            <span>Joined {{ moment(user.createdAt).fromNow() }}</span>
           </div>
         </div>
 

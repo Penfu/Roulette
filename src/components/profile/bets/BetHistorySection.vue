@@ -13,8 +13,8 @@ const props = defineProps<{
 
 const betsOffset = ref(0);
 
-const fetchUserBets = (name: string, offset: number, limit: number = 10): Promise<Bet[]> => axios.get(`/users/${name}/bets?offset=${offset}&limit=${limit}`)
-.then((res) => res.data.map((bet: any) => ({ ...bet, isWin: bet.is_win, createdAt: bet.created_at })));
+const fetchUserBets = (name: string, offset: number, limit: number = 10): Promise<Bet[]> =>
+  axios.get(`/users/${name}/bets?offset=${offset}&limit=${limit}`).then((res) => res.data);
 
 const { isPending: betsIsPending, data: bets } = useQuery({
   queryKey: ["bets", props.user],
@@ -31,19 +31,21 @@ const loadBets = async () => {
 
 <template>
   <div class="flex flex-col space-y-4">
-      <h2 class="text-3xl font-bold">Bets</h2>
-      <div class="p-4 grow bg-bkg-1 rounded-lg shadow shadow-gray-300 space-y-6">
-        <div v-if="!betsIsPending" class="space-y-3">
+    <h2 class="text-3xl font-bold">Bets</h2>
+    <div class="p-4 grow bg-bkg-1 rounded-lg shadow shadow-gray-300 space-y-6">
+      <div v-if="!betsIsPending">
+        <div v-if="haveSomeBets" class="space-y-3">
           <BetHistory v-for="(bet, index) in bets" :key="index" :bet="bet" />
-        </div>
 
-        <button
-          v-show="haveSomeBets"
-          class="btn w-full md:w-auto bg-black hover:bg-black-dark text-white"
-          @click="loadBets()"
-        >
-          Load more
-        </button>
+          <button
+            class="btn w-full md:w-auto bg-black hover:bg-black-dark text-white"
+            @click="loadBets()"
+          >
+            Load more
+          </button>
+        </div>
+        <p v-else>This user has no bets yet.</p>
       </div>
     </div>
+  </div>
 </template>

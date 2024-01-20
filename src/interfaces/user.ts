@@ -7,6 +7,6 @@ export default interface User {
   balance: number;
   avatar: avatarOptions;
   provider?: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };

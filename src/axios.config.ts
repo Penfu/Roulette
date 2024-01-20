@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
+import camelCaseKeys from "camelcase-keys";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_URL + "/api",
@@ -10,10 +11,12 @@ interface CustomAxiosError {
 }
 
 axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => response,
+  (response: AxiosResponse) => {
+    response.data = camelCaseKeys(response.data);
+    return response;
+  },
   (error: AxiosError<CustomAxiosError>) => {
     error.message = error.response?.data.message || error.message;
-
     return Promise.reject(error);
   }
 );

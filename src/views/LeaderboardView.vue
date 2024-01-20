@@ -118,12 +118,7 @@ const searchUsers = computed(() =>
         <span class="">{{ user.balance }}</span>
       </RouterLink>
 
-      <div
-        v-if="search && searchUsers!.length === 0"
-        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
-      >
-        <p>No users found</p>
-      </div>
+      <p v-if="search && searchUsers!.length === 0" class="w-full">No users found.</p>
     </div>
   </main>
 </template>
