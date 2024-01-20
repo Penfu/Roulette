@@ -5,16 +5,13 @@ import moment from "moment";
 import type Bet from "@/interfaces/bet";
 import { classFromColor } from "@/helpers/color";
 
-import RollHistorySkeleton from "@/components/profile/bets/RollHistorySkeleton.vue";
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 
 defineProps<{
   bet: Bet;
 }>();
 
-const RollHistory = defineAsyncComponent(
-  () => import("@/components/profile/bets/RollHistory.vue")
-);
+const RollHistory = defineAsyncComponent(() => import("@/components/profile/bets/RollHistory.vue"));
 
 const isOpen = ref(false);
 </script>
@@ -32,7 +29,8 @@ const isOpen = ref(false);
       </div>
 
       <!-- Bet result -->
-      <span class="tag lowercase text-black-light shadow"
+      <span
+        class="tag lowercase text-black-light shadow"
         :class="{
           'bg-green shadow-green': bet.isWin,
           'bg-red shadow-red': !bet.isWin,
@@ -42,7 +40,9 @@ const isOpen = ref(false);
       </span>
 
       <!-- Bet date -->
-      <span class="hidden sm:block md:hidden">{{ moment(bet.createdAt).format("DD/MM/YYYY") }}</span>
+      <span class="hidden sm:block md:hidden">{{
+        moment(bet.createdAt).format("DD/MM/YYYY")
+      }}</span>
       <span class="hidden md:block">{{ moment(bet.createdAt).format("DD/MM/YYYY HH:mm:ss") }}</span>
 
       <button class="focus:outline-none">
@@ -61,14 +61,7 @@ const isOpen = ref(false);
       }"
       v-if="isOpen"
     >
-      <Suspense>
-        <template #default>
-          <RollHistory :bet="bet" />
-        </template>
-        <template #fallback>
-          <RollHistorySkeleton />
-        </template>
-      </Suspense>
+      <RollHistory :bet="bet" />
     </div>
   </div>
 </template>
