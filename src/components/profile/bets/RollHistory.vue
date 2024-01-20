@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-
 import { useRoll } from "@/composables/useRoll";
 
 import { Color } from "@/enums/color";
@@ -9,7 +8,7 @@ import type Bet from "@/interfaces/bet";
 
 import { useNumberHelper } from "@/helpers/number";
 
-import BetsOnColor from "@/components/user/activity/bet/BetsOnColor.vue";
+import BetsOnColor from "@/components/profile/bets/BetsOnColor.vue";
 
 const props = defineProps<{
   bet: Bet;

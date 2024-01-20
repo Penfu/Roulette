@@ -5,15 +5,15 @@ import moment from "moment";
 import type Bet from "@/interfaces/bet";
 import { classFromColor } from "@/helpers/color";
 
-import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoading.vue";
+import RollHistorySkeleton from "@/components/profile/bets/RollHistorySkeleton.vue";
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 
 defineProps<{
   bet: Bet;
 }>();
 
-const RollActivity = defineAsyncComponent(
-  () => import("@/components/user/activity/roll/RollActivity.vue")
+const RollHistory = defineAsyncComponent(
+  () => import("@/components/profile/bets/RollHistory.vue")
 );
 
 const isOpen = ref(false);
@@ -63,10 +63,10 @@ const isOpen = ref(false);
     >
       <Suspense>
         <template #default>
-          <RollActivity :bet="bet" />
+          <RollHistory :bet="bet" />
         </template>
         <template #fallback>
-          <RollActivityLoading />
+          <RollHistorySkeleton />
         </template>
       </Suspense>
     </div>

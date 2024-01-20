@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 
-defineProps<{ pending: boolean }>();
+defineProps<{
+  pending: boolean
+}>();
 </script>
 
 <template>
