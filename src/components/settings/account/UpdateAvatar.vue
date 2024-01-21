@@ -17,7 +17,7 @@ const store = useAvatarStore();
 const { isPending, mutate } = useMutation({
   mutationFn: () => axios.patch("/users/me/avatar", { avatar: store.selectedOptions }),
   onSuccess: () => {
-    auth.user.avatar = store.selectedOptions;
+    auth.user.avatar = { ...store.selectedOptions };
   },
 });
 
