@@ -1,6 +1,7 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import axios from "axios";
+import { isAxiosError } from "axios";
+import axios from "@/axios.config";
 
 import type User from "@/interfaces/user";
 
@@ -26,14 +27,13 @@ export const useAuthStore = defineStore("auth", () => {
       });
       logUser(response.data.user, response.data.token);
 
-      return { success: true, message: "success" };
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 422) {
-        const { name, email, password } = error.response.data.errors;
-        return { success: false, errors: { name, email, password } };
-      }
+      return { success: true };
+    } catch (error: any) {
+      const name = error.errors?.name || [];
+      const email = error.errors?.email || [];
+      const password = error.errors?.password || [];
 
-      return { success: false, message: "error" };
+      return { success: false, errors: { name, email, password } };
     }
   };
 
@@ -44,13 +44,9 @@ export const useAuthStore = defineStore("auth", () => {
       const response = await axios.post("/login", { email, password });
       logUser(response.data.user, response.data.token);
 
-      return { success: true, message: "success" };
+      return { success: true };
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        return { success: false, message: "invalid_credentials" };
-      }
-
-      return { success: false, message: "error" };
+      return { success: false, error: error };
     }
   };
 

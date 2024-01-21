@@ -1,15 +1,19 @@
-import { defineStore } from "pinia";
 import { ref } from "vue";
+import { defineStore } from "pinia";
 
-export const useSettingsStore = defineStore("settings", () => {
-  const amountButtons = ref([1, 10, 100, 1000]);
+export const useSettingsStore = defineStore(
+  "settings",
+  () => {
+    const amounts = ref([1, 10, 100, 1000]);
 
-  const setAmounts = (amount: number[]) => {
-    amountButtons.value = amount;
-  }
+    const setAmounts = (newAmounts: number[]) => {
+      amounts.value = newAmounts;
+    };
 
-  return {
-    amountButtons,
-    setAmounts,
-  };
-}, { persist: true });
+    return {
+      amounts,
+      setAmounts,
+    };
+  },
+  { persist: true }
+);

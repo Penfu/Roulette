@@ -61,7 +61,7 @@
 	}
 
 	.prefab {
-		@apply px-4 py-3 rounded-lg text-lg border-2 disabled:opacity-50 dark:disabled:opacity-70;
+		@apply px-6 py-3 rounded-lg text-lg border-3 disabled:opacity-50 dark:disabled:opacity-70;
 	}
 
 	input {
@@ -73,14 +73,18 @@
 	}
 
 	.btn-primary {
-		@apply btn bg-green enabled:hover:bg-green-dark border-green-600 text-white dark:text-black;
+		@apply btn bg-green hover:bg-green-dark disabled:hover:bg-green border-green-600 text-white dark:text-black;
 	}
 
 	.btn-secondary {
-		@apply btn bg-white enabled:hover:bg-gray-200 text-black dark:enabled:hover:text-white border-black-dark;
+		@apply btn bg-white hover:bg-gray-200 disabled:hover:bg-white text-black dark:hover:text-white disabled:dark:hover:text-black border-black-dark;
 	}
 
 	.btn-danger {
-		@apply btn bg-red enabled:hover:bg-red-dark text-white border-red-700;
+		@apply btn bg-red hover:bg-red-dark disabled:hover:bg-red text-white border-red-700;
+	}
+
+	.tag {
+		@apply px-4 py-2 rounded-md font-semibold;
 	}
 }

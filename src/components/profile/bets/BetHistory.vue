@@ -5,22 +5,19 @@ import moment from "moment";
 import type Bet from "@/interfaces/bet";
 import { classFromColor } from "@/helpers/color";
 
-import RollActivityLoading from "@/components/user/activity/roll/RollActivityLoading.vue";
 import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
 
 defineProps<{
   bet: Bet;
 }>();
 
-const RollActivity = defineAsyncComponent(
-  () => import("@/components/user/activity/roll/RollActivity.vue")
-);
+const RollHistory = defineAsyncComponent(() => import("@/components/profile/bets/RollHistory.vue"));
 
 const isOpen = ref(false);
 </script>
 
 <template>
-  <div class="flex flex-col bg-gray-100 rounded-lg border-2 border-gray-300 overflow-hidden">
+  <div class="flex flex-col bg-gray-100 rounded-lg border-3 border-gray-300 overflow-hidden">
     <div
       @click="isOpen = !isOpen"
       class="px-2 sm:px-4 md:px-6 py-4 md:py-6 flex items-center gap-4 xs:gap-6 sm:gap-8 lg:gap-12 xl:gap-14 cursor-pointer"
@@ -32,7 +29,8 @@ const isOpen = ref(false);
       </div>
 
       <!-- Bet result -->
-      <span class="px-2 lowercase text-black-light font-semibold rounded shadow"
+      <span
+        class="tag lowercase text-black-light shadow"
         :class="{
           'bg-green shadow-green': bet.isWin,
           'bg-red shadow-red': !bet.isWin,
@@ -42,7 +40,9 @@ const isOpen = ref(false);
       </span>
 
       <!-- Bet date -->
-      <span class="hidden sm:block md:hidden">{{ moment(bet.createdAt).format("DD/MM/YYYY") }}</span>
+      <span class="hidden sm:block md:hidden">{{
+        moment(bet.createdAt).format("DD/MM/YYYY")
+      }}</span>
       <span class="hidden md:block">{{ moment(bet.createdAt).format("DD/MM/YYYY HH:mm:ss") }}</span>
 
       <button class="focus:outline-none">
@@ -61,14 +61,7 @@ const isOpen = ref(false);
       }"
       v-if="isOpen"
     >
-      <Suspense>
-        <template #default>
-          <RollActivity :bet="bet" />
-        </template>
-        <template #fallback>
-          <RollActivityLoading />
-        </template>
-      </Suspense>
+      <RollHistory :bet="bet" />
     </div>
   </div>
 </template>

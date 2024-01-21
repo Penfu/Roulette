@@ -8,7 +8,7 @@ const { login, loginOAuth } = useAuthStore();
 
 const email = ref("");
 const password = ref("");
-const error = ref("");
+const error = ref();
 
 const handleLogin = async () => {
   const response = await login(email.value, password.value);
@@ -18,19 +18,14 @@ const handleLogin = async () => {
       router.push("/");
     });
   } else {
-    if (response.message === "invalid_credentials") {
-      error.value = "Invalid credentials";
-    } else {
-      error.value = "An error occured";
-    }
-
+    error.value = response.error;
     password.value = "";
   }
 };
 </script>
 
 <template>
-  <main class="mx-4 md:mx-8 lg:mx-16 xl:mx-32">
+  <main class="px-8">
     <div class="mx-auto max-w-lg pt-16 pb-8 space-y-12">
       <h2 class="text-center text-5xl font-semibold uppercase">Login</h2>
 
@@ -54,7 +49,7 @@ const handleLogin = async () => {
 
           <form @submit.prevent="handleLogin" class="space-y-8">
             <div class="h-64 space-y-2">
-              <span class="block text-red">{{ error }}</span>
+              <span v-if="error" class="block text-red">{{ error?.message }}</span>
 
               <div class="space-y-6">
                 <div class="space-y-2">
@@ -88,7 +83,7 @@ const handleLogin = async () => {
 
         <div class="flex flex-wrap justify-center gap-2 text-gray-700">
           <span>Don't have an account?</span>
-          <router-link to="/register" class="text-green hover:text-green-dark">
+          <router-link to="/register" class="text-green hover:text-green-dark font-semibold">
             Register
           </router-link>
         </div>

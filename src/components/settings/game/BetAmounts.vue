@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref, computed } from "vue";
+import { isEqual } from "lodash";
+
 import { useSettingsStore } from "@/stores/settings";
 
 const input = ref<HTMLInputElement | null>(null);
 
-const { amountButtons: amountButtonsStored, setAmounts } = useSettingsStore();
+const store = useSettingsStore();
 
 const selectedButtonIndex = ref(0);
 const selectedButton = computed(() =>
@@ -12,12 +14,13 @@ const selectedButton = computed(() =>
 );
 
 const amountButtons = ref([
-  { index: 0, value: amountButtonsStored[0] },
-  { index: 1, value: amountButtonsStored[1] },
-  { index: 2, value: amountButtonsStored[2] },
-  { index: 3, value: amountButtonsStored[3] },
+  { index: 0, value: store.amounts[0] },
+  { index: 1, value: store.amounts[1] },
+  { index: 2, value: store.amounts[2] },
+  { index: 3, value: store.amounts[3] },
 ]);
 const sortedAmountButtons = computed(() => amountButtons.value.sort((a, b) => a.value - b.value));
+const amounts = computed(() => amountButtons.value.map((btn) => btn.value));
 
 const error = computed(() => {
   if (amountButtons.value.some((btn) => btn.value <= 0)) {
@@ -40,11 +43,13 @@ const handleSelectAmountButton = (index: number) => {
   input.value?.focus();
 };
 
+const amountsHaveChanged = computed(() => !isEqual(amounts.value, store.amounts));
+const canSave = computed(() => !error.value && amountsHaveChanged.value);
+
 const handleSaveAmounts = () => {
   if (error.value) return;
 
-  const amounts = amountButtons.value.map((btn) => btn.value);
-  setAmounts(amounts);
+  store.setAmounts(amounts.value);
 };
 </script>
 
@@ -64,7 +69,7 @@ const handleSaveAmounts = () => {
             @click="handleSelectAmountButton(amount.index)"
             class="px-4 xs:px-6 sm:px-8 py-3 grow font-semibold bg-gray-100 hover:bg-gray-200 rounded shadow shadow-gray-300"
             :class="{
-              'outline outline-2 outline-green': selectedButtonIndex === amount.index,
+              'outline outline-3 outline-green': selectedButtonIndex === amount.index,
             }"
           >
             {{ amount.value }}
@@ -81,7 +86,7 @@ const handleSaveAmounts = () => {
         />
       </div>
 
-      <button @click="handleSaveAmounts" class="btn-primary w-full sm:w-auto md:w-full lg:w-auto">
+      <button @click="handleSaveAmounts" :disabled="!canSave" class="btn-primary w-full sm:w-auto">
         Save amounts
       </button>
 

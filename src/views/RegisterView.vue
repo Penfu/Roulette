@@ -80,22 +80,22 @@ const handleRegister = async () => {
 </script>
 
 <template>
-  <main class="mx-4 md:mx-8 lg:mx-16 xl:mx-32">
+  <main class="px-8">
     <div class="mx-auto max-w-lg pt-16 pb-8 space-y-12">
       <h2 class="text-center text-5xl font-semibold uppercase">Register</h2>
 
       <div class="space-y-4">
-        <form @submit.prevent="handleRegister" class="space-y-8">
+        <form @submit.prevent="handleRegister" @keypress.enter.prevent="handleNextStep" class="space-y-8">
           <!-- Steps -->
           <div class="flex justify-center space-x-6 md:space-x-8">
             <StepBtn
               v-for="(step, index) in steps"
               :key="step.name"
               @set-step="activeStepIndex = index"
-              :is-active="index === activeStepIndex"
+              :isActive="index === activeStepIndex"
               :index="index"
               :name="step.name"
-              :hasError="step.errors !== undefined"
+              :hasError="step.errors !== undefined && step.errors.length > 0"
             />
           </div>
 
@@ -136,7 +136,7 @@ const handleRegister = async () => {
 
         <div class="flex flex-wrap justify-center gap-2 text-gray-700">
           <span>Already have an account?</span>
-          <router-link to="/login" class="text-green hover:text-green-dark"> Login </router-link>
+          <router-link to="/login" class="text-green hover:text-green-dark font-semibold"> Login </router-link>
         </div>
       </div>
     </div>
