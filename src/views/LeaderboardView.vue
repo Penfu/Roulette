@@ -1,40 +1,38 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { ref, computed } from "vue";
+import { useQuery } from "@tanstack/vue-query";
+import axios from "@/axios.config";
 
-import { useUser } from "@/composables/useUser";
+import type User from "@/interfaces/user";
 
-type Rank = {
-  name: string;
-  balance: number;
-  rank: number;
-};
-
-const { users, fetchUsers } = useUser();
-const loading = ref(true);
 const search = ref("");
 
-const rankedUsers = ref<Rank[]>([]);
-const podiumUsers = computed(() => rankedUsers.value.slice(0, 3));
-const searchUsers = computed(() =>
-  rankedUsers.value
-    .slice(3)
-    .filter((user) => user.name.toLowerCase().includes(search.value.toLowerCase()))
-);
+const fetchUsers = (): Promise<User[]> => axios.get("/users").then((res) => res.data);
 
-onMounted(async () => {
-  await fetchUsers();
+const { isPending, data: users } = useQuery({
+  queryKey: ["users"],
+  queryFn: () => fetchUsers(),
+});
 
-  rankedUsers.value = users.value
-    .sort((a, b) => b.balance - a.balance)
-    .map((user: any, index: number) => {
+const rankedUsers = computed(() =>
+  users.value
+    ?.slice()
+    ?.sort((a: User, b: User) => b.balance - a.balance)
+    ?.map((user, index: number) => {
       return {
         name: user.name,
         balance: user.balance,
         rank: index + 1,
       };
-    });
-  loading.value = false;
-});
+    })
+);
+
+const podiumUsers = computed(() => rankedUsers.value?.slice(0, 3));
+const searchUsers = computed(() =>
+  rankedUsers.value
+    ?.slice(3)
+    ?.filter((user) => user.name.toLowerCase().includes(search.value.toLowerCase()))
+);
 </script>
 
 <template>
@@ -43,33 +41,37 @@ onMounted(async () => {
     <div
       class="h-48 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-bkg-1 rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out"
     >
+      <div v-if="isPending" class="bg-skeleton animate-pulse" />
       <RouterLink
+        v-else
         v-motion
         :initial="{ opacity: 0, y: 100 }"
         :enter="{
           opacity: 1,
           y: 0,
-          transition: { delay: 500 * (podiumUsers.length - (index + 1)) },
+          transition: { delay: 500 * (podiumUsers!.length - user.rank) },
         }"
-        v-for="(user, index) in podiumUsers"
+        v-for="user in podiumUsers"
         :key="user.name"
         :to="`/profile/${user.name}`"
         class="group px-6 xs:px-8 sm:px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-between sm:justify-center space-x-8 sm:space-x-16 bg-bkg-1 first:bg-green"
       >
-        <span class="text-4xl md:text-6xl font-bold">{{ index + 1 }}</span>
+        <span class="text-4xl md:text-6xl font-bold">{{ user.rank }}</span>
         <div class="grow flex flex-col">
-          <span class="font-semibold text-lg sm:text-xl sm:group-hover:text-3xl transform transition-all duration-300 ease-in-out">
+          <span
+            class="font-semibold text-lg sm:text-xl sm:group-hover:text-3xl transform transition-all duration-300 ease-in-out"
+          >
             {{ user.name }}
           </span>
           <span>{{ user.balance }}</span>
         </div>
       </RouterLink>
-
-      <div v-if="loading" class="bg-skeleton animate-pulse" />
     </div>
 
     <!-- Search bar -->
-    <div class="flex items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 border-3 border-gray-300 overflow-hidden">
+    <div
+      class="flex items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 border-3 border-gray-300 overflow-hidden"
+    >
       <input
         v-model="search"
         type="text"
@@ -77,16 +79,16 @@ onMounted(async () => {
         placeholder="Search for a user..."
       />
       <span class="px-2 py-3 bg-gray-200 text-center">
-        <span v-if="loading" class="text-xl animate-pulse">...</span>
+        <span v-if="isPending" class="text-xl animate-pulse">...</span>
         <span v-else class="text-lg font-semibold whitespace-nowrap">
-          {{ searchUsers.length }} / {{ rankedUsers.length - podiumUsers.length }}
+          {{ searchUsers!.length }} / {{ users!.length - podiumUsers!.length }}
         </span>
       </span>
     </div>
 
     <!-- Ranking -->
     <div
-      v-if="loading"
+      v-if="isPending"
       class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 overflow-y-auto"
     >
       <div
@@ -116,12 +118,7 @@ onMounted(async () => {
         <span class="">{{ user.balance }}</span>
       </RouterLink>
 
-      <div
-        v-if="search && !searchUsers.length"
-        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded"
-      >
-        <p>No users found</p>
-      </div>
+      <p v-if="search && searchUsers!.length === 0" class="w-full">No users found.</p>
     </div>
   </main>
 </template>

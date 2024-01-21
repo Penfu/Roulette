@@ -1,35 +1,38 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref, computed } from "vue";
+import { useMutation } from "@tanstack/vue-query";
+import axios from "@/axios.config";
 
 import { useAuthStore } from "@/stores/auth";
-import { useUserSettings } from "@/composables/useUserSettings";
 
-const { error, updateEmail } = useUserSettings();
+import PendingButton from "@/components/PendingButton.vue";
+
 const auth = useAuthStore();
 
 const email = ref(auth.user.email);
 const password = ref("");
 
-const formIsValid = computed(() => {
-  return email.value && email.value !== auth.user.email && password.value;
+const { isPending, isError, error, mutate } = useMutation({
+  mutationFn: () =>
+    axios.patch("/users/me/email", { email: email.value, password: password.value }),
+  onSettled: () => {
+    password.value = "";
+  },
+  onSuccess: (data) => {
+    auth.user = data.data;
+  },
 });
 
-const handleUpdateEmail = () => {
-  if (!formIsValid) return;
-
-  updateEmail(email.value, password.value);
-  password.value = "";
-};
+const canSubmit = computed(
+  () => !isPending.value && email.value !== auth.user.email && password.value
+);
 </script>
 
 <template>
-  <form
-    @submit.prevent="handleUpdateEmail"
-    class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4"
-  >
+  <form @submit.prevent="mutate()" class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4">
     <h2 class="text-xl font-semibold">Change your email</h2>
 
-    <p v-if="error" class="text-red">{{ error }}</p>
+    <p v-if="isError" class="text-red">{{ error?.message }}</p>
     <div class="space-y-6">
       <div class="space-y-2">
         <label for="email" class="block">Your email</label>
@@ -41,13 +44,14 @@ const handleUpdateEmail = () => {
         <input v-model="password" id="password" type="password" />
       </div>
 
-      <button
-        :disabled="!formIsValid"
+      <PendingButton
         type="submit"
-        class="btn-primary w-full sm:w-auto md:w-full lg:w-auto"
+        :disabled="!canSubmit"
+        :pending="isPending"
+        class="btn-primary w-full sm:w-auto"
       >
         Change email
-      </button>
+      </PendingButton>
     </div>
   </form>
 </template>

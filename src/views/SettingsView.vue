@@ -2,9 +2,9 @@
 import AccountSettings from "@/components/settings/AccountSettings.vue";
 import GameSettings from "@/components/settings/GameSettings.vue";
 
-defineProps({
-  tab: { type: String },
-});
+defineProps<{
+  tab: string,
+}>();
 </script>
 
 <template>

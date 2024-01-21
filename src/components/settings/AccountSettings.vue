@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import ProviderInfo from "@/components/settings/account/ProviderInfo.vue";
 import UpdateName from "@/components/settings/account/UpdateName.vue";
 import UpdateAvatar from "@/components/settings/account/UpdateAvatar.vue";
+import UpdateProvider from "@/components/settings/account/UpdateProvider.vue";
 import UpdateEmail from "@/components/settings/account/UpdateEmail.vue";
 import UpdatePassword from "@/components/settings/account/UpdatePassword.vue";
 import DeleteAccount from "@/components/settings/account/DeleteAccount.vue";
@@ -23,7 +23,7 @@ const userCanEdit = computed(() => !auth.user.provider);
     <div v-else class="space-y-8 drop-shadow">
       <UpdateName />
       <UpdateAvatar />
-      <ProviderInfo />
+      <UpdateProvider />
       <UpdateEmail v-if="userCanEdit" />
       <UpdatePassword v-if="userCanEdit" />
       <DeleteAccount />

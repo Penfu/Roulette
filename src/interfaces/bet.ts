@@ -1,7 +1,7 @@
 import type Roll from "./roll";
 
 export default interface Bet {
-  id: number;
+  id?: number;
   color: string;
   amount: number;
   user: string;
