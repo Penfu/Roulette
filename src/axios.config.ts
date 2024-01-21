@@ -12,7 +12,7 @@ interface CustomAxiosError {
 
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    response.data = camelCaseKeys(response.data);
+    response.data = camelCaseKeys(response.data, { deep: true });
     return response;
   },
   (error: AxiosError<CustomAxiosError>) => {
