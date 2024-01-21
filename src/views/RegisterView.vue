@@ -85,17 +85,17 @@ const handleRegister = async () => {
       <h2 class="text-center text-5xl font-semibold uppercase">Register</h2>
 
       <div class="space-y-4">
-        <form @submit.prevent="handleRegister" class="space-y-8">
+        <form @submit.prevent="handleRegister" @keypress.enter.prevent="handleNextStep" class="space-y-8">
           <!-- Steps -->
           <div class="flex justify-center space-x-6 md:space-x-8">
             <StepBtn
               v-for="(step, index) in steps"
               :key="step.name"
               @set-step="activeStepIndex = index"
-              :is-active="index === activeStepIndex"
+              :isActive="index === activeStepIndex"
               :index="index"
               :name="step.name"
-              :hasError="step.errors !== undefined"
+              :hasError="step.errors !== undefined && step.errors.length > 0"
             />
           </div>
 

@@ -8,7 +8,7 @@ const { login, loginOAuth } = useAuthStore();
 
 const email = ref("");
 const password = ref("");
-const error = ref("");
+const error = ref();
 
 const handleLogin = async () => {
   const response = await login(email.value, password.value);
@@ -18,12 +18,7 @@ const handleLogin = async () => {
       router.push("/");
     });
   } else {
-    if (response.message === "invalid_credentials") {
-      error.value = "Invalid credentials";
-    } else {
-      error.value = "An error occured";
-    }
-
+    error.value = response.error;
     password.value = "";
   }
 };
@@ -54,7 +49,7 @@ const handleLogin = async () => {
 
           <form @submit.prevent="handleLogin" class="space-y-8">
             <div class="h-64 space-y-2">
-              <span class="block text-red">{{ error }}</span>
+              <span v-if="error" class="block text-red">{{ error?.message }}</span>
 
               <div class="space-y-6">
                 <div class="space-y-2">
