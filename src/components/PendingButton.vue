@@ -2,12 +2,12 @@
 import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
 
 defineProps<{
-  pending: boolean
+  pending: boolean;
 }>();
 </script>
 
 <template>
-  <button class="relative flex justify-center items-center">
+  <button :disabled="pending" class="relative flex justify-center items-center">
     <span :class="{ invisible: pending }">
       <slot>Submit</slot>
     </span>
