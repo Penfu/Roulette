@@ -4,12 +4,9 @@ import router from "@/router";
 
 import { useAuthStore } from "@/stores/auth";
 
-const props = defineProps({
-  provider: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  provider: string,
+}>();
 
 const { loginOAuthCallback } = useAuthStore();
 
