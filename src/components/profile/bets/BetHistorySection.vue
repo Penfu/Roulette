@@ -32,7 +32,7 @@ const hasBets = computed(() => bets.value?.pages[0].data.data.length > 0);
 <template>
   <div class="flex flex-col space-y-4">
     <h2 class="text-3xl font-bold">Bets</h2>
-    <div class="p-4 grow bg-bkg-1 rounded-lg shadow shadow-gray-300">
+    <div class="p-4 grow bg-gray rounded-lg shadow shadow-gray-300">
       <div v-if="!isPending">
         <div v-if="hasBets" class="space-y-6">
           <div class="space-y-3">

@@ -88,7 +88,7 @@ const active = ref(true);
     :initial="{ opacity: 0, y: -100 }"
     :enter="{ opacity: 1, y: 0 }"
     v-show="active"
-    class="mb-2 px-4 py-2 h-auto space-y-4 bg-bkg-1 rounded-lg shadow shadow-gray-300"
+    class="mb-2 px-4 py-2 h-auto space-y-4 bg-gray rounded-lg shadow shadow-gray-300"
   >
     <div class="flex">
       <div class="grow text-2xl">

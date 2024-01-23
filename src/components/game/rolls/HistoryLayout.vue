@@ -19,7 +19,7 @@ const md = breakpoints.smaller("md");
       <div
         v-for="x in md ? 5 : 10"
         :key="x"
-        class="flex justify-center items-center text-center h-12 w-12 bg-black rounded shadow animate-pulse"
+        class="flex justify-center items-center text-center h-12 w-12 bg-skeleton rounded shadow animate-pulse"
       />
     </template>
     <template v-else>

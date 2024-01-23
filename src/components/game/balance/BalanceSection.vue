@@ -74,7 +74,7 @@ const handleResetBalance = () => {
 <template>
   <div>
     <h3 class="pb-1 text-xl font-bold uppercase">Choose an amount</h3>
-    <div class="mt-2 bg-bkg-1 rounded-lg shadow shadow-gray-300">
+    <div class="mt-2 bg-gray rounded-lg shadow shadow-gray-300">
       <div class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl">
         <div class="w-full flex flex-wrap gap-2">
           <AmountButton v-for="amount in amounts" :key="amount" :enabled="!loading" :value="amount" :onSelect="handleSelectAmount" />

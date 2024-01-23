@@ -15,7 +15,7 @@ defineProps<{
       type="email"
       autocomplete="email"
       required
-      class="bg-bkg-1"
+      class="bg-gray"
     />
   </div>
 </template>

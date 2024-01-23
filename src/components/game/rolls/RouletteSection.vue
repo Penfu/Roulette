@@ -75,7 +75,7 @@ watch(
 </script>
 
 <template>
-  <div class="px-2 py-4 bg-bkg-1 rounded-lg shadow shadow-gray-300">
+  <div class="px-2 py-4 bg-gray rounded-lg shadow shadow-gray-300">
     <div class="flex flex-col xl:flex-row items-center xl:items-stretch gap-2 lg:gap-4">
       <div class="py-2 basis-2/3 flex flex-col justify-center items-center space-y-2">
         <ChevronDownIcon />

@@ -66,7 +66,7 @@ const handleMakeBet = () => {
 
     <TransitionGroup
       tag="div"
-      class="h-56 grow p-2 overflow-y-hidden space-y-2 bg-bkg-1 text-left text-xl rounded shadow shadow-gray-300 transition-transform duration-300 ease-in-out"
+      class="h-56 grow p-2 overflow-y-hidden space-y-2 bg-gray text-left text-xl rounded shadow shadow-gray-300 transition-transform duration-300 ease-in-out"
       :class="{ 'scale-105': canBet && hovered }"
       move-class="transition-all duration-500 ease-in-out"
       enter-active-class="transition-all duration-500 ease-in-out"
