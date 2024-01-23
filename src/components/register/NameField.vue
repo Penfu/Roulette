@@ -15,7 +15,7 @@ defineProps<{
       type="text"
       autocomplete="username"
       required
-      class="bg-bkg-1"
+      class="bg-gray"
     />
   </div>
 </template>

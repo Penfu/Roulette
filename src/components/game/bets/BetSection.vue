@@ -14,7 +14,7 @@ const { step } = storeToRefs(game);
 
 <template>
   <div
-    class="grow flex flex-col md:flex-row gap-x-4 gap-y-8 text-center text-white text-2xl transition-all duration-300"
+    class="grow flex flex-col md:flex-row gap-x-4 gap-y-8 transition-all duration-300"
     :class="{ 'scale-95': step !== RollStep.BET }"
   >
     <BetsLayout :color="Color.RED" :value="2" />

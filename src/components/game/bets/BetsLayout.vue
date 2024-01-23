@@ -58,7 +58,7 @@ const handleMakeBet = () => {
       @mouseover="hovered = true"
       @mouseout="hovered = false"
       :disable="!canBet"
-      class="py-4 w-full font-semibold rounded shadow transition-transform duration-300 ease-in-out cursor-default"
+      class="py-4 w-full font-semibold text-white text-2xl rounded shadow transition-transform duration-300 ease-in-out cursor-default"
       :class="[classFromColor(color, canBet), { 'hover:scale-105 cursor-pointer': canBet }]"
     >
       x {{ value }}
@@ -66,7 +66,7 @@ const handleMakeBet = () => {
 
     <TransitionGroup
       tag="div"
-      class="h-56 grow p-2 overflow-y-hidden space-y-2 bg-bkg-1 text-left text-xl rounded shadow shadow-gray-300 transition-transform duration-300 ease-in-out"
+      class="h-56 grow p-2 overflow-y-hidden space-y-2 bg-gray text-left rounded-lg shadow shadow-gray-300 transition-transform duration-300 ease-in-out"
       :class="{ 'scale-105': canBet && hovered }"
       move-class="transition-all duration-500 ease-in-out"
       enter-active-class="transition-all duration-500 ease-in-out"

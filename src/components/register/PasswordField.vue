@@ -17,7 +17,7 @@ defineProps<{
         type="password"
         autocomplete="new-password"
         required
-        class="bg-bkg-1"
+        class="bg-gray"
       />
     </div>
     <div class="space-y-2">
@@ -28,7 +28,7 @@ defineProps<{
         type="password"
         autocomplete="new-password"
         required
-        class="bg-bkg-1"
+        class="bg-gray"
       />
     </div>
   </div>

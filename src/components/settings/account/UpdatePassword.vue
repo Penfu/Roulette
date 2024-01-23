@@ -36,7 +36,7 @@ const { isPending, isError, error, mutate } = useMutation({
 </script>
 
 <template>
-  <form @submit.prevent="mutate()" class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4">
+  <form @submit.prevent="mutate()" class="px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg space-y-4">
     <h2 class="text-xl font-semibold">Change your password</h2>
 
     <p v-if="isError || !passwordMatch" class="text-red">

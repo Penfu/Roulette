@@ -41,7 +41,7 @@ const handleLogin = async () => {
             </button>
             <button
               @click="loginOAuth('google')"
-              class="btn w-full text-gray-700 bg-bkg-1 hover:bg-gray-200 border-gray-300 shadow"
+              class="btn w-full text-gray-700 bg-gray hover:bg-gray-200 border-gray-300 shadow"
             >
               Google
             </button>
@@ -60,7 +60,7 @@ const handleLogin = async () => {
                     type="email"
                     autocomplete="email"
                     required
-                    class="bg-bkg-1"
+                    class="bg-gray"
                   />
                 </div>
                 <div class="space-y-2">
@@ -71,7 +71,7 @@ const handleLogin = async () => {
                     type="password"
                     autocomplete="current-password"
                     required
-                    class="bg-bkg-1"
+                    class="bg-gray"
                   />
                 </div>
               </div>

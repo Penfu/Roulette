@@ -13,7 +13,7 @@ module.exports = {
           DEFAULT: "rgb(var(--color-white))",
         },
         gray: {
-          50: "rgb(var(--color-gray-50) / <alpha-value>)",
+          DEFAULT: "rgb(var(--color-gray) / <alpha-value>)",
           100: "rgb(var(--color-gray-100) / <alpha-value>)",
           200: "rgb(var(--color-gray-200) / <alpha-value>)",
           300: "rgb(var(--color-gray-300) / <alpha-value>)",

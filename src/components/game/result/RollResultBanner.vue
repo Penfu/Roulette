@@ -88,17 +88,21 @@ const active = ref(true);
     :initial="{ opacity: 0, y: -100 }"
     :enter="{ opacity: 1, y: 0 }"
     v-show="active"
-    class="mb-2 px-4 py-2 h-auto space-y-4 bg-bkg-1 rounded-lg shadow shadow-gray-300"
+    class="mb-2 px-4 py-2 h-auto space-y-4 bg-gray rounded-lg shadow shadow-gray-300"
   >
     <div class="flex">
       <div class="grow text-2xl">
-        <span v-if="result === Result.EQUAL">😐 No wins no losses &nbsp</span>
-        <div v-else>
-          <span v-if="result === Result.WIN">😁 Congratulations you won &nbsp</span>
-          <span v-else>😥 No luck you lost &nbsp</span>
-
-          <span class="font-bold">{{ totalAmount }} <span>coins on this roll</span></span>
-        </div>
+        <span v-if="result === Result.EQUAL">No wins no losses</span>
+        <span v-else-if="result === Result.WIN">
+          Congratulations you won
+          <span class="font-bold">{{ totalAmount }}</span>
+          coins on this roll
+        </span>
+        <span v-else-if="result === Result.LOSE">
+          No luck you lost
+          <span class="font-bold">{{ totalAmount }}</span>
+          coins on this roll
+        </span>
       </div>
       <button @click="active = false" class="p-1 bg-gray-200 hover:bg-gray-300 rounded">
         <CrossIcon />

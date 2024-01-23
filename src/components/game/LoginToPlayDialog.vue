@@ -31,7 +31,7 @@ defineProps<{
         as="template"
       >
         <DialogPanel
-          class="sm:mx-8 px-6 py-8 md:px-8 md:py-10 max-w-2xl w-full bg-bkg-1 rounded-t-3xl sm:rounded-lg space-y-12"
+          class="sm:mx-8 px-6 py-8 md:px-8 md:py-10 max-w-2xl w-full bg-gray rounded-t-3xl sm:rounded-lg space-y-12"
         >
           <DialogTitle as="h2" class="text-3xl font-bold">
             In order to play, you need to login

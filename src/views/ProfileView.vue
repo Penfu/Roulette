@@ -29,7 +29,7 @@ const { isPending: userIsPending, data: user } = useQuery({
 
 <template>
   <main class="flex flex-col space-y-8 md:space-y-10">
-    <div class="p-2 md:p-4 bg-bkg-1 rounded-lg shadow shadow-gray-300">
+    <div class="p-2 md:p-4 bg-gray rounded-lg shadow shadow-gray-300">
       <div v-if="user" class="flex flex-col md:flex-row gap-8">
         <div class="grow h-full flex flex-col sm:flex-row items-center sm:items-stretch gap-8">
           <Avatar class="w-44" :options="user.avatar" />
