@@ -21,8 +21,8 @@ interface UserWithStats extends User {
 const fetchUser = (): Promise<UserWithStats> =>
   axios.get(`/users/${props.name}`).then((res) => res.data);
 
-const { isPending: userIsPending, data: user } = useQuery({
-  queryKey: ["profile", props.name],
+const { isPending, data: user } = useQuery({
+  queryKey: ["profiles", props],
   queryFn: () => fetchUser(),
 });
 </script>

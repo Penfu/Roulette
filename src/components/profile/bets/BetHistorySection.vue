@@ -20,7 +20,7 @@ const {
   isFetchingNextPage,
   isPending,
 } = useInfiniteQuery({
-  queryKey: ["bets", props.user],
+  queryKey: ["bets", props],
   queryFn: fetchBets,
   initialPageParam: undefined,
   getNextPageParam: (lastPage: any) => lastPage.data.nextCursor,
