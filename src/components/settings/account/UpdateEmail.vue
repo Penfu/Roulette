@@ -29,29 +29,31 @@ const canSubmit = computed(
 </script>
 
 <template>
-  <form @submit.prevent="mutate()" class="px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg space-y-4">
+  <section class="space-y-4">
     <h2 class="text-xl font-semibold">Change your email</h2>
 
-    <p v-if="isError" class="text-red">{{ error?.message }}</p>
-    <div class="space-y-6">
-      <div class="space-y-2">
-        <label for="email" class="block">Your email</label>
-        <input v-model="email" id="email" type="email" autocomplete="email" />
-      </div>
+    <form @submit.prevent="mutate()" class="space-y-2">
+      <p v-if="isError" class="text-red">{{ error?.message }}</p>
+      <div class="space-y-6">
+        <div class="space-y-2">
+          <label for="email" class="block">Your email</label>
+          <input v-model="email" id="email" type="email" autocomplete="email" />
+        </div>
 
-      <div class="space-y-2">
-        <label for="password" class="block">Confirm your password</label>
-        <input v-model="password" id="password" type="password" />
-      </div>
+        <div class="space-y-2">
+          <label for="password" class="block">Confirm your password</label>
+          <input v-model="password" id="password" type="password" />
+        </div>
 
-      <PendingButton
-        type="submit"
-        :disabled="!canSubmit"
-        :pending="isPending"
-        class="btn-primary w-full sm:w-auto"
-      >
-        Change email
-      </PendingButton>
-    </div>
-  </form>
+        <PendingButton
+          type="submit"
+          :disabled="!canSubmit"
+          :pending="isPending"
+          class="btn-primary w-full sm:w-auto"
+        >
+          Change email
+        </PendingButton>
+      </div>
+    </form>
+  </section>
 </template>

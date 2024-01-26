@@ -36,36 +36,38 @@ const { isPending, isError, error, mutate } = useMutation({
 </script>
 
 <template>
-  <form @submit.prevent="mutate()" class="px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg space-y-4">
+  <section class="space-y-4">
     <h2 class="text-xl font-semibold">Change your password</h2>
 
-    <p v-if="isError || !passwordMatch" class="text-red">
-      {{ !passwordMatch ? "Passwords don't match" : error?.message }}
-    </p>
-    <div class="space-y-6">
-      <div class="space-y-2">
-        <label for="current_password" class="block">Your current password</label>
-        <input v-model="password" id="current_password" type="password" />
-      </div>
+    <form @submit.prevent="mutate()" class="space-y-2">
+      <p v-if="isError || !passwordMatch" class="text-red">
+        {{ !passwordMatch ? "Passwords don't match" : error?.message }}
+      </p>
+      <div class="space-y-6">
+        <div class="space-y-2">
+          <label for="current_password" class="block">Your current password</label>
+          <input v-model="password" id="current_password" type="password" />
+        </div>
 
-      <div class="space-y-2">
-        <label for="new_password" class="block">Your new password</label>
-        <input v-model="newPassword" id="new_password" type="password" />
-      </div>
+        <div class="space-y-2">
+          <label for="new_password" class="block">Your new password</label>
+          <input v-model="newPassword" id="new_password" type="password" />
+        </div>
 
-      <div class="space-y-2">
-        <label for="new_password_confirmation" class="block">Confirm your new password</label>
-        <input v-model="newPasswordConfirmation" id="new_password_confirmation" type="password" />
-      </div>
+        <div class="space-y-2">
+          <label for="new_password_confirmation" class="block">Confirm your new password</label>
+          <input v-model="newPasswordConfirmation" id="new_password_confirmation" type="password" />
+        </div>
 
-      <PendingButton
-        type="submit"
-        :disabled="!canSubmit"
-        :pending="isPending"
-        class="btn-primary w-full sm:w-auto"
-      >
-        Change password
-      </PendingButton>
-    </div>
-  </form>
+        <PendingButton
+          type="submit"
+          :disabled="!canSubmit"
+          :pending="isPending"
+          class="btn-primary w-full sm:w-auto"
+        >
+          Change password
+        </PendingButton>
+      </div>
+    </form>
+  </section>
 </template>

@@ -29,23 +29,25 @@ const canSubmit = computed(() => !isPending.value && !isFirstAndDefault.value &&
 </script>
 
 <template>
-  <form @submit.prevent="mutate()" class="px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg space-y-4">
+  <section class="space-y-4">
     <h2 class="text-xl font-semibold">Change your avatar</h2>
 
-    <div class="space-y-6">
-      <div class="space-y-8">
-        <Avatar class="w-44" :options="store.selectedOptions" />
-        <OptionsEditor />
-      </div>
+    <form @submit.prevent="mutate()" class="space-y-2">
+      <div class="space-y-6">
+        <div class="space-y-8">
+          <Avatar class="w-44" :options="store.selectedOptions" />
+          <OptionsEditor />
+        </div>
 
-      <PendingButton
-        type="submit"
-        :disabled="!canSubmit"
-        :pending="isPending"
-        class="btn-primary w-full sm:w-auto"
-      >
-        Change avatar
-      </PendingButton>
-    </div>
-  </form>
+        <PendingButton
+          type="submit"
+          :disabled="!canSubmit"
+          :pending="isPending"
+          class="btn-primary w-full sm:w-auto"
+        >
+          Change avatar
+        </PendingButton>
+      </div>
+    </form>
+  </section>
 </template>

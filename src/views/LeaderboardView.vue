@@ -38,8 +38,8 @@ const searchUsers = computed(() =>
 <template>
   <main class="flex flex-col space-y-4">
     <!-- Podium -->
-    <div
-      class="h-48 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-gray rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out"
+    <section
+      class="p-0 h-48 lg:h-32 grid grid-flow-row lg:grid-flow-col overflow-hidden transition-all duration-300 ease-in-out"
     >
       <div v-if="isPending" class="bg-skeleton animate-pulse" />
       <RouterLink
@@ -66,12 +66,10 @@ const searchUsers = computed(() =>
           <span>{{ user.balance }}</span>
         </div>
       </RouterLink>
-    </div>
+    </section>
 
     <!-- Search bar -->
-    <div
-      class="flex items-center bg-gray rounded-lg shadow shadow-gray-300 border-3 border-gray-300 overflow-hidden"
-    >
+    <section class="p-0 flex items-center border-3 border-gray-300 shadow-none overflow-hidden">
       <input
         v-model="search"
         type="text"
@@ -84,12 +82,10 @@ const searchUsers = computed(() =>
           {{ searchUsers!.length }} / {{ users!.length - podiumUsers!.length }}
         </span>
       </span>
-    </div>
+    </section>
 
     <!-- Ranking -->
-    <div
-      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-gray rounded-lg shadow shadow-gray-300"
-    >
+    <section class="h-full flex flex-col items-center space-y-2">
       <template v-if="!isPending">
         <RouterLink
           v-for="user in searchUsers"
@@ -108,14 +104,14 @@ const searchUsers = computed(() =>
           :key="i"
           class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-200 rounded-lg animate-pulse"
         >
-          <span class="w-6 h-5 bg-skeleton rounded-xl"></span>
+          <span class="w-6 h-5 bg-skeleton rounded-lg"></span>
           <div class="grow flex">
-            <span class="w-32 h-5 bg-skeleton rounded-xl"></span>
+            <span class="w-32 h-5 bg-skeleton rounded-lg"></span>
           </div>
-          <span class="w-24 h-5 bg-skeleton rounded-xl"></span>
+          <span class="w-24 h-5 bg-skeleton rounded-lg"></span>
         </div>
       </template>
       <p v-if="search && searchUsers!.length === 0" class="w-full">No users found.</p>
-    </div>
+    </section>
   </main>
 </template>

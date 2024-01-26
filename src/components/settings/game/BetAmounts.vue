@@ -54,7 +54,7 @@ const handleSaveAmounts = () => {
 </script>
 
 <template>
-  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg space-y-4">
+  <section class="space-y-4">
     <h2 class="text-xl font-semibold">Bet</h2>
 
     <div class="space-y-6">
@@ -94,5 +94,5 @@ const handleSaveAmounts = () => {
         The amount buttons are the buttons that you can click to bet a certain amount of coins.
       </p>
     </div>
-  </div>
+  </section>
 </template>

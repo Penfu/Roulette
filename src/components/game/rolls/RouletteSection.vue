@@ -75,43 +75,41 @@ watch(
 </script>
 
 <template>
-  <div class="px-2 py-4 bg-gray rounded-lg shadow shadow-gray-300">
-    <div class="flex flex-col xl:flex-row items-center xl:items-stretch gap-2 lg:gap-4">
-      <div class="py-2 basis-2/3 flex flex-col justify-center items-center space-y-2">
-        <ChevronDownIcon />
-        <img
-          v-motion-pop
-          ref="wheel"
-          src="@/assets/roulette.png"
-          alt="Roulette"
-          class="w-60 h-60 md:w-80 md:h-80 object-contain transition-width duration-500"
-        />
+  <section class="flex flex-col xl:flex-row items-center xl:items-stretch gap-2 lg:gap-4">
+    <div class="py-2 basis-2/3 flex flex-col justify-center items-center space-y-2">
+      <ChevronDownIcon />
+      <img
+        v-motion-pop
+        ref="wheel"
+        src="@/assets/roulette.png"
+        alt="Roulette"
+        class="w-60 h-60 md:w-80 md:h-80 object-contain transition-width duration-500"
+      />
+    </div>
+
+    <div class="basis-1/3 flex flex-col justify-end space-y-4 lg:space-y-8 xl:space-y-0">
+      <div
+        class="h-14 flex grow justify-center items-center text-center text-3xl xl:text-5xl font-semibold uppercase"
+      >
+        <span v-show="step === RollStep.BET">{{ message }}</span>
+        <span v-show="step === RollStep.ROLL"> Rolling... </span>
+        <div
+          v-if="step === RollStep.DISPLAY_RESULT && result"
+          class="flex items-center justify-center space-x-4"
+        >
+          <span>Result</span>
+          <span
+            class="h-12 w-12 xl:h-20 xl:w-20 flex items-center justify-center text-white rounded-lg shadow"
+            :class="classFromColor(result.color)"
+          >
+            {{ result.value }}
+          </span>
+        </div>
       </div>
 
-      <div class="basis-1/3 flex flex-col justify-end space-y-4 lg:space-y-8 xl:space-y-0">
-        <div
-          class="h-14 flex grow justify-center items-center text-center text-3xl xl:text-5xl font-semibold uppercase"
-        >
-          <span v-show="step === RollStep.BET">{{ message }}</span>
-          <span v-show="step === RollStep.ROLL"> Rolling... </span>
-          <div
-            v-if="step === RollStep.DISPLAY_RESULT && result"
-            class="flex items-center justify-center space-x-4"
-          >
-            <span>Result</span>
-            <span
-              class="h-12 w-12 xl:h-20 xl:w-20 flex items-center justify-center text-white rounded-lg shadow"
-              :class="classFromColor(result.color)"
-            >
-              {{ result.value }}
-            </span>
-          </div>
-        </div>
-
-        <div class="justify-end items-center xl:items-end">
-          <HistoryLayout />
-        </div>
+      <div class="justify-end items-center xl:items-end">
+        <HistoryLayout />
       </div>
     </div>
-  </div>
+  </section>
 </template>

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -28,10 +28,10 @@
 
 		--color-skeleton: 206 212 220;
 	}
-	
-	:root[class="dark"] {
+
+	:root[class='dark'] {
 		--color-white: 255, 255, 255, 85%;
-		
+
 		--color-gray: 25 25 25;
 		--color-gray-100: 18 18 19;
 		--color-gray-200: 38 38 38;
@@ -51,9 +51,28 @@
 		@apply font-inter tabular-nums;
 	}
 
+	div {
+		@apply focus:!outline-none;
+	}
+
 	button,
 	input {
 		@apply tabular-nums;
+	}
+
+	input:-webkit-autofill,
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
+	input:-webkit-autofill:active {
+		transition: background-color 5000s ease-in-out 0s;
+	}
+
+	.section {
+		@apply px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg shadow shadow-gray-300;
+	}
+
+	section {
+		@apply section;
 	}
 
 	.prefab {

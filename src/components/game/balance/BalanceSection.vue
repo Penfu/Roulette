@@ -72,43 +72,48 @@ const handleResetBalance = () => {
 </script>
 
 <template>
-  <div>
-    <h3 class="pb-1 text-xl font-bold uppercase">Choose an amount</h3>
-    <div class="mt-2 bg-gray rounded-lg shadow shadow-gray-300">
-      <div class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl">
-        <div class="w-full flex flex-wrap gap-2">
-          <AmountButton v-for="amount in amounts" :key="amount" :enabled="!loading" :value="amount" :onSelect="handleSelectAmount" />
-        </div>
+  <div class="space-y-4">
+    <h3 class="text-xl font-bold uppercase">Choose an amount</h3>
 
-        <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
-          <span
-            class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded box-border border-3 border-gray-200 shadow shadow-gray-300"
+    <section class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl">
+      <div class="w-full flex flex-wrap gap-2">
+        <AmountButton
+          v-for="amount in amounts"
+          :key="amount"
+          :enabled="!loading"
+          :value="amount"
+          :onSelect="handleSelectAmount"
+        />
+      </div>
+
+      <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
+        <span
+          class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded box-border border-3 border-gray-200 shadow shadow-gray-300"
+        >
+          {{ balanceToDisplay }}
+        </span>
+        <div class="flex space-x-2">
+          <button
+            :disabled="loading"
+            @click="handleAllIn"
+            class="btn basis-1/2 bg-gray-200 hover:bg-gray-300 whitespace-nowrap rounded shadow shadow-gray-300"
           >
-            {{ balanceToDisplay }}
-          </span>
-          <div class="flex space-x-2">
-            <button
-              :disabled="loading"
-              @click="handleAllIn"
-              class="btn basis-1/2 bg-gray-200 hover:bg-gray-300 whitespace-nowrap rounded shadow shadow-gray-300"
-            >
-              All In
-            </button>
-            <button
-              :disabled="loading"
-              @click="handleResetBalance"
-              aria-label="Reset balance"
-              class="btn basis-1/2 flex justify-center items-center bg-red hover:bg-red-dark text-white stroke-2 rounded border-red shadow shadow-red-300"
-            >
-              <CrossIcon />
-            </button>
-          </div>
+            All In
+          </button>
+          <button
+            :disabled="loading"
+            @click="handleResetBalance"
+            aria-label="Reset balance"
+            class="btn basis-1/2 flex justify-center items-center bg-red hover:bg-red-dark text-white stroke-2 rounded border-red shadow shadow-red-300"
+          >
+            <CrossIcon />
+          </button>
         </div>
       </div>
-    </div>
+    </section>
+  </div>
 
   <TransitionRoot appear :show="isOpen" as="template">
     <LoginToPlayDialog :onClose="closeModal" />
   </TransitionRoot>
-</div>
 </template>
