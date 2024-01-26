@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from "vue";
+import { ref, computed, nextTick } from "vue";
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import router from "@/router";
 
 import { useAuthStore } from "@/stores/auth";
@@ -8,33 +9,15 @@ import StepBtn from "@/components/register/StepBtn.vue";
 import NameField from "@/components/register/NameField.vue";
 import EmailField from "@/components/register/EmailField.vue";
 import PasswordField from "@/components/register/PasswordField.vue";
-import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
+import PendingButton from "@/components/PendingButton.vue";
 
 const { register } = useAuthStore();
 
-type Errors = {
-  name: string[];
-  email: string[];
-  password: string[];
+const selectedTab = ref(0);
+
+const changeTab = (index: number) => {
+  selectedTab.value = index;
 };
-
-type Step = {
-  component: any;
-  name: string;
-  errors: string[];
-};
-
-const activeStepIndex = ref(0);
-const activeStep = computed(() => steps.value[activeStepIndex.value]);
-
-const steps = computed(
-  () =>
-    [
-      { component: NameField, name: "Name", errors: errors.value.name },
-      { component: EmailField, name: "Email", errors: errors.value.email },
-      { component: PasswordField, name: "Password", errors: errors.value.password },
-    ] as Step[]
-);
 
 const user = ref({
   name: "",
@@ -42,30 +25,46 @@ const user = ref({
   password: "",
   passwordConfirmation: "",
 });
-const errors = ref({} as Errors);
 
-const isReadyToSubmit = computed(() => {
-  return activeStepIndex.value === steps.value.length - 1;
+type Errors = {
+  name: string[];
+  email: string[];
+  password: string[];
+};
+
+const errors = ref<Errors>({
+  name: [],
+  email: [],
+  password: [],
 });
-const isValidating = ref(false);
+
+const isPending = ref(false);
+const isLastStep = computed(() => selectedTab.value === 2);
+const canSubmit = computed(() => {
+  return (
+    user.value.name.length > 0 &&
+    user.value.email.length > 0 &&
+    user.value.password.length > 0 &&
+    user.value.passwordConfirmation.length > 0
+  );
+});
 
 const handlePreviousStep = () => {
-  if (activeStepIndex.value > 0) activeStepIndex.value--;
+  if (selectedTab.value > 0) {
+    selectedTab.value--;
+  }
 };
 
 const handleNextStep = () => {
-  if (!isReadyToSubmit.value) activeStepIndex.value++;
+  if (canSubmit.value) {
+    handleRegister();
+  } else {
+    selectedTab.value++;
+  }
 };
 
 const handleRegister = async () => {
-  // Local validation
-  if (user.value.password !== user.value.passwordConfirmation) {
-    errors.value.password.push("Passwords do not match");
-    return;
-  }
-
-  // Server validation
-  isValidating.value = true;
+  isPending.value = true;
   const response = await register(user.value.name, user.value.email, user.value.password);
 
   if (response.success) {
@@ -73,72 +72,105 @@ const handleRegister = async () => {
       router.push("/");
     });
   } else {
-    isValidating.value = false;
+    isPending.value = false;
     errors.value = response.errors as Errors;
   }
 };
 </script>
 
 <template>
-  <main class="px-8">
-    <div class="mx-auto max-w-lg pt-16 pb-8 space-y-12">
+  <main class="flex justify-center items-center">
+    <section class="w-full max-w-xl py-16 space-y-24">
       <h2 class="text-center text-5xl font-semibold uppercase">Register</h2>
 
-      <div class="space-y-4">
-        <form @submit.prevent="handleRegister" @keypress.enter.prevent="handleNextStep" class="space-y-8">
-          <!-- Steps -->
-          <div class="flex justify-center space-x-6 md:space-x-8">
-            <StepBtn
-              v-for="(step, index) in steps"
-              :key="step.name"
-              @set-step="activeStepIndex = index"
-              :isActive="index === activeStepIndex"
-              :index="index"
-              :name="step.name"
-              :hasError="step.errors !== undefined && step.errors.length > 0"
-            />
-          </div>
+      <div class="h-[36rem] flex flex-col space-y-8">
+        <form
+          @submit.prevent="handleRegister"
+          @keypress.enter.prevent="handleNextStep"
+          class="grow flex flex-col space-y-14"
+        >
+          <TabGroup :selectedIndex="selectedTab" @change="changeTab">
+            <TabList class="flex justify-center space-x-6 md:space-x-8">
+              <Tab as="template" v-slot="{ selected }">
+                <StepBtn
+                  :index="0"
+                  :selected="selected"
+                  :hasError="errors.name.length > 0"
+                  name="Name"
+                />
+              </Tab>
+              <Tab as="template" v-slot="{ selected }">
+                <StepBtn
+                  :index="1"
+                  :selected="selected"
+                  :hasError="errors.email.length > 0"
+                  name="Email"
+                />
+              </Tab>
+              <Tab as="template" v-slot="{ selected }">
+                <StepBtn
+                  :index="2"
+                  :selected="selected"
+                  :hasError="errors.password.length > 0"
+                  name="Password"
+                />
+              </Tab>
+            </TabList>
 
-          <div class="h-64 space-y-2">
-            <span class="text-red">{{ activeStep.errors?.[0] }}</span>
-            <component :is="activeStep.component" :user="user" />
-          </div>
+            <TabPanels as="div" class="grow">
+              <TabPanel>
+                <span class="text-red">{{ errors.name[0] }}</span>
+                <NameField v-model:name="user.name" />
+              </TabPanel>
+              <TabPanel>
+                <span class="text-red">{{ errors.email[0] }}</span>
+                <EmailField v-model:email="user.email" />
+              </TabPanel>
+              <TabPanel>
+                <span class="text-red">{{ errors.password[0] }}</span>
+                <PasswordField
+                  v-model:password="user.password"
+                  v-model:passwordConfirmation="user.passwordConfirmation"
+                />
+              </TabPanel>
+            </TabPanels>
+          </TabGroup>
 
           <!-- Buttons -->
-          <div class="flex space-x-4 text-lg">
+          <div class="flex flex-col xs:flex-row xs:justify-end gap-4 text-lg">
             <button
-              v-if="activeStepIndex > 0"
+              v-if="selectedTab > 0"
               type="button"
               @click="handlePreviousStep"
-              class="btn-secondary w-full"
-              :class="{ 'basis-2/5': isReadyToSubmit }"
+              class="btn-secondary w-full transition-width duration-200 ease-in-out"
+              :class="[isLastStep ? 'xs:w-1/3' : 'xs:w-1/2']"
             >
               Back
             </button>
-            <button
-              v-if="!isReadyToSubmit"
+            <PendingButton
               type="button"
+              :pending="isPending"
+              :disabled="isLastStep && !canSubmit"
               @click="handleNextStep()"
-              class="btn-primary w-full"
+              class="btn-primary w-full transition-width duration-200 ease-in-out"
+              :class="{
+                'xs:w-full': selectedTab === 0,
+                'xs:w-1/2': selectedTab === 1,
+                'xs:w-2/3': isLastStep,
+              }"
             >
-              Next Step
-            </button>
-            <button
-              v-else
-              type="submit"
-              class="btn-primary w-full relative flex justify-center items-center"
-            >
-              Register
-              <SpinnerIcon v-if="isValidating" class="absolute right-4" />
-            </button>
+              {{ isLastStep ? "Register" : "Next Step" }}
+            </PendingButton>
           </div>
         </form>
 
         <div class="flex flex-wrap justify-center gap-2 text-gray-700">
           <span>Already have an account?</span>
-          <router-link to="/login" class="text-green hover:text-green-dark font-semibold"> Login </router-link>
+          <router-link to="/login" class="text-green hover:text-green-dark font-semibold">
+            Login
+          </router-link>
         </div>
       </div>
-    </div>
+    </section>
   </main>
 </template>

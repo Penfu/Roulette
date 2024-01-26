@@ -25,12 +25,12 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <main class="px-8">
-    <div class="mx-auto max-w-lg pt-16 pb-8 space-y-12">
+  <main class="flex justify-center items-center">
+    <section class="w-full max-w-xl py-16 space-y-24">
       <h2 class="text-center text-5xl font-semibold uppercase">Login</h2>
 
-      <div class="space-y-4">
-        <div class="space-y-8">
+      <div class="h-[36rem] flex flex-col space-y-8">
+        <div class="h-full flex flex-col space-y-8">
           <!-- OAuth -->
           <div class="flex space-x-2 font-semibold">
             <button
@@ -41,27 +41,21 @@ const handleLogin = async () => {
             </button>
             <button
               @click="loginOAuth('google')"
-              class="btn w-full text-gray-700 bg-gray hover:bg-gray-200 border-gray-300 shadow"
+              class="btn w-full text-gray-700 bg-gray-200 hover:bg-gray-300 border-gray-300 shadow"
             >
               Google
             </button>
           </div>
 
-          <form @submit.prevent="handleLogin" class="space-y-8">
-            <div class="h-64 space-y-2">
+          <!-- Standard auth -->
+          <form @submit.prevent="handleLogin" class="grow h-full flex flex-col">
+            <div class="grow h-full space-y-2">
               <span v-if="error" class="block text-red">{{ error?.message }}</span>
 
               <div class="space-y-6">
                 <div class="space-y-2">
                   <label for="email" class="block">Email</label>
-                  <input
-                    v-model="email"
-                    id="email"
-                    type="email"
-                    autocomplete="email"
-                    required
-                    class="bg-gray"
-                  />
+                  <input v-model="email" id="email" type="email" autocomplete="email" required />
                 </div>
                 <div class="space-y-2">
                   <label for="password" class="block">Password</label>
@@ -71,7 +65,6 @@ const handleLogin = async () => {
                     type="password"
                     autocomplete="current-password"
                     required
-                    class="bg-gray"
                   />
                 </div>
               </div>
@@ -88,6 +81,6 @@ const handleLogin = async () => {
           </router-link>
         </div>
       </div>
-    </div>
+    </section>
   </main>
 </template>
