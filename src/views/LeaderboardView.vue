@@ -38,8 +38,8 @@ const searchUsers = computed(() =>
 <template>
   <main class="flex flex-col space-y-4">
     <!-- Podium -->
-    <div
-      class="h-48 lg:h-32 grid grid-flow-row lg:grid-flow-col bg-bkg-1 rounded-lg overflow-hidden shadow shadow-gray-300 transition-all duration-300 ease-in-out"
+    <section
+      class="p-0 h-48 lg:h-32 grid grid-flow-row lg:grid-flow-col overflow-hidden transition-all duration-300 ease-in-out"
     >
       <div v-if="isPending" class="bg-skeleton animate-pulse" />
       <RouterLink
@@ -54,7 +54,7 @@ const searchUsers = computed(() =>
         v-for="user in podiumUsers"
         :key="user.name"
         :to="`/profile/${user.name}`"
-        class="group px-6 xs:px-8 sm:px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-between sm:justify-center space-x-8 sm:space-x-16 bg-bkg-1 first:bg-green"
+        class="group px-6 xs:px-8 sm:px-12 sm:first:col-span-2 lg:first:col-span-1 flex items-center justify-between sm:justify-center space-x-8 sm:space-x-16 bg-gray first:bg-green"
       >
         <span class="text-4xl md:text-6xl font-bold">{{ user.rank }}</span>
         <div class="grow flex flex-col">
@@ -66,16 +66,14 @@ const searchUsers = computed(() =>
           <span>{{ user.balance }}</span>
         </div>
       </RouterLink>
-    </div>
+    </section>
 
     <!-- Search bar -->
-    <div
-      class="flex items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 border-3 border-gray-300 overflow-hidden"
-    >
+    <section class="p-0 flex items-center border-3 border-gray-300 shadow-none overflow-hidden">
       <input
         v-model="search"
         type="text"
-        class="bg-bkg-1 rounded-none outline-none text-ellipsis border-none"
+        class="bg-gray rounded-none outline-none text-ellipsis border-none"
         placeholder="Search for a user..."
       />
       <span class="px-2 py-3 bg-gray-200 text-center">
@@ -84,41 +82,36 @@ const searchUsers = computed(() =>
           {{ searchUsers!.length }} / {{ users!.length - podiumUsers!.length }}
         </span>
       </span>
-    </div>
+    </section>
 
     <!-- Ranking -->
-    <div
-      v-if="isPending"
-      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 overflow-y-auto"
-    >
-      <div
-        v-for="i in 10"
-        :key="i"
-        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded animate-pulse"
-      >
-        <span class="w-6 h-5 bg-skeleton rounded-xl"></span>
-        <div class="grow flex">
-          <span class="w-32 h-5 bg-skeleton rounded-xl"></span>
+    <section class="h-full flex flex-col items-center space-y-2">
+      <template v-if="!isPending">
+        <RouterLink
+          v-for="user in searchUsers"
+          :key="user.rank"
+          :to="`/profile/${user.name}`"
+          class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-200 rounded-lg hover:bg-green-200 dark:hover:bg-green-600"
+        >
+          <span class="w-6">{{ user.rank }}</span>
+          <span class="grow">{{ user.name }}</span>
+          <span class="">{{ user.balance }}</span>
+        </RouterLink>
+      </template>
+      <template v-else>
+        <div
+          v-for="i in 3"
+          :key="i"
+          class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-200 rounded-lg animate-pulse"
+        >
+          <span class="w-6 h-5 bg-skeleton rounded-lg"></span>
+          <div class="grow flex">
+            <span class="w-32 h-5 bg-skeleton rounded-lg"></span>
+          </div>
+          <span class="w-24 h-5 bg-skeleton rounded-lg"></span>
         </div>
-        <span class="w-24 h-5 bg-skeleton rounded-xl"></span>
-      </div>
-    </div>
-    <div
-      v-else
-      class="h-full px-4 py-4 flex flex-col space-y-2 items-center bg-bkg-1 rounded-lg shadow shadow-gray-300 overflow-y-auto"
-    >
-      <RouterLink
-        v-for="user in searchUsers"
-        :key="user.rank"
-        :to="`/profile/${user.name}`"
-        class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-100 rounded-lg hover:bg-green-200 dark:hover:bg-green-600"
-      >
-        <span class="w-6">{{ user.rank }}</span>
-        <span class="grow">{{ user.name }}</span>
-        <span class="">{{ user.balance }}</span>
-      </RouterLink>
-
+      </template>
       <p v-if="search && searchUsers!.length === 0" class="w-full">No users found.</p>
-    </div>
+    </section>
   </main>
 </template>

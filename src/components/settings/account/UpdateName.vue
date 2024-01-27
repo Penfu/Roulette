@@ -22,24 +22,26 @@ const canSubmit = computed(() => !isPending.value && name.value && name.value !=
 </script>
 
 <template>
-  <form @submit.prevent="mutate()" class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4">
+  <section class="space-y-4">
     <h2 class="text-xl font-semibold">Change your name</h2>
 
-    <p v-if="isError" class="text-red">{{ error?.message }}</p>
-    <div class="space-y-6">
-      <div class="space-y-2">
-        <label for="name" class="block">Your name</label>
-        <input v-model="name" id="name" type="text" autocomplete="username" />
-      </div>
+    <form @submit.prevent="mutate()" class="space-y-2">
+      <p v-if="isError" class="text-red">{{ error?.message }}</p>
+      <div class="space-y-6">
+        <div class="space-y-2">
+          <label for="name" class="block">Your name</label>
+          <input v-model="name" id="name" type="text" autocomplete="username" />
+        </div>
 
-      <PendingButton
-        type="submit"
-        :disabled="!canSubmit"
-        :pending="isPending"
-        class="btn-primary w-full sm:w-auto"
-      >
-        Change name
-      </PendingButton>
-    </div>
-  </form>
+        <PendingButton
+          type="submit"
+          :disabled="!canSubmit"
+          :pending="isPending"
+          class="btn-primary w-full sm:w-auto"
+        >
+          Change name
+        </PendingButton>
+      </div>
+    </form>
+  </section>
 </template>

@@ -20,7 +20,7 @@ const {
   isFetchingNextPage,
   isPending,
 } = useInfiniteQuery({
-  queryKey: ["bets", props.user],
+  queryKey: ["bets", props],
   queryFn: fetchBets,
   initialPageParam: undefined,
   getNextPageParam: (lastPage: any) => lastPage.data.nextCursor,
@@ -30,31 +30,30 @@ const hasBets = computed(() => bets.value?.pages[0].data.data.length > 0);
 </script>
 
 <template>
-  <div class="flex flex-col space-y-4">
+  <section class="flex flex-col space-y-4">
     <h2 class="text-3xl font-bold">Bets</h2>
-    <div class="p-4 grow bg-bkg-1 rounded-lg shadow shadow-gray-300">
-      <div v-if="!isPending">
-        <div v-if="hasBets" class="space-y-6">
-          <div class="space-y-3">
-            <template v-for="page in bets?.pages">
-              <BetHistory v-for="bet in page.data.data" :key="bet.id" :bet="bet" />
-            </template>
-          </div>
 
-          <PendingButton
-            v-if="hasNextPage"
-            @click="fetchNextPage()"
-            type="button"
-            :disabled="isFetchingNextPage"
-            :pending="isFetchingNextPage"
-            class="btn-primary w-full sm:w-auto"
-          >
-            Show more
-          </PendingButton>
+    <div v-if="!isPending">
+      <div v-if="hasBets" class="space-y-6">
+        <div class="space-y-3">
+          <template v-for="page in bets?.pages">
+            <BetHistory v-for="bet in page.data.data" :key="bet.id" :bet="bet" />
+          </template>
         </div>
-        <p v-else class="w-full">This user has no bets yet.</p>
+
+        <PendingButton
+          v-if="hasNextPage"
+          @click="fetchNextPage()"
+          type="button"
+          :disabled="isFetchingNextPage"
+          :pending="isFetchingNextPage"
+          class="btn-primary w-full sm:w-auto"
+        >
+          Show more
+        </PendingButton>
       </div>
-      <div v-else class="w-full h-8 bg-skeleton rounded-lg animate-pulse"></div>
+      <p v-else class="w-full">This user has no bets yet.</p>
     </div>
-  </div>
+    <div v-else class="w-full h-8 bg-skeleton rounded-lg animate-pulse"></div>
+  </section>
 </template>

@@ -17,7 +17,7 @@ const { isPending, mutate } = useMutation({
 </script>
 
 <template>
-  <div class="px-4 sm:px-8 py-3 sm:py-6 bg-bkg-1 rounded-lg space-y-4">
+  <section class="space-y-4">
     <h2 class="text-xl font-semibold">Provider</h2>
 
     <div v-if="auth.user.provider" class="space-y-6">
@@ -62,7 +62,7 @@ const { isPending, mutate } = useMutation({
         &nbsp;to login with them.
       </p>
       <p>
-        To link your account you need to logout then login with a provider account which has your
+        To link your account you need to sign out then login with a provider account which has your
         email address
         <span class="text-green font-semibold">{{ auth.user.email }}</span
         >. If you want to login with a provider account which has a different email, you can change
@@ -73,5 +73,5 @@ const { isPending, mutate } = useMutation({
         will conserve all your data !
       </p>
     </div>
-  </div>
+  </section>
 </template>

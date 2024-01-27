@@ -1,10 +1,6 @@
 <script setup lang="ts">
-defineProps<{
-  user: {
-    password: string;
-    passwordConfirmation: string;
-  };
-}>();
+const password = defineModel('password');
+const passwordConfirmation = defineModel('passwordConfirmation');
 </script>
 
 <template>
@@ -12,23 +8,21 @@ defineProps<{
     <div class="space-y-2">
       <label for="password" class="block">Password</label>
       <input
-        v-model="user.password"
+        v-model="password"
         id="password"
         type="password"
         autocomplete="new-password"
         required
-        class="bg-bkg-1"
       />
     </div>
     <div class="space-y-2">
       <label for="password_confirmation" class="block">Password Confirmation</label>
       <input
-        v-model="user.passwordConfirmation"
+        v-model="passwordConfirmation"
         id="password_confirmation"
         type="password"
         autocomplete="new-password"
         required
-        class="bg-bkg-1"
       />
     </div>
   </div>

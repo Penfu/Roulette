@@ -16,7 +16,7 @@ const winrate = computed(() => percent(props.win, props.count));
 </script>
 
 <template>
-  <div class="p-2 w-full flex items-center space-x-4 bg-bkg-1 rounded-lg shadow shadow-gray-300">
+  <div class="p-4 w-full flex items-center space-x-4 bg-gray-100 rounded-lg shadow">
     <span class="p-6 xs:p-8 rounded shadow" :class="classFromColor(color)" />
 
     <div class="grow flex flex-row md:flex-col lg:flex-row justify-center lg:items-center">

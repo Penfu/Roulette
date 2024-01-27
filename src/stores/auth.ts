@@ -1,6 +1,5 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { isAxiosError } from "axios";
 import axios from "@/axios.config";
 
 import type User from "@/interfaces/user";
@@ -29,9 +28,9 @@ export const useAuthStore = defineStore("auth", () => {
 
       return { success: true };
     } catch (error: any) {
-      const name = error.errors?.name || [];
-      const email = error.errors?.email || [];
-      const password = error.errors?.password || [];
+      const name = error.response.data.errors?.name || [];
+      const email = error.response.data.errors?.email || [];
+      const password = error.response.data.errors?.password || [];
 
       return { success: false, errors: { name, email, password } };
     }

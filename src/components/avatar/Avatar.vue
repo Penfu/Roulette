@@ -18,5 +18,5 @@ const src = computed(() => `data:image/svg+xml;utf8,${encodeURIComponent(
 </script>
 
 <template>
-  <img :src="src" loading="lazy" class="rounded-xl" />
+  <img :src="src" loading="lazy" class="rounded-lg" />
 </template>

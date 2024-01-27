@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,13 +6,11 @@
 
 @layer base {
 	:root {
-		--color-bg: 241 245 249;
-		--color-bg-1: 255 255 255;
-
 		--color-white: 255, 255, 255, 100%;
 
+		--color-gray: 255 255 255;
 		--color-gray-100: 241 245 249;
-		--color-gray-200: 226 232 240;
+		--color-gray-200: 231 235 242;
 		--color-gray-300: 203 213 225;
 		--color-gray-700: 64 64 64;
 
@@ -24,22 +22,20 @@
 		--color-red-light: 248 113 113;
 		--color-red-dark: 220 38 38;
 
-		--color-black: 13 13 14;
+		--color-black: 5 5 6;
 		--color-black-light: 24 24 27;
 		--color-black-dark: 10 10 11;
 
 		--color-skeleton: 206 212 220;
 	}
-	
-	:root[class="dark"] {
-		--color-bg: 18 18 19;
-		--color-bg-1: 25 25 25;
 
+	:root[class='dark'] {
 		--color-white: 255, 255, 255, 85%;
 
-		--color-gray-100: 23 23 23;
+		--color-gray: 25 25 25;
+		--color-gray-100: 18 18 19;
 		--color-gray-200: 38 38 38;
-		--color-gray-300: 64 64 64;
+		--color-gray-300: 66 66 66;
 		--color-gray-700: 226 232 240;
 
 		--color-skeleton: 46 46 46;
@@ -55,9 +51,21 @@
 		@apply font-inter tabular-nums;
 	}
 
+	div {
+		@apply focus:!outline-none;
+	}
+
 	button,
 	input {
 		@apply tabular-nums;
+	}
+
+	.section {
+		@apply px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg shadow shadow-gray-300;
+	}
+
+	section {
+		@apply section;
 	}
 
 	.prefab {
@@ -65,7 +73,15 @@
 	}
 
 	input {
-		@apply prefab w-full bg-bkg border-gray-300;
+		@apply prefab w-full bg-gray-100 border-gray-300;
+	}
+
+	input:-webkit-autofill,
+	input:-webkit-autofill:focus {
+		transition: background-color 600000s 0s, color 600000s 0s;
+	}
+	input[data-autocompleted] {
+		background-color: var(--color-gray-100) !important;
 	}
 
 	.btn {

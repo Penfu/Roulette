@@ -57,16 +57,14 @@ const auth = useAuthStore();
                 Settings
               </RouterLink>
             </MenuItem>
-          </div>
 
-          <div class="px-1 py-1">
             <MenuItem v-slot="{ active }">
               <button
                 @click="auth.logout"
                 class="p-2 w-full rounded text-left"
                 :class="{ 'bg-red text-white': active }"
               >
-                Logout
+                Sign out
               </button>
             </MenuItem>
           </div>

@@ -44,7 +44,7 @@ const closeModal = () => {
 
 <template>
   <div
-    class="px-4 sm:px-8 py-3 sm:py-6 bg-red-100 dark:bg-opacity-90 rounded-lg border-3 border-red-dark space-y-4"
+    class="section bg-red-100 dark:bg-opacity-90 border-3 border-red-dark space-y-4"
   >
     <div class="space-y-2">
       <h2 class="text-xl text-black font-semibold">Delete your account</h2>
@@ -86,7 +86,7 @@ const closeModal = () => {
           as="template"
         >
           <DialogPanel
-            class="sm:mx-8 px-6 py-8 md:px-8 md:py-10 max-w-2xl w-full bg-bkg-1 rounded-t-3xl sm:rounded-lg space-y-12"
+            class="sm:mx-8 px-6 py-8 md:px-8 md:py-10 max-w-2xl w-full bg-gray rounded-t-3xl sm:rounded-lg space-y-12"
           >
             <DialogTitle as="h2" class="text-3xl font-bold">
               You're about to delete your account
