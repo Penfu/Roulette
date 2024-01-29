@@ -2,15 +2,14 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+// @ts-ignore
+import { MotionPlugin } from "@vueuse/motion";
 
 import App from "./App.vue";
 import router from "./router";
 
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
-
-import { MotionPlugin } from "@vueuse/motion";
-
 
 import "./assets/main.css";
 

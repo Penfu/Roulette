@@ -77,4 +77,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 - [MARECHAL Armand](https://github.com/Penfu)
 
 <p align="right"><a href="#readme-top">back to top</a></p>
-

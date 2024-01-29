@@ -1,17 +1,14 @@
 {
-	"files": [],
-	"references": [
-		{
-			"path": "./tsconfig.config.json"
-		},
-		{
-			"path": "./tsconfig.app.json"
-		},
-		{
-			"path": "./tsconfig.vitest.json"
-		}
-	],
-	"compilerOptions": {
-		"typeRoots": ["./types", "./node_modules/@types/"]
-	},
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+  "compilerOptions": {
+    "typeRoots": ["./types", "./node_modules/@types/"]
+  }
 }
