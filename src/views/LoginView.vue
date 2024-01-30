@@ -1,50 +1,53 @@
 <script setup lang="ts">
-import { nextTick, ref } from "vue";
-import router from "@/router";
+import { nextTick, ref } from 'vue'
+import router from '@/router'
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth'
 
-const { login, loginOAuth } = useAuthStore();
+const { login, loginOAuth } = useAuthStore()
 
-const email = ref("");
-const password = ref("");
-const error = ref();
+const email = ref('')
+const password = ref('')
+const error = ref()
 
 const handleLogin = async () => {
-  const response = await login(email.value, password.value);
+  const response = await login(email.value, password.value)
 
   if (response.success) {
     nextTick(() => {
-      router.push("/");
-    });
+      router.push('/')
+    })
   } else {
-    error.value = response.error;
-    password.value = "";
+    error.value = response.error
+    password.value = ''
   }
-};
+}
 </script>
 
 <template>
   <main class="flex justify-center items-center">
-    <section class="w-full max-w-xl py-16 space-y-24">
+    <section class="w-full sm:max-w-xl py-12 sm:py-16 space-y-12 sm:space-y-24">
       <h2 class="text-center text-5xl font-semibold uppercase">Login</h2>
 
       <div class="h-[36rem] flex flex-col space-y-8">
         <div class="h-full flex flex-col space-y-8">
           <!-- OAuth -->
-          <div class="flex space-x-2 font-semibold">
+          <div class="flex flex-col xs:flex-row gap-4">
             <button
               @click="loginOAuth('github')"
-              class="btn w-full text-white bg-black hover:bg-black-dark border-gray-300 shadow"
+              class="btn w-full text-white bg-black hover:bg-black-dark"
             >
               Github
             </button>
-            <button
-              @click="loginOAuth('google')"
-              class="btn w-full text-gray-700 bg-gray-200 hover:bg-gray-300 border-gray-300 shadow"
-            >
+            <button @click="loginOAuth('google')" class="btn w-full bg-gray-200 hover:bg-gray-300">
               Google
             </button>
+          </div>
+
+          <div class="flex items-center justify-center">
+            <span class="w-full h-px bg-gray-300"></span>
+            <span class="px-4 text-gray-700">or</span>
+            <span class="w-full h-px bg-gray-300"></span>
           </div>
 
           <!-- Standard auth -->

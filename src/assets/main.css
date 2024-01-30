@@ -5,102 +5,100 @@
 @tailwind utilities;
 
 @layer base {
-	:root {
-		--color-white: 255, 255, 255, 100%;
+  :root {
+    --color-white: 255, 255, 255, 100%;
 
-		--color-gray: 255 255 255;
-		--color-gray-100: 241 245 249;
-		--color-gray-200: 231 235 242;
-		--color-gray-300: 203 213 225;
-		--color-gray-700: 64 64 64;
+    --color-gray: 255 255 255;
+    --color-gray-100: 241 245 249;
+    --color-gray-200: 231 235 242;
+    --color-gray-300: 203 213 225;
+    --color-gray-700: 64 64 64;
 
-		--color-green: 74 222 128;
-		--color-green-light: 134 239 172;
-		--color-green-dark: 34 197 94;
+    --color-green: 74 222 128;
+    --color-green-light: 134 239 172;
+    --color-green-dark: 34 197 94;
 
-		--color-red: 239 68 68;
-		--color-red-light: 248 113 113;
-		--color-red-dark: 220 38 38;
+    --color-red: 239 68 68;
+    --color-red-light: 248 113 113;
+    --color-red-dark: 220 38 38;
 
-		--color-black: 5 5 6;
-		--color-black-light: 24 24 27;
-		--color-black-dark: 10 10 11;
+    --color-black: 5 5 6;
+    --color-black-light: 24 24 27;
+    --color-black-dark: 10 10 11;
 
-		--color-skeleton: 206 212 220;
-	}
+    --color-skeleton: 206 212 220;
+  }
 
-	:root[class='dark'] {
-		--color-white: 255, 255, 255, 85%;
+  :root[class='dark'] {
+    --color-white: 255, 255, 255, 85%;
 
-		--color-gray: 23 24 24;
-		--color-gray-100: 14 14 15;
-		--color-gray-200: 36 36 37;
-		--color-gray-300: 51 51 53;
-		--color-gray-700: 226 232 240;
+    --color-gray: 23 24 24;
+    --color-gray-100: 14 14 15;
+    --color-gray-200: 36 36 37;
+    --color-gray-300: 51 51 53;
+    --color-gray-700: 226 232 240;
 
-		--color-skeleton: 46 46 46;
+    --color-skeleton: 46 46 46;
 
-		@apply !text-white;
+    @apply !text-white;
 
-		* {
-			@apply !shadow-none;
-		}
-	}
+    * {
+      @apply !shadow-none;
+    }
+  }
 
-	body {
-		@apply font-inter tabular-nums;
-	}
+  body {
+    @apply font-inter tabular-nums;
+  }
 
-	div {
-		@apply focus:!outline-none;
-	}
+  div {
+    @apply focus:!outline-none;
+  }
 
-	button,
-	input {
-		@apply tabular-nums;
-	}
+  button,
+  input {
+    @apply tabular-nums;
+  }
 
-	.section {
-		@apply px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg shadow shadow-gray-300;
-	}
+  .section {
+    @apply px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg shadow shadow-gray-300;
+  }
 
-	section {
-		@apply section;
-	}
+  section {
+    @apply section;
+  }
 
-	.prefab {
-		@apply px-6 py-3 rounded-lg text-lg border-3 disabled:opacity-50 dark:disabled:opacity-70;
-	}
+  input {
+    @apply w-full px-6 py-3 bg-gray-100 rounded-lg text-lg border-3 border-gray-300 disabled:opacity-50 dark:disabled:opacity-70;
+  }
 
-	input {
-		@apply prefab w-full bg-gray-100 border-gray-300;
-	}
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition:
+      background-color 600000s 0s,
+      color 600000s 0s;
+  }
+  input[data-autocompleted] {
+    background-color: var(--color-gray-100) !important;
+  }
 
-	input:-webkit-autofill,
-	input:-webkit-autofill:focus {
-		transition: background-color 600000s 0s, color 600000s 0s;
-	}
-	input[data-autocompleted] {
-		background-color: var(--color-gray-100) !important;
-	}
+  .btn {
+    @apply px-6 py-3 rounded-lg text-lg font-semibold tracking-wide disabled:opacity-50 dark:disabled:opacity-70 shadow shadow-gray-300 transition-colors duration-200 ease-in-out;
+  }
 
-	.btn {
-		@apply prefab font-semibold tracking-wide;
-	}
+  .btn-primary {
+    @apply btn bg-green hover:bg-green-dark disabled:hover:bg-green text-white dark:text-black;
+  }
 
-	.btn-primary {
-		@apply btn bg-green hover:bg-green-dark disabled:hover:bg-green border-green-600 text-white dark:text-black;
-	}
+  .btn-secondary {
+    @apply btn bg-gray-200 hover:bg-gray-300 disabled:hover:bg-gray-200 text-black dark:text-white;
+  }
 
-	.btn-secondary {
-		@apply btn bg-white hover:bg-gray-200 disabled:hover:bg-white text-black dark:hover:text-white disabled:dark:hover:text-black border-black-dark;
-	}
+  .btn-danger {
+    @apply btn bg-red hover:bg-red-dark disabled:hover:bg-red text-white;
+  }
 
-	.btn-danger {
-		@apply btn bg-red hover:bg-red-dark disabled:hover:bg-red text-white border-red-700;
-	}
-
-	.tag {
-		@apply px-4 py-2 rounded-md font-semibold;
-	}
+  .tag {
+    @apply px-4 py-2 rounded-md font-semibold shadow shadow-gray-300 transition-colors duration-200 ease-in-out;
+  }
 }

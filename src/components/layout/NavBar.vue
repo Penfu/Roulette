@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth'
 
-import { HomeIcon, TrophyIcon, BanknotesIcon } from "@heroicons/vue/24/outline";
+import { HomeIcon, TrophyIcon, BanknotesIcon } from '@heroicons/vue/24/outline'
 
-import DarkModeSwitch from "@/components/layout/DarkModeSwitch.vue";
-import DropdownMenu from "@/components/layout/DropdownMenu.vue";
+import DarkModeSwitch from '@/components/layout/DarkModeSwitch.vue'
+import DropdownMenu from '@/components/layout/DropdownMenu.vue'
 
-const auth = useAuthStore();
+const auth = useAuthStore()
 </script>
 
 <template>
   <div>
     <nav
-      class="h-20 px-4 flex flex-row justify-center items-center gap-4 text-gray-700 bg-gray xs:rounded-b-lg shadow shadow-gray-300"
+      class="h-[4.5rem] px-4 flex flex-row justify-center items-center gap-4 text-gray-700 bg-gray xs:rounded-b-lg shadow shadow-gray-300"
     >
       <!-- Title -->
       <RouterLink to="/" class="flex justify-center items-center gap-x-2 text-lg">

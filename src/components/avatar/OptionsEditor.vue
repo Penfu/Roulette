@@ -16,7 +16,7 @@ const store = useAvatarStore();
         <Tab
           v-for="(_option, i) in store.availableOptions"
           :key="i"
-          class="tag bg-gray-200 enabled:hover:bg-gray-100 ui-selected:outline outline-3 outline-green"
+          class="tag bg-gray-200 enabled:hover:bg-gray-300 ui-selected:outline outline-3 outline-green"
         >
           {{ capitalCase(i) }}
         </Tab>

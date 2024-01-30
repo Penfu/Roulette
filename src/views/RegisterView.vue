@@ -1,86 +1,86 @@
 <script setup lang="ts">
-import { ref, computed, nextTick } from "vue";
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import router from "@/router";
+import { ref, computed, nextTick } from 'vue'
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
+import router from '@/router'
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth'
 
-import StepBtn from "@/components/register/StepBtn.vue";
-import NameField from "@/components/register/NameField.vue";
-import EmailField from "@/components/register/EmailField.vue";
-import PasswordField from "@/components/register/PasswordField.vue";
-import PendingButton from "@/components/PendingButton.vue";
+import StepBtn from '@/components/register/StepBtn.vue'
+import NameField from '@/components/register/NameField.vue'
+import EmailField from '@/components/register/EmailField.vue'
+import PasswordField from '@/components/register/PasswordField.vue'
+import PendingButton from '@/components/PendingButton.vue'
 
-const { register } = useAuthStore();
+const { register } = useAuthStore()
 
-const selectedTab = ref(0);
+const selectedTab = ref(0)
 
 const changeTab = (index: number) => {
-  selectedTab.value = index;
-};
+  selectedTab.value = index
+}
 
 const user = ref({
-  name: "",
-  email: "",
-  password: "",
-  passwordConfirmation: "",
-});
+  name: '',
+  email: '',
+  password: '',
+  passwordConfirmation: ''
+})
 
 type Errors = {
-  name: string[];
-  email: string[];
-  password: string[];
-};
+  name: string[]
+  email: string[]
+  password: string[]
+}
 
 const errors = ref<Errors>({
   name: [],
   email: [],
-  password: [],
-});
+  password: []
+})
 
-const isPending = ref(false);
-const isLastStep = computed(() => selectedTab.value === 2);
+const isPending = ref(false)
+const isLastStep = computed(() => selectedTab.value === 2)
 const canSubmit = computed(() => {
   return (
     user.value.name.length > 0 &&
     user.value.email.length > 0 &&
     user.value.password.length > 0 &&
     user.value.passwordConfirmation.length > 0
-  );
-});
+  )
+})
 
 const handlePreviousStep = () => {
   if (selectedTab.value > 0) {
-    selectedTab.value--;
+    selectedTab.value--
   }
-};
+}
 
 const handleNextStep = () => {
   if (canSubmit.value) {
-    handleRegister();
+    handleRegister()
   } else {
-    selectedTab.value++;
+    selectedTab.value++
   }
-};
+}
 
 const handleRegister = async () => {
-  isPending.value = true;
-  const response = await register(user.value.name, user.value.email, user.value.password);
+  isPending.value = true
+  const response = await register(user.value.name, user.value.email, user.value.password)
 
   if (response.success) {
     nextTick(() => {
-      router.push("/");
-    });
+      router.push('/')
+    })
   } else {
-    isPending.value = false;
-    errors.value = response.errors as Errors;
+    isPending.value = false
+    errors.value = response.errors as Errors
   }
-};
+}
 </script>
 
 <template>
   <main class="flex justify-center items-center">
-    <section class="w-full max-w-xl py-16 space-y-24">
+    <section class="w-full sm:max-w-xl py-12 sm:py-16 space-y-12 sm:space-y-24">
       <h2 class="text-center text-5xl font-semibold uppercase">Register</h2>
 
       <div class="h-[36rem] flex flex-col space-y-8">
@@ -90,7 +90,7 @@ const handleRegister = async () => {
           class="grow flex flex-col space-y-14"
         >
           <TabGroup :selectedIndex="selectedTab" @change="changeTab">
-            <TabList class="flex justify-center space-x-6 md:space-x-8">
+            <TabList class="flex justify-center space-x-8">
               <Tab as="template" v-slot="{ selected }">
                 <StepBtn
                   :index="0"
@@ -142,7 +142,7 @@ const handleRegister = async () => {
               v-if="selectedTab > 0"
               type="button"
               @click="handlePreviousStep"
-              class="btn-secondary w-full transition-width duration-200 ease-in-out"
+              class="btn-secondary w-full transition-all duration-200 ease-in-out"
               :class="[isLastStep ? 'xs:w-1/3' : 'xs:w-1/2']"
             >
               Back
@@ -152,14 +152,14 @@ const handleRegister = async () => {
               :pending="isPending"
               :disabled="isLastStep && !canSubmit"
               @click="handleNextStep()"
-              class="btn-primary w-full transition-width duration-200 ease-in-out"
+              class="btn-primary w-full transition-all duration-200 ease-in-out"
               :class="{
                 'xs:w-full': selectedTab === 0,
                 'xs:w-1/2': selectedTab === 1,
-                'xs:w-2/3': isLastStep,
+                'xs:w-2/3': isLastStep
               }"
             >
-              {{ isLastStep ? "Register" : "Next Step" }}
+              {{ isLastStep ? 'Register' : 'Next Step' }}
             </PendingButton>
           </div>
         </form>

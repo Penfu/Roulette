@@ -10,7 +10,7 @@ defineProps<{
 <template>
   <button type="button" class="flex items-center space-x-2 focus:outline-none">
     <span
-      class="w-12 h-12 flex items-center justify-center text-lg font-semibold rounded-lg shadow shadow-gray-300"
+      class="btn w-12 h-12 flex items-center justify-center"
       :class="[
         { [hasError ? 'bg-red' : 'bg-green']: selected },
         { [hasError ? 'bg-red-light hover:bg-red bg-opacity-80 shadow-red' : 'bg-gray-200 hover:bg-gray-300']: !selected },
@@ -19,7 +19,7 @@ defineProps<{
     >
       {{ index + 1 }}
     </span>
-    <span class="hidden md:block text-md text-gray-700">
+    <span class="hidden sm:block text-gray-700">
       {{ name }}
     </span>
   </button>
