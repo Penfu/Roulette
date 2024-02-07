@@ -88,7 +88,7 @@ const handleResetBalance = () => {
 
       <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
         <span
-          class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded box-border border-3 border-gray-200 shadow shadow-gray-300"
+          class="px-2 md:px-4 h-11 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded border-3 border-gray-300 shadow shadow-gray-300"
         >
           {{ balanceToDisplay }}
         </span>

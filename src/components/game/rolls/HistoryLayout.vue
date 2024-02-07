@@ -15,19 +15,13 @@ const md = breakpoints.smaller("md");
 
 <template>
   <div class="p-2 flex space-x-2">
-    <template v-if="!history">
-      <div
-        v-for="x in md ? 5 : 10"
-        :key="x"
-        class="flex justify-center items-center text-center h-12 w-12 bg-skeleton rounded shadow animate-pulse"
-      />
+    <template v-if="history">
+      <HistoryCard v-for="roll in history.slice(0, md ? 5 : 10)" :key="roll.id" :roll="roll" />
     </template>
     <template v-else>
-      <HistoryCard
-        v-for="roll in md ? history.slice(0, 5) : history.slice(0, 10)"
-        :key="roll.id"
-        :roll="roll"
-      />
+      <!-- Skeleton -->
+      <span v-for="x in md ? 5 : 10" :key="x"
+        class="p-5 flex justify-center items-center text-center bg-skeleton rounded shadow animate-pulse" />
     </template>
   </div>
 </template>

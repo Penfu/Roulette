@@ -61,7 +61,7 @@
   }
 
   .section {
-    @apply px-4 sm:px-8 py-3 sm:py-6 bg-gray rounded-lg shadow shadow-gray-300;
+    @apply px-4 sm:px-8 py-2 sm:py-6 bg-gray rounded-lg shadow shadow-gray-300;
   }
 
   section {
@@ -69,7 +69,7 @@
   }
 
   input {
-    @apply w-full px-6 py-3 bg-gray-100 rounded-lg text-lg border-3 border-gray-300 disabled:opacity-50 dark:disabled:opacity-70;
+    @apply w-full px-6 py-2 bg-gray-100 rounded-lg text-lg border-3 border-gray-300 disabled:opacity-50 dark:disabled:opacity-70;
   }
 
   input:-webkit-autofill,
@@ -83,7 +83,7 @@
   }
 
   .btn {
-    @apply px-6 py-3 rounded-lg text-lg font-semibold tracking-wide disabled:opacity-50 dark:disabled:opacity-70 shadow shadow-gray-300 transition-colors duration-200 ease-in-out;
+    @apply px-6 py-2 rounded-lg text-lg font-semibold tracking-wide disabled:opacity-50 dark:disabled:opacity-70 shadow shadow-gray-300 transition-colors duration-200 ease-in-out;
   }
 
   .btn-primary {
@@ -99,6 +99,6 @@
   }
 
   .tag {
-    @apply px-4 py-2 rounded-md font-semibold shadow shadow-gray-300 transition-colors duration-200 ease-in-out;
+    @apply px-3 py-1 rounded-md font-semibold shadow shadow-gray-300 transition-colors duration-200 ease-in-out;
   }
 }

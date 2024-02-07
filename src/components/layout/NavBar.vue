@@ -12,7 +12,7 @@ const auth = useAuthStore()
 <template>
   <div>
     <nav
-      class="h-[4.5rem] px-4 flex flex-row justify-center items-center gap-4 text-gray-700 bg-gray xs:rounded-b-lg shadow shadow-gray-300"
+      class="h-14 px-4 flex flex-row justify-center items-center gap-4 text-gray-700 bg-gray xs:rounded-b-lg shadow shadow-gray-300"
     >
       <!-- Title -->
       <RouterLink to="/" class="flex justify-center items-center gap-x-2 text-lg">
@@ -22,13 +22,13 @@ const auth = useAuthStore()
 
       <!-- Links -->
       <div class="grow w-full">
-        <div class="px-4 w-full flex flex-row items-center space-x-4 border-l border-gray-300">
+        <div class="px-4 w-full flex flex-row items-center space-x-4  text-lg font-medium border-l border-gray-300">
           <RouterLink
             to="/leaderboard"
-            class="p-3 flex justify-center items-center gap-x-2 text-lg hover:bg-gray-200 rounded"
+            class="p-2 flex justify-center items-center gap-x-2 text-lg hover:bg-gray-200 rounded"
           >
             <TrophyIcon class="md:hidden w-6 h-6" />
-            <span class="hidden md:block text-xl font-medium">Leaderboard</span>
+            <span class="hidden md:block">Leaderboard</span>
           </RouterLink>
         </div>
       </div>
@@ -36,9 +36,9 @@ const auth = useAuthStore()
       <!-- User Info / Actions -->
       <div class="flex items-center gap-2 md:gap-4">
         <!-- Balance -->
-        <span v-show="auth.isAuth" class="hidden sm:flex p-3 justify-center items-center gap-2">
-          <BanknotesIcon class="h-8 w-8 text-green" />
-          <span class="text-xl">{{ auth.user.balance }}</span>
+        <span v-show="auth.isAuth" class="hidden sm:flex p-2 justify-center items-center gap-2">
+          <BanknotesIcon class="h-6 w-6 text-green" />
+          <span class="text-lg">{{ auth.user.balance }}</span>
         </span>
 
         <DarkModeSwitch />

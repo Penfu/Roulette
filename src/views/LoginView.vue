@@ -26,8 +26,8 @@ const handleLogin = async () => {
 
 <template>
   <main class="flex justify-center items-center">
-    <section class="w-full sm:max-w-xl py-12 sm:py-16 space-y-12 sm:space-y-24">
-      <h2 class="text-center text-5xl font-semibold uppercase">Login</h2>
+    <section class="w-full sm:max-w-xl py-12 space-y-12 sm:space-y-20">
+      <h2 class="text-4xl sm:text-5xl text-center font-semibold uppercase">Login</h2>
 
       <div class="h-[36rem] flex flex-col space-y-8">
         <div class="h-full flex flex-col space-y-8">

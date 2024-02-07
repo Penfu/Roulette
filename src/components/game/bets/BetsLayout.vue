@@ -58,7 +58,7 @@ const handleMakeBet = () => {
       @mouseover="hovered = true"
       @mouseout="hovered = false"
       :disable="!canBet"
-      class="py-4 w-full font-semibold text-white text-2xl rounded shadow transition-transform duration-300 ease-in-out cursor-default"
+      class="py-3 w-full font-semibold text-white text-2xl rounded shadow transition-transform duration-300 ease-in-out cursor-default"
       :class="[classFromColor(color, canBet), { 'hover:scale-105 cursor-pointer': canBet }]"
     >
       x {{ value }}

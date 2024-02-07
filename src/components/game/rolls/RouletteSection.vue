@@ -83,13 +83,13 @@ watch(
         ref="wheel"
         src="@/assets/roulette.png"
         alt="Roulette"
-        class="w-60 h-60 md:w-80 md:h-80 object-contain transition-width duration-500"
+        class="w-56 h-56 md:w-72 md:h-72 object-contain transition-width duration-500"
       />
     </div>
 
     <div class="basis-1/3 flex flex-col justify-end space-y-4 lg:space-y-8 xl:space-y-0">
       <div
-        class="h-14 flex grow justify-center items-center text-center text-3xl xl:text-5xl font-semibold uppercase"
+        class="h-14 flex grow justify-center items-center text-center text-2xl xl:text-4xl font-semibold uppercase"
       >
         <span v-show="step === RollStep.BET">{{ message }}</span>
         <span v-show="step === RollStep.ROLL"> Rolling... </span>

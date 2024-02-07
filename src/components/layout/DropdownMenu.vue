@@ -11,7 +11,7 @@ const auth = useAuthStore();
   <Menu as="div" class="xs:relative">
     <MenuButton
       aria-label="User Menu"
-      class="btn p-3 flex justify-center bg-gray-200 hover:bg-gray-300"
+      class="btn p-2 flex justify-center bg-gray-200 hover:bg-gray-300"
     >
       <UserIcon class="w-6 h-6" />
     </MenuButton>

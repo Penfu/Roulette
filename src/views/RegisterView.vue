@@ -5,7 +5,7 @@ import router from '@/router'
 
 import { useAuthStore } from '@/stores/auth'
 
-import StepBtn from '@/components/register/StepBtn.vue'
+import StepButton from '@/components/register/StepButton.vue'
 import NameField from '@/components/register/NameField.vue'
 import EmailField from '@/components/register/EmailField.vue'
 import PasswordField from '@/components/register/PasswordField.vue'
@@ -80,8 +80,8 @@ const handleRegister = async () => {
 
 <template>
   <main class="flex justify-center items-center">
-    <section class="w-full sm:max-w-xl py-12 sm:py-16 space-y-12 sm:space-y-24">
-      <h2 class="text-center text-5xl font-semibold uppercase">Register</h2>
+    <section class="w-full sm:max-w-xl py-12 space-y-12 sm:space-y-20">
+      <h2 class="text-4xl sm:text-5xl text-center font-semibold uppercase">Register</h2>
 
       <div class="h-[36rem] flex flex-col space-y-8">
         <form
@@ -92,7 +92,7 @@ const handleRegister = async () => {
           <TabGroup :selectedIndex="selectedTab" @change="changeTab">
             <TabList class="flex justify-center space-x-8">
               <Tab as="template" v-slot="{ selected }">
-                <StepBtn
+                <StepButton
                   :index="0"
                   :selected="selected"
                   :hasError="errors.name.length > 0"
@@ -100,7 +100,7 @@ const handleRegister = async () => {
                 />
               </Tab>
               <Tab as="template" v-slot="{ selected }">
-                <StepBtn
+                <StepButton
                   :index="1"
                   :selected="selected"
                   :hasError="errors.email.length > 0"
@@ -108,7 +108,7 @@ const handleRegister = async () => {
                 />
               </Tab>
               <Tab as="template" v-slot="{ selected }">
-                <StepBtn
+                <StepButton
                   :index="2"
                   :selected="selected"
                   :hasError="errors.password.length > 0"

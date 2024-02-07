@@ -67,7 +67,7 @@ const handleSaveAmounts = () => {
             v-for="amount in sortedAmountButtons"
             :key="amount.index"
             @click="handleSelectAmountButton(amount.index)"
-            class="px-4 xs:px-6 sm:px-8 py-3 grow font-semibold bg-gray-200 hover:bg-gray-300 rounded shadow shadow-gray-300"
+            class="px-4 xs:px-6 sm:px-8 py-2 grow font-semibold bg-gray-200 hover:bg-gray-300 rounded shadow shadow-gray-300"
             :class="{
               'outline outline-3 outline-green': selectedButtonIndex === amount.index,
             }"
