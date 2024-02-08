@@ -83,7 +83,7 @@ watch(
         ref="wheel"
         src="@/assets/roulette.png"
         alt="Roulette"
-        class="w-56 h-56 md:w-72 md:h-72 object-contain transition-width duration-500"
+        class="w-60 h-60 md:w-72 md:h-72 object-contain transition-width duration-500"
       />
     </div>
 

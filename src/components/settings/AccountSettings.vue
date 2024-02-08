@@ -17,7 +17,7 @@ const userCanEdit = computed(() => !auth.user.provider);
 
 <template>
   <div class="space-y-5">
-    <h1 class="text-4xl font-bold">Account Settings</h1>
+    <h2>Account Settings</h2>
 
     <div v-if="auth.loading" class="h-64 w-full bg-gray-200 rounded-lg animate-pulse" />
     <div v-else class="space-y-8">

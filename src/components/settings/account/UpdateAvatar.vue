@@ -30,7 +30,7 @@ const canSubmit = computed(() => !isPending.value && !isFirstAndDefault.value &&
 
 <template>
   <section class="space-y-4">
-    <h2 class="text-xl font-semibold">Change your avatar</h2>
+    <h4>Change your avatar</h4>
 
     <form @submit.prevent="mutate()" class="space-y-2">
       <div class="space-y-6">

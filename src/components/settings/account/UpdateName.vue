@@ -23,7 +23,7 @@ const canSubmit = computed(() => !isPending.value && name.value && name.value !=
 
 <template>
   <section class="space-y-4">
-    <h2 class="text-xl font-semibold">Change your name</h2>
+    <h4>Change your name</h4>
 
     <form @submit.prevent="mutate()" class="space-y-2">
       <p v-if="isError" class="text-red">{{ error?.message }}</p>

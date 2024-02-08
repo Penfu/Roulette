@@ -72,9 +72,8 @@ const handleResetBalance = () => {
 </script>
 
 <template>
-  <div class="space-y-4">
-    <h3 class="text-xl font-bold uppercase">Choose an amount</h3>
-
+  <div class="space-y-2">
+    <h4 class="uppercase">Choose an amount</h4>
     <section class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl">
       <div class="w-full flex flex-wrap gap-2">
         <AmountButton

@@ -18,7 +18,7 @@ const { isPending, mutate } = useMutation({
 
 <template>
   <section class="space-y-4">
-    <h2 class="text-xl font-semibold">Provider</h2>
+    <h4>Provider</h4>
 
     <div v-if="auth.user.provider" class="space-y-6">
       <p>

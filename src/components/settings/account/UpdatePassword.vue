@@ -37,7 +37,7 @@ const { isPending, isError, error, mutate } = useMutation({
 
 <template>
   <section class="space-y-4">
-    <h2 class="text-xl font-semibold">Change your password</h2>
+    <h4>Change your password</h4>
 
     <form @submit.prevent="mutate()" class="space-y-2">
       <p v-if="isError || !passwordMatch" class="text-red">

@@ -30,7 +30,7 @@ const canSubmit = computed(
 
 <template>
   <section class="space-y-4">
-    <h2 class="text-xl font-semibold">Change your email</h2>
+    <h4>Change your email</h4>
 
     <form @submit.prevent="mutate()" class="space-y-2">
       <p v-if="isError" class="text-red">{{ error?.message }}</p>

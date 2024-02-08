@@ -23,7 +23,7 @@ const betAverage = computed(() => percent(props.stats?.bet.amount, props.stats?.
 
 <template>
   <section class="space-y-4">
-    <h2 class="text-3xl font-bold">Stats</h2>
+    <h2>Stats</h2>
 
     <div class="space-y-4">
       <!-- Global Stats -->

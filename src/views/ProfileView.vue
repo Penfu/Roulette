@@ -37,10 +37,8 @@ const { isPending, data: user } = useQuery({
           <!-- Description -->
           <div class="py-4 flex flex-col">
             <div class="grow">
-              <h3 class="text-3xl font-bold">
-                {{ user.name }}
-              </h3>
-              <h4>{{ user.email }}</h4>
+              <h3>{{ user.name }}</h3>
+              <h4 class="font-normal">{{ user.email }}</h4>
             </div>
             <span>Joined {{ moment(user.createdAt).fromNow() }}</span>
           </div>

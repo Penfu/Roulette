@@ -47,7 +47,7 @@ const closeModal = () => {
     class="section bg-red-100 dark:bg-opacity-90 border-3 border-red-dark space-y-4"
   >
     <div class="space-y-2">
-      <h2 class="text-xl text-black font-semibold">Delete your account</h2>
+      <h4 class="text-xl text-black font-semibold">Delete your account</h4>
       <p>
         <span class="text-red-dark font-semibold">
           This action is irreversible. All your data will be lost.

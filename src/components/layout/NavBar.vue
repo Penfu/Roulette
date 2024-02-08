@@ -17,7 +17,7 @@ const auth = useAuthStore()
       <!-- Title -->
       <RouterLink to="/" class="flex justify-center items-center gap-x-2 text-lg">
         <HomeIcon class="md:hidden w-6 h-6" />
-        <span class="hidden md:block px-2 text-2xl font-bold uppercase">Roll</span>
+        <h1 class="hidden md:block px-2 text-2xl font-bold uppercase">Roll</h1>
       </RouterLink>
 
       <!-- Links -->
