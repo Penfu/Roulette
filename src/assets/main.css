@@ -8,10 +8,10 @@
   :root {
     --color-white: 255, 255, 255, 100%;
 
-    --color-gray: 255 255 255;
-    --color-gray-100: 241 245 249;
-    --color-gray-200: 231 235 242;
-    --color-gray-300: 203 213 225;
+    --color-gray: 252 252 254;
+    --color-gray-100: 236 240 244;
+    --color-gray-200: 223 227 235;
+    --color-gray-300: 205 215 227;
     --color-gray-700: 64 64 64;
 
     --color-green: 74 222 128;

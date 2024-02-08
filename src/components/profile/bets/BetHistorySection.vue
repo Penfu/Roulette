@@ -54,6 +54,6 @@ const hasBets = computed(() => bets.value?.pages[0].data.data.length > 0);
       </div>
       <p v-else class="w-full">This user has no bets yet.</p>
     </div>
-    <div v-else class="w-full h-8 bg-skeleton rounded-lg animate-pulse"></div>
+    <span v-else class="w-full h-12 bg-skeleton rounded-lg animate-pulse" />
   </section>
 </template>

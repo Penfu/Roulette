@@ -91,7 +91,7 @@ const searchUsers = computed(() =>
           v-for="user in searchUsers"
           :key="user.rank"
           :to="`/profile/${user.name}`"
-            class="w-full px-4 py-2 flex space-x-8 even:bg-gray-200 rounded-lg hover:bg-green-200 dark:hover:bg-green-600 overflow-clip"
+            class="w-full px-4 py-3 flex space-x-8 even:bg-gray-200 rounded-lg hover:bg-green-200 dark:hover:bg-green-600 overflow-clip"
         >
           <span class="w-6">{{ user.rank }}</span>
           <span class="grow">{{ user.name }}</span>
@@ -102,7 +102,7 @@ const searchUsers = computed(() =>
         <div
           v-for="i in 3"
           :key="i"
-          class="w-full px-4 py-2 sm:py-4 flex space-x-8 even:bg-gray-200 rounded-lg animate-pulse"
+          class="w-full px-4 py-3 sm:py-4 flex space-x-8 even:bg-gray-200 rounded-lg animate-pulse"
         >
           <span class="w-6 h-5 bg-skeleton rounded-lg"></span>
           <div class="grow flex">
