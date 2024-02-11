@@ -1,4 +1,4 @@
-import type Roll from "./roll";
+import type Roll from './roll';
 
 export default interface Bet {
   id?: number;
@@ -8,4 +8,4 @@ export default interface Bet {
   createdAt?: Date;
   isWin?: boolean;
   roll?: Roll;
-};
+}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BetAmounts from "@/components/settings/game/BetAmounts.vue";
+import BetAmounts from '@/components/settings/game/BetAmounts.vue';
 </script>
 
 <template>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import { capitalCase } from "change-case";
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import { capitalCase } from 'change-case';
 
-import { useAvatarStore } from "@/stores/avatar";
+import { useAvatarStore } from '@/stores/avatar';
 
-import Avatar from "@/components/avatar/Avatar.vue";
+import AvatarImg from '@/components/avatar/AvatarImg.vue';
 
 const store = useAvatarStore();
 </script>
@@ -31,9 +31,9 @@ const store = useAvatarStore();
               type="button"
               @click="store.selectedOptions[k] = [value]"
               class="outline-3 outline-offset-4 outline-green-400 rounded-lg"
-              :class="{ 'outline': store.selectedOptions[k]?.includes(value) }"
+              :class="{ outline: store.selectedOptions[k]?.includes(value) }"
             >
-              <Avatar
+              <AvatarImg
                 class="w-20 md:w-24"
                 :options="{ ...store.selectedOptions, [k]: [value] }"
               />

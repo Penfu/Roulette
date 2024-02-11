@@ -1,10 +1,10 @@
-import { computed, ref } from "vue";
-import { defineStore } from "pinia";
-import axios from "@/axios.config";
+import { computed, ref } from 'vue';
+import { defineStore } from 'pinia';
+import axios from '@/axios.config';
 
-import type User from "@/interfaces/user";
+import type User from '@/interfaces/user';
 
-export const useAuthStore = defineStore("auth", () => {
+export const useAuthStore = defineStore('auth', () => {
   const user = ref({} as User);
   const token = ref(null as string | null);
 
@@ -12,14 +12,14 @@ export const useAuthStore = defineStore("auth", () => {
   const loading = computed(() => isAuth.value && !user.value.id);
 
   const csrfToken = async () => {
-    await axios.get(import.meta.env.VITE_APP_URL + "/sanctum/csrf-cookie");
+    await axios.get(import.meta.env.VITE_APP_URL + '/sanctum/csrf-cookie');
   };
 
   const register = async (name: string, email: string, password: string) => {
     await csrfToken();
 
     try {
-      const response = await axios.post("/register", {
+      const response = await axios.post('/register', {
         name,
         email,
         password,
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore("auth", () => {
     await csrfToken();
 
     try {
-      const response = await axios.post("/login", { email, password });
+      const response = await axios.post('/login', { email, password });
       logUser(response.data.user, response.data.token);
 
       return { success: true };
@@ -50,8 +50,8 @@ export const useAuthStore = defineStore("auth", () => {
   };
 
   const loginFromToken = async () => {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
-    const response = await axios.get("/users/me");
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token.value;
+    const response = await axios.get('/users/me');
 
     user.value = response.data;
   };
@@ -72,9 +72,9 @@ export const useAuthStore = defineStore("auth", () => {
       });
       logUser(response.data.user, response.data.token);
 
-      return { success: true, message: "success" };
+      return { success: true, message: 'success' };
     } catch (error) {
-      return { success: false, message: "error" };
+      return { success: false, message: 'error' };
     }
   };
 
@@ -82,8 +82,8 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = {} as User;
     token.value = null;
 
-    localStorage.removeItem("token");
-    delete axios.defaults.headers.common["Authorization"];
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
 
     location.reload();
   };
@@ -92,13 +92,13 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = newUser;
     token.value = newToken;
 
-    localStorage.setItem("token", newToken);
-    axios.defaults.headers.common["Authorization"] = "Bearer " + token.value;
+    localStorage.setItem('token', newToken);
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token.value;
   };
 
   // Auto login
-  if (localStorage.getItem("token")) {
-    token.value = localStorage.getItem("token");
+  if (localStorage.getItem('token')) {
+    token.value = localStorage.getItem('token');
     loginFromToken();
   }
 

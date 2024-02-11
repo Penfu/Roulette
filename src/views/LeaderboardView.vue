@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useQuery } from "@tanstack/vue-query";
-import axios from "@/axios.config";
+import { ref, computed } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
+import axios from '@/axios.config';
 
-import type User from "@/interfaces/user";
+import type User from '@/interfaces/user';
 
-const search = ref("");
+const search = ref('');
 
-const fetchUsers = (): Promise<User[]> => axios.get("/users").then((res) => res.data);
+const fetchUsers = (): Promise<User[]> => axios.get('/users').then((res) => res.data);
 
 const { isPending, data: users } = useQuery({
-  queryKey: ["users"],
+  queryKey: ['users'],
   queryFn: () => fetchUsers(),
 });
 
@@ -24,14 +24,12 @@ const rankedUsers = computed(() =>
         balance: user.balance,
         rank: index + 1,
       };
-    })
+    }),
 );
 
 const podiumUsers = computed(() => rankedUsers.value?.slice(0, 3));
 const searchUsers = computed(() =>
-  rankedUsers.value
-    ?.slice(3)
-    ?.filter((user) => user.name.toLowerCase().includes(search.value.toLowerCase()))
+  rankedUsers.value?.slice(3)?.filter((user) => user.name.toLowerCase().includes(search.value.toLowerCase())),
 );
 </script>
 
@@ -91,7 +89,7 @@ const searchUsers = computed(() =>
           v-for="user in searchUsers"
           :key="user.rank"
           :to="`/profile/${user.name}`"
-            class="w-full px-4 py-3 flex space-x-8 even:bg-gray-200 rounded-lg hover:bg-green-200 dark:hover:bg-green-600 overflow-clip"
+          class="w-full px-4 py-3 flex space-x-8 even:bg-gray-200 rounded-lg hover:bg-green-200 dark:hover:bg-green-600 overflow-clip"
         >
           <span class="w-6">{{ user.rank }}</span>
           <span class="grow">{{ user.name }}</span>

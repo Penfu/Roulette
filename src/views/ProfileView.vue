@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
-import axios from "@/axios.config";
-import moment from "moment";
+import { useQuery } from '@tanstack/vue-query';
+import axios from '@/axios.config';
+import moment from 'moment';
 
-import type User from "@/interfaces/user";
-import type Stats from "@/interfaces/stats";
+import type User from '@/interfaces/user';
+import type Stats from '@/interfaces/stats';
 
-import Avatar from "@/components/avatar/Avatar.vue";
-import UserStats from "@/components/profile/stats/StatsSection.vue";
-import BetsHistory from "@/components/profile/bets/BetHistorySection.vue";
+import AvatarImg from '@/components/avatar/AvatarImg.vue';
+import UserStats from '@/components/profile/stats/StatsSection.vue';
+import BetsHistory from '@/components/profile/bets/BetHistorySection.vue';
 
 const props = defineProps<{
   name: string;
@@ -18,11 +18,10 @@ interface UserWithStats extends User {
   stats: Stats;
 }
 
-const fetchUser = (): Promise<UserWithStats> =>
-  axios.get(`/users/${props.name}`).then((res) => res.data);
+const fetchUser = (): Promise<UserWithStats> => axios.get(`/users/${props.name}`).then((res) => res.data);
 
-const { isPending, data: user } = useQuery({
-  queryKey: ["profiles", props],
+const { data: user } = useQuery({
+  queryKey: ['profiles', props],
   queryFn: () => fetchUser(),
 });
 </script>
@@ -32,7 +31,7 @@ const { isPending, data: user } = useQuery({
     <section>
       <div v-if="user" class="flex flex-col md:flex-row gap-8">
         <div class="grow h-full flex flex-col sm:flex-row items-center sm:items-stretch gap-8">
-          <Avatar class="w-44" :options="user.avatar" />
+          <AvatarImg class="w-44" :options="user.avatar" />
 
           <!-- Description -->
           <div class="py-4 flex flex-col">

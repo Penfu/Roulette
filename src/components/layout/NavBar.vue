@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth';
 
-import { HomeIcon, TrophyIcon, BanknotesIcon } from '@heroicons/vue/24/outline'
+import { HomeIcon, TrophyIcon, BanknotesIcon } from '@heroicons/vue/24/outline';
 
-import DarkModeSwitch from '@/components/layout/DarkModeSwitch.vue'
-import DropdownMenu from '@/components/layout/DropdownMenu.vue'
+import DarkModeSwitch from '@/components/layout/DarkModeSwitch.vue';
+import DropdownMenu from '@/components/layout/DropdownMenu.vue';
 
-const auth = useAuthStore()
+const auth = useAuthStore();
 </script>
 
 <template>
@@ -22,7 +22,7 @@ const auth = useAuthStore()
 
       <!-- Links -->
       <div class="grow w-full">
-        <div class="px-4 w-full flex flex-row items-center space-x-4  text-lg font-medium border-l border-gray-300">
+        <div class="px-4 w-full flex flex-row items-center space-x-4 text-lg font-medium border-l border-gray-300">
           <RouterLink
             to="/leaderboard"
             class="p-2 flex justify-center items-center gap-x-2 text-lg hover:bg-gray-200 rounded"
@@ -47,9 +47,7 @@ const auth = useAuthStore()
         <DropdownMenu v-if="auth.isAuth" />
 
         <!-- Login btn -->
-        <RouterLink v-else to="/login" class="btn text-base bg-gray-200 hover:bg-gray-300">
-          Login
-        </RouterLink>
+        <RouterLink v-else to="/login" class="btn text-base bg-gray-200 hover:bg-gray-300">Login</RouterLink>
       </div>
     </nav>
   </div>

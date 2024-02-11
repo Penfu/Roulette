@@ -1,14 +1,14 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
-import { adventurer } from "@dicebear/collection";
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
+import { adventurer } from '@dicebear/collection';
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth';
 
-import { getSchemaOptions } from "@/utils/getSchemaOptions";
+import { getSchemaOptions } from '@/utils/getSchemaOptions';
 
-import type avatarOptions from "@/interfaces/avatarOptions";
+import type avatarOptions from '@/interfaces/avatarOptions';
 
-export const useAvatarStore = defineStore("avatar", () => {
+export const useAvatarStore = defineStore('avatar', () => {
   const auth = useAuthStore();
   const options = getSchemaOptions(adventurer.schema);
 
@@ -17,9 +17,9 @@ export const useAvatarStore = defineStore("avatar", () => {
     backgroundColor: options.backgroundColor,
     hair: options.hair,
     hairColor: options.hairColor,
-    mouth: { ...options.mouth, values: ["", ...options.mouth.values] },
-    eyes: { ...options.eyes, values: ["", ...options.eyes.values] },
-    eyebrows: { ...options.eyebrows, values: ["", ...options.eyebrows.values] },
+    mouth: { ...options.mouth, values: ['', ...options.mouth.values] },
+    eyes: { ...options.eyes, values: ['', ...options.eyes.values] },
+    eyebrows: { ...options.eyebrows, values: ['', ...options.eyebrows.values] },
   };
 
   const defaultOptions = {
@@ -32,9 +32,7 @@ export const useAvatarStore = defineStore("avatar", () => {
     eyebrows: [availableOptions.eyebrows.values[0]],
   } as avatarOptions;
 
-  const selectedOptions = ref<avatarOptions>(
-    auth.user.avatar ? { ...auth.user?.avatar } : { ...defaultOptions }
-  );
+  const selectedOptions = ref<avatarOptions>(auth.user.avatar ? { ...auth.user?.avatar } : { ...defaultOptions });
 
   return {
     availableOptions,

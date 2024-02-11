@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useMutation } from "@tanstack/vue-query";
-import axios from "@/axios.config";
+import { ref, computed } from 'vue';
+import { useMutation } from '@tanstack/vue-query';
+import axios from '@/axios.config';
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth';
 
-import PendingButton from "@/components/PendingButton.vue";
+import PendingButton from '@/components/PendingButton.vue';
 
 const auth = useAuthStore();
 
 const name = ref(auth.user.name);
 
 const { isPending, isError, error, mutate } = useMutation({
-  mutationFn: () => axios.patch("/users/me/name", { name: name.value }),
+  mutationFn: () => axios.patch('/users/me/name', { name: name.value }),
   onSuccess: (data) => {
     auth.user = data.data;
   },
@@ -33,12 +33,7 @@ const canSubmit = computed(() => !isPending.value && name.value && name.value !=
           <input v-model="name" id="name" type="text" autocomplete="username" />
         </div>
 
-        <PendingButton
-          type="submit"
-          :disabled="!canSubmit"
-          :pending="isPending"
-          class="btn-primary w-full sm:w-auto"
-        >
+        <PendingButton type="submit" :disabled="!canSubmit" :pending="isPending" class="btn-primary w-full sm:w-auto">
           Change name
         </PendingButton>
       </div>

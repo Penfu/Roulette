@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import { storeToRefs } from "pinia";
+import { ref, computed, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 
-import { useAuthStore } from "@/stores/auth";
-import { useGameStore } from "@/stores/game";
+import { useAuthStore } from '@/stores/auth';
+import { useGameStore } from '@/stores/game';
 
-import { Color } from "@/enums/color";
-import { RollStep } from "@/enums/step";
-import type Bet from "@/interfaces/bet";
+import { Color } from '@/enums/color';
+import { RollStep } from '@/enums/step';
+import type Bet from '@/interfaces/bet';
 
-import RollResultBanner from "@/components/game/result/RollResultBanner.vue";
+import RollResultBanner from '@/components/game/result/RollResultBanner.vue';
 
-import RouletteSection from "@/components/game/rolls/RouletteSection.vue";
-import BalanceSection from "@/components/game/balance/BalanceSection.vue";
-import BetSection from "@/components/game/bets/BetSection.vue";
+import RouletteSection from '@/components/game/rolls/RouletteSection.vue';
+import BalanceSection from '@/components/game/balance/BalanceSection.vue';
+import BetSection from '@/components/game/bets/BetSection.vue';
 
 const auth = useAuthStore();
 const { user } = storeToRefs(auth);
@@ -21,22 +21,16 @@ const { user } = storeToRefs(auth);
 const game = useGameStore();
 const { bets, history, timer, step, result } = storeToRefs(game);
 
-const message = ref("");
+const message = ref('');
 
-const myBetOnRed = computed(
-  () => bets.value.red.find((bet: Bet) => bet.user === user.value.name) as Bet
-);
-const myBetOnBlack = computed(
-  () => bets.value.black.find((bet: Bet) => bet.user === user.value.name) as Bet
-);
-const myBetOnGreen = computed(
-  () => bets.value.green.find((bet: Bet) => bet.user === user.value.name) as Bet
-);
+const myBetOnRed = computed(() => bets.value.red.find((bet: Bet) => bet.user === user.value.name) as Bet);
+const myBetOnBlack = computed(() => bets.value.black.find((bet: Bet) => bet.user === user.value.name) as Bet);
+const myBetOnGreen = computed(() => bets.value.green.find((bet: Bet) => bet.user === user.value.name) as Bet);
 
 const hasBet = computed(() => myBetOnRed.value || myBetOnBlack.value || myBetOnGreen.value);
 
 onMounted(async () => {
-  window.Echo.channel("roulette").listen("RollEvent", (e: any) => {
+  window.Echo.channel('roulette').listen('RollEvent', (e: any) => {
     timer.value = e.timer;
     bets.value = {
       red: e.bets.red.map((bet: Bet) => {
@@ -57,8 +51,8 @@ onMounted(async () => {
     result.value = e.result;
 
     switch (e.status) {
-      case "BET":
-        message.value = Math.round(e.timer / 1000) + " seconds left";
+      case 'BET':
+        message.value = Math.round(e.timer / 1000) + ' seconds left';
 
         if (step.value === RollStep.BET) {
           return;
@@ -66,15 +60,15 @@ onMounted(async () => {
 
         step.value = RollStep.BET;
         break;
-      case "ROLL":
+      case 'ROLL':
         if (game.step === RollStep.ROLL) {
           return;
         }
 
         step.value = RollStep.ROLL;
-        message.value = "Rolling";
+        message.value = 'Rolling';
         break;
-      case "DISPLAY_RESULT":
+      case 'DISPLAY_RESULT':
         if (timer.value === 0) {
           step.value = RollStep.RESET;
         }

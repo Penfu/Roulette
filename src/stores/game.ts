@@ -1,13 +1,13 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth';
 
-import { RollStep } from "@/enums/step";
-import type Roll from "@/interfaces/roll";
-import type Bet from "@/interfaces/bet";
+import { RollStep } from '@/enums/step';
+import type Roll from '@/interfaces/roll';
+import type Bet from '@/interfaces/bet';
 
-export const useGameStore = defineStore("game", () => {
+export const useGameStore = defineStore('game', () => {
   const auth = useAuthStore();
 
   const step = ref(RollStep.DEFAULT);
