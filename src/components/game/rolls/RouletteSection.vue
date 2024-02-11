@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { storeToRefs } from "pinia";
-import anime from "animejs";
+import { ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import anime from 'animejs';
 
-import { useGameStore } from "@/stores/game";
+import { useGameStore } from '@/stores/game';
 
-import { RollStep } from "@/enums/step";
-import { classFromColor } from "@/helpers/color";
+import { RollStep } from '@/enums/step';
+import { classFromColor } from '@/helpers/color';
 
-import HistoryLayout from "@/components/game/rolls/HistoryLayout.vue";
-import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
+import HistoryLayout from '@/components/game/rolls/HistoryLayout.vue';
+import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
 
 defineProps<{
   message: string;
@@ -46,7 +46,7 @@ watch(
         targets: wheel.value,
         rotate: 360 * turn - finalAngle,
         duration: 5500,
-        easing: "easeInOutQuad",
+        easing: 'easeInOutQuad',
         paused: false,
       });
     } else if (step === RollStep.RESET) {
@@ -70,7 +70,7 @@ watch(
           duration: 925,
         });
     }
-  }
+  },
 );
 </script>
 
@@ -83,20 +83,15 @@ watch(
         ref="wheel"
         src="@/assets/roulette.png"
         alt="Roulette"
-        class="w-60 h-60 md:w-80 md:h-80 object-contain transition-width duration-500"
+        class="w-60 h-60 md:w-72 md:h-72 object-contain transition-width duration-500"
       />
     </div>
 
     <div class="basis-1/3 flex flex-col justify-end space-y-4 lg:space-y-8 xl:space-y-0">
-      <div
-        class="h-14 flex grow justify-center items-center text-center text-3xl xl:text-5xl font-semibold uppercase"
-      >
+      <div class="h-14 flex grow justify-center items-center text-center text-2xl xl:text-4xl font-semibold uppercase">
         <span v-show="step === RollStep.BET">{{ message }}</span>
-        <span v-show="step === RollStep.ROLL"> Rolling... </span>
-        <div
-          v-if="step === RollStep.DISPLAY_RESULT && result"
-          class="flex items-center justify-center space-x-4"
-        >
+        <span v-show="step === RollStep.ROLL">Rolling...</span>
+        <div v-if="step === RollStep.DISPLAY_RESULT && result" class="flex items-center justify-center space-x-4">
           <span>Result</span>
           <span
             class="h-12 w-12 xl:h-20 xl:w-20 flex items-center justify-center text-white rounded-lg shadow"

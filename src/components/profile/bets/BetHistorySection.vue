@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { useInfiniteQuery } from "@tanstack/vue-query";
-import axios from "@/axios.config";
+import { useInfiniteQuery } from '@tanstack/vue-query';
+import axios from '@/axios.config';
 
-import BetHistory from "@/components/profile/bets/BetHistory.vue";
-import PendingButton from "@/components/PendingButton.vue";
-import { computed } from "vue";
+import BetHistory from '@/components/profile/bets/BetHistory.vue';
+import PendingButton from '@/components/PendingButton.vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
   user: string;
 }>();
 
-const fetchBets = ({ pageParam = 0 }) =>
-  axios.get(`/users/${props.user}/bets`, { params: { cursor: pageParam } });
+const fetchBets = ({ pageParam = 0 }) => axios.get(`/users/${props.user}/bets`, { params: { cursor: pageParam } });
 
 const {
   data: bets,
@@ -20,7 +19,7 @@ const {
   isFetchingNextPage,
   isPending,
 } = useInfiniteQuery({
-  queryKey: ["bets", props],
+  queryKey: ['bets', props],
   queryFn: fetchBets,
   initialPageParam: undefined,
   getNextPageParam: (lastPage: any) => lastPage.data.nextCursor,
@@ -31,7 +30,7 @@ const hasBets = computed(() => bets.value?.pages[0].data.data.length > 0);
 
 <template>
   <section class="flex flex-col space-y-4">
-    <h2 class="text-3xl font-bold">Bets</h2>
+    <h2>Bets</h2>
 
     <div v-if="!isPending">
       <div v-if="hasBets" class="space-y-6">
@@ -54,6 +53,6 @@ const hasBets = computed(() => bets.value?.pages[0].data.data.length > 0);
       </div>
       <p v-else class="w-full">This user has no bets yet.</p>
     </div>
-    <div v-else class="w-full h-8 bg-skeleton rounded-lg animate-pulse"></div>
+    <span v-else class="w-full h-12 bg-skeleton rounded-lg animate-pulse" />
   </section>
 </template>

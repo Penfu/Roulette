@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { storeToRefs } from "pinia";
-import { TransitionRoot } from "@headlessui/vue";
-import anime from "animejs";
+import { ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import { TransitionRoot } from '@headlessui/vue';
+import anime from 'animejs';
 
-import { useSettingsStore } from "@/stores/settings";
-import { useAuthStore } from "@/stores/auth";
-import { useGameStore } from "@/stores/game";
+import { useSettingsStore } from '@/stores/settings';
+import { useAuthStore } from '@/stores/auth';
+import { useGameStore } from '@/stores/game';
 
-import AmountButton from "@/components/game/balance/AmountButton.vue";
-import CrossIcon from "@/components/icons/CrossIcon.vue";
-import LoginToPlayDialog from "@/components/game/LoginToPlayDialog.vue";
+import AmountButton from '@/components/game/balance/AmountButton.vue';
+import CrossIcon from '@/components/icons/CrossIcon.vue';
+import LoginToPlayDialog from '@/components/game/LoginToPlayDialog.vue';
 
 const settings = useSettingsStore();
 const { amounts } = storeToRefs(settings);
@@ -31,9 +31,9 @@ watch(
       value: [oldBalance, newBalance],
       round: 1,
       duration: 500,
-      easing: "linear",
+      easing: 'linear',
     });
-  }
+  },
 );
 
 const isOpen = ref(false);
@@ -72,9 +72,8 @@ const handleResetBalance = () => {
 </script>
 
 <template>
-  <div class="space-y-4">
-    <h3 class="text-xl font-bold uppercase">Choose an amount</h3>
-
+  <div class="space-y-2">
+    <h4 class="uppercase">Choose an amount</h4>
     <section class="px-4 py-2 flex flex-col xs:flex-row xs:justify-between gap-8 md:gap-16 text-xl">
       <div class="w-full flex flex-wrap gap-2">
         <AmountButton
@@ -88,7 +87,7 @@ const handleResetBalance = () => {
 
       <div class="w-auto flex flex-col lg:flex-row lg:justify-end gap-2">
         <span
-          class="px-2 md:px-4 py-3 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded box-border border-3 border-gray-200 shadow shadow-gray-300"
+          class="px-2 md:px-4 h-11 xs:min-w-[4rem] sm:min-w-[8rem] flex justify-center items-center rounded border-3 border-gray-300 shadow shadow-gray-300"
         >
           {{ balanceToDisplay }}
         </span>

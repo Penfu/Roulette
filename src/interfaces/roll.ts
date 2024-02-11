@@ -9,4 +9,4 @@ export default interface Roll {
   win: number;
   lose: number;
   amount: number;
-};
+}

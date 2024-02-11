@@ -1,87 +1,87 @@
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
-import router from '@/router'
+import { ref, computed, nextTick } from 'vue';
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import router from '@/router';
 
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth';
 
-import StepBtn from '@/components/register/StepBtn.vue'
-import NameField from '@/components/register/NameField.vue'
-import EmailField from '@/components/register/EmailField.vue'
-import PasswordField from '@/components/register/PasswordField.vue'
-import PendingButton from '@/components/PendingButton.vue'
+import StepButton from '@/components/register/StepButton.vue';
+import NameField from '@/components/register/NameField.vue';
+import EmailField from '@/components/register/EmailField.vue';
+import PasswordField from '@/components/register/PasswordField.vue';
+import PendingButton from '@/components/PendingButton.vue';
 
-const { register } = useAuthStore()
+const { register } = useAuthStore();
 
-const selectedTab = ref(0)
+const selectedTab = ref(0);
 
 const changeTab = (index: number) => {
-  selectedTab.value = index
-}
+  selectedTab.value = index;
+};
 
 const user = ref({
   name: '',
   email: '',
   password: '',
-  passwordConfirmation: ''
-})
+  passwordConfirmation: '',
+});
 
 type Errors = {
-  name: string[]
-  email: string[]
-  password: string[]
-}
+  name: string[];
+  email: string[];
+  password: string[];
+};
 
 const errors = ref<Errors>({
   name: [],
   email: [],
-  password: []
-})
+  password: [],
+});
 
-const isPending = ref(false)
-const isLastStep = computed(() => selectedTab.value === 2)
+const isPending = ref(false);
+const isLastStep = computed(() => selectedTab.value === 2);
 const canSubmit = computed(() => {
   return (
     user.value.name.length > 0 &&
     user.value.email.length > 0 &&
     user.value.password.length > 0 &&
     user.value.passwordConfirmation.length > 0
-  )
-})
+  );
+});
 
 const handlePreviousStep = () => {
   if (selectedTab.value > 0) {
-    selectedTab.value--
+    selectedTab.value--;
   }
-}
+};
 
 const handleNextStep = () => {
   if (canSubmit.value) {
-    handleRegister()
+    handleRegister();
   } else {
-    selectedTab.value++
+    selectedTab.value++;
   }
-}
+};
 
 const handleRegister = async () => {
-  isPending.value = true
-  const response = await register(user.value.name, user.value.email, user.value.password)
+  isPending.value = true;
+  const response = await register(user.value.name, user.value.email, user.value.password);
 
   if (response.success) {
     nextTick(() => {
-      router.push('/')
-    })
+      router.push('/');
+    });
   } else {
-    isPending.value = false
-    errors.value = response.errors as Errors
+    isPending.value = false;
+    errors.value = response.errors as Errors;
   }
-}
+};
 </script>
 
 <template>
   <main class="flex justify-center items-center">
-    <section class="w-full sm:max-w-xl py-12 sm:py-16 space-y-12 sm:space-y-24">
-      <h2 class="text-center text-5xl font-semibold uppercase">Register</h2>
+    <section class="w-full sm:max-w-xl py-12 space-y-12 sm:space-y-20">
+      <h2 class="text-4xl sm:text-5xl text-center font-semibold uppercase">Register</h2>
 
       <div class="h-[36rem] flex flex-col space-y-8">
         <form
@@ -92,28 +92,13 @@ const handleRegister = async () => {
           <TabGroup :selectedIndex="selectedTab" @change="changeTab">
             <TabList class="flex justify-center space-x-8">
               <Tab as="template" v-slot="{ selected }">
-                <StepBtn
-                  :index="0"
-                  :selected="selected"
-                  :hasError="errors.name.length > 0"
-                  name="Name"
-                />
+                <StepButton :index="0" :selected="selected" :hasError="errors.name.length > 0" name="Name" />
               </Tab>
               <Tab as="template" v-slot="{ selected }">
-                <StepBtn
-                  :index="1"
-                  :selected="selected"
-                  :hasError="errors.email.length > 0"
-                  name="Email"
-                />
+                <StepButton :index="1" :selected="selected" :hasError="errors.email.length > 0" name="Email" />
               </Tab>
               <Tab as="template" v-slot="{ selected }">
-                <StepBtn
-                  :index="2"
-                  :selected="selected"
-                  :hasError="errors.password.length > 0"
-                  name="Password"
-                />
+                <StepButton :index="2" :selected="selected" :hasError="errors.password.length > 0" name="Password" />
               </Tab>
             </TabList>
 
@@ -156,7 +141,7 @@ const handleRegister = async () => {
               :class="{
                 'xs:w-full': selectedTab === 0,
                 'xs:w-1/2': selectedTab === 1,
-                'xs:w-2/3': isLastStep
+                'xs:w-2/3': isLastStep,
               }"
             >
               {{ isLastStep ? 'Register' : 'Next Step' }}
@@ -166,9 +151,7 @@ const handleRegister = async () => {
 
         <div class="flex flex-wrap justify-center gap-2 text-gray-700">
           <span>Already have an account?</span>
-          <router-link to="/login" class="text-green hover:text-green-dark font-semibold">
-            Login
-          </router-link>
+          <router-link to="/login" class="text-green hover:text-green-dark font-semibold">Login</router-link>
         </div>
       </div>
     </section>

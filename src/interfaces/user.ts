@@ -1,4 +1,4 @@
-import type avatarOptions from "./avatarOptions";
+import type avatarOptions from './avatarOptions';
 
 export default interface User {
   id: string;
@@ -9,4 +9,4 @@ export default interface User {
   provider?: string;
   createdAt: Date;
   updatedAt: Date;
-};
+}

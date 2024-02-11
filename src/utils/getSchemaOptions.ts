@@ -1,5 +1,5 @@
-import { red, orange, yellow, emerald, sky, violet, pink, gray } from "tailwindcss/colors";
-import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import { red, orange, yellow, emerald, sky, violet, pink, gray } from 'tailwindcss/colors';
+import type { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 
 const defaultBackgroundColors = [
   ...[gray[200], gray[300], gray[400], gray[500]],
@@ -10,52 +10,48 @@ const defaultBackgroundColors = [
   ...[sky[200], sky[300], sky[400], sky[500]],
   ...[violet[200], violet[300], violet[400], violet[500]],
   ...[pink[200], pink[300], pink[400], pink[500]],
-].map((color) => color.replace("#", ""));
+].map((color) => color.replace('#', ''));
 
 export const getSchemaOptions = (schema: JSONSchema7) => {
   const result: any = {};
 
   const properties: Record<string, JSONSchema7Definition> = {
     backgroundColor: {
-      type: "array",
+      type: 'array',
       items: {
-        type: "string",
-        pattern: "^(transparent|[a-fA-F0-9]{6})$",
+        type: 'string',
+        pattern: '^(transparent|[a-fA-F0-9]{6})$',
       },
     },
     ...schema.properties,
   };
 
   for (const key in properties) {
-    if (false === properties.hasOwnProperty(key)) {
-      continue;
-    }
-
-    if (key === "style") {
+    if (key === 'style') {
       continue;
     }
 
     const property = properties[key];
 
-    if (typeof property === "boolean") {
+    if (typeof property === 'boolean') {
       continue;
     }
 
     const isColor = !!key.match(/Color$/);
-    const isArray = property.type === "array";
-    const isBackgroundColor = key === "backgroundColor";
+    const isArray = property.type === 'array';
+    const isBackgroundColor = key === 'backgroundColor';
     const probability = properties[`${key}Probability`];
-    const hasProbability = typeof probability === "object";
+    const hasProbability = typeof probability === 'object';
 
     const values = new Set<string>();
 
     if (hasProbability) {
-      values.add("");
+      values.add('');
     }
 
     if (property.enum) {
       for (const value of property.enum) {
-        if (typeof value === "string") {
+        if (typeof value === 'string') {
           values.add(value);
         }
       }
@@ -63,19 +59,15 @@ export const getSchemaOptions = (schema: JSONSchema7) => {
 
     if (property.default && Array.isArray(property.default)) {
       for (const value of property.default) {
-        if (typeof value === "string") {
+        if (typeof value === 'string') {
           values.add(value);
         }
       }
     }
 
-    if (
-      typeof property.items === "object" &&
-      !Array.isArray(property.items) &&
-      property.items.enum
-    ) {
+    if (typeof property.items === 'object' && !Array.isArray(property.items) && property.items.enum) {
       for (const value of property.items.enum) {
-        if (typeof value === "string") {
+        if (typeof value === 'string') {
           values.add(value);
         }
       }
@@ -91,9 +83,9 @@ export const getSchemaOptions = (schema: JSONSchema7) => {
       }
     }
 
-    if (isBackgroundColor && values.has("transparent")) {
-      values.delete("transparent");
-      values.add("ffffff");
+    if (isBackgroundColor && values.has('transparent')) {
+      values.delete('transparent');
+      values.add('ffffff');
     }
 
     result[key] = {

@@ -1,36 +1,33 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useMutation } from "@tanstack/vue-query";
-import axios from "@/axios.config";
+import { ref, computed } from 'vue';
+import { useMutation } from '@tanstack/vue-query';
+import axios from '@/axios.config';
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth';
 
-import PendingButton from "@/components/PendingButton.vue";
+import PendingButton from '@/components/PendingButton.vue';
 
 const auth = useAuthStore();
 
 const email = ref(auth.user.email);
-const password = ref("");
+const password = ref('');
 
 const { isPending, isError, error, mutate } = useMutation({
-  mutationFn: () =>
-    axios.patch("/users/me/email", { email: email.value, password: password.value }),
+  mutationFn: () => axios.patch('/users/me/email', { email: email.value, password: password.value }),
   onSettled: () => {
-    password.value = "";
+    password.value = '';
   },
   onSuccess: (data) => {
     auth.user = data.data;
   },
 });
 
-const canSubmit = computed(
-  () => !isPending.value && email.value !== auth.user.email && password.value
-);
+const canSubmit = computed(() => !isPending.value && email.value !== auth.user.email && password.value);
 </script>
 
 <template>
   <section class="space-y-4">
-    <h2 class="text-xl font-semibold">Change your email</h2>
+    <h4>Change your email</h4>
 
     <form @submit.prevent="mutate()" class="space-y-2">
       <p v-if="isError" class="text-red">{{ error?.message }}</p>
@@ -45,12 +42,7 @@ const canSubmit = computed(
           <input v-model="password" id="password" type="password" />
         </div>
 
-        <PendingButton
-          type="submit"
-          :disabled="!canSubmit"
-          :pending="isPending"
-          class="btn-primary w-full sm:w-auto"
-        >
+        <PendingButton type="submit" :disabled="!canSubmit" :pending="isPending" class="btn-primary w-full sm:w-auto">
           Change email
         </PendingButton>
       </div>

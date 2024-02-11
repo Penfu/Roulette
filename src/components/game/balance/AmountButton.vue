@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGameStore } from "@/stores/game";
+import { useGameStore } from '@/stores/game';
 
 const props = defineProps<{
   onSelect: () => void;
@@ -20,7 +20,7 @@ const handleAddAmountToBalance = (amount: number) => {
   <button
     :disabled="!enabled"
     @click="handleAddAmountToBalance(value)"
-    class="btn grow h-[3.45rem] bg-gray-200 hover:bg-gray-300 rounded shadow shadow-gray-300"
+    class="btn grow h-max bg-gray-200 hover:bg-gray-300 rounded shadow shadow-gray-300"
   >
     {{ value }}
   </button>

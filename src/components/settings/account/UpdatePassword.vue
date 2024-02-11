@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useMutation } from "@tanstack/vue-query";
-import axios from "@/axios.config";
+import { ref, computed } from 'vue';
+import { useMutation } from '@tanstack/vue-query';
+import axios from '@/axios.config';
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth';
 
-import PendingButton from "@/components/PendingButton.vue";
+import PendingButton from '@/components/PendingButton.vue';
 
 const auth = useAuthStore();
 
-const password = ref("");
-const newPassword = ref("");
-const newPasswordConfirmation = ref("");
+const password = ref('');
+const newPassword = ref('');
+const newPasswordConfirmation = ref('');
 
 const passwordMatch = computed(() => newPassword.value === newPasswordConfirmation.value);
 
@@ -19,15 +19,15 @@ const canSubmit = computed(() => password.value && passwordMatch.value);
 
 const { isPending, isError, error, mutate } = useMutation({
   mutationFn: () =>
-    axios.patch("/users/me/password", {
+    axios.patch('/users/me/password', {
       password: password.value,
       new_password: newPassword.value,
       new_password_confirmation: newPasswordConfirmation.value,
     }),
   onSettled: () => {
-    password.value = "";
-    newPassword.value = "";
-    newPasswordConfirmation.value = "";
+    password.value = '';
+    newPassword.value = '';
+    newPasswordConfirmation.value = '';
   },
   onSuccess: (data) => {
     auth.user = data.data;
@@ -37,7 +37,7 @@ const { isPending, isError, error, mutate } = useMutation({
 
 <template>
   <section class="space-y-4">
-    <h2 class="text-xl font-semibold">Change your password</h2>
+    <h4>Change your password</h4>
 
     <form @submit.prevent="mutate()" class="space-y-2">
       <p v-if="isError || !passwordMatch" class="text-red">
@@ -59,12 +59,7 @@ const { isPending, isError, error, mutate } = useMutation({
           <input v-model="newPasswordConfirmation" id="new_password_confirmation" type="password" />
         </div>
 
-        <PendingButton
-          type="submit"
-          :disabled="!canSubmit"
-          :pending="isPending"
-          class="btn-primary w-full sm:w-auto"
-        >
+        <PendingButton type="submit" :disabled="!canSubmit" :pending="isPending" class="btn-primary w-full sm:w-auto">
           Change password
         </PendingButton>
       </div>

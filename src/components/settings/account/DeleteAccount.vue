@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useMutation } from "@tanstack/vue-query";
-import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
-import axios from "@/axios.config";
+import { ref, computed } from 'vue';
+import { useMutation } from '@tanstack/vue-query';
+import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
+import axios from '@/axios.config';
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth';
 
-import PendingButton from "@/components/PendingButton.vue";
+import PendingButton from '@/components/PendingButton.vue';
 
 const auth = useAuthStore();
 
 const closeBtnElement = ref(null);
 const isOpen = ref(false);
-const keyword = ref("");
+const keyword = ref('');
 
 const { isPending, isSuccess, isError, error, mutate } = useMutation({
-  mutationFn: () => axios.delete("/users/me", { data: { keyword: keyword.value } }),
+  mutationFn: () => axios.delete('/users/me', { data: { keyword: keyword.value } }),
   onError: () => {
-    keyword.value = "";
+    keyword.value = '';
   },
   onSuccess: () => {
     closeModal();
@@ -30,10 +30,10 @@ const canCancel = computed(() => !isPending.value && !isSuccess.value);
 
 const openModal = () => {
   if (error.value?.message) {
-    error.value.message = "";
+    error.value.message = '';
   }
 
-  keyword.value = "";
+  keyword.value = '';
   isOpen.value = true;
 };
 
@@ -43,22 +43,16 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div
-    class="section bg-red-100 dark:bg-opacity-90 border-3 border-red-dark space-y-4"
-  >
+  <div class="section bg-red-100 dark:bg-opacity-90 border-3 border-red-dark space-y-4">
     <div class="space-y-2">
-      <h2 class="text-xl text-black font-semibold">Delete your account</h2>
+      <h4 class="text-xl text-black font-semibold">Delete your account</h4>
       <p>
-        <span class="text-red-dark font-semibold">
-          This action is irreversible. All your data will be lost.
-        </span>
+        <span class="text-red-dark font-semibold">This action is irreversible. All your data will be lost.</span>
         <span class="dark:text-black">You'll get a chance to confirm your choice.</span>
       </p>
     </div>
 
-    <button @click="openModal" type="button" class="btn-danger w-full sm:w-auto">
-      Delete account
-    </button>
+    <button @click="openModal" type="button" class="btn-danger w-full sm:w-auto">Delete account</button>
   </div>
 
   <TransitionRoot appear :show="isOpen" as="template">
@@ -88,15 +82,14 @@ const closeModal = () => {
           <DialogPanel
             class="sm:mx-8 px-6 py-8 md:px-8 md:py-10 max-w-2xl w-full bg-gray rounded-t-3xl sm:rounded-lg space-y-12"
           >
-            <DialogTitle as="h2" class="text-3xl font-bold">
-              You're about to delete your account
-            </DialogTitle>
+            <DialogTitle as="h2" class="text-3xl font-bold">You're about to delete your account</DialogTitle>
 
             <div class="space-y-8">
               <p v-if="isError" class="text-red">{{ error?.message }}</p>
               <p class="text-gray-700">
-                This is <span class="text-red font-semibold">irreversible</span>. All your data will
-                be deleted including your balance, bets, and profile.
+                This is
+                <span class="text-red font-semibold">irreversible</span>
+                . All your data will be deleted including your balance, bets, and profile.
               </p>
               <div class="space-y-2">
                 <label for="keyword" class="font-semibold space-x-2">

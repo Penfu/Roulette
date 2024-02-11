@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
-import { useGameStore } from "@/stores/game";
+import { useGameStore } from '@/stores/game';
 
-import { Color } from "@/enums/color";
-import { Result } from "@/enums/result";
-import type Bet from "@/interfaces/bet";
+import { Color } from '@/enums/color';
+import { Result } from '@/enums/result';
+import type Bet from '@/interfaces/bet';
 
-import CrossIcon from "@/components/icons/CrossIcon.vue";
+import CrossIcon from '@/components/icons/CrossIcon.vue';
 
 const props = defineProps<{
   bets: {
@@ -55,6 +55,8 @@ const winsAmount = computed(() => {
   if (game.result?.color === Color.GREEN) {
     return green?.amount ?? 0 * 13;
   }
+
+  return 0;
 });
 
 const lossesAmount = computed(() => {
@@ -69,14 +71,18 @@ const lossesAmount = computed(() => {
   if (game.result?.color === Color.GREEN) {
     return (red?.amount ?? 0) + (black?.amount ?? 0);
   }
+
+  return 0;
 });
 
 const totalAmount = computed(() => (winsAmount?.value || 0) - (lossesAmount?.value || 0));
 
 const result = computed(() => {
-  if (totalAmount?.value === 0) return Result.EQUAL;
-  else if (totalAmount?.value > 0) return Result.WIN;
-  else if (totalAmount?.value < 0) return Result.LOSE;
+  return totalAmount?.value === 0
+    ? Result.EQUAL
+    : totalAmount?.value > 0
+      ? Result.WIN
+      : Result.LOSE;
 });
 
 const active = ref(true);

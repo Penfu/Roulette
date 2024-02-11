@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { storeToRefs } from "pinia";
-import { useMutation } from "@tanstack/vue-query";
-import axios from "@/axios.config";
+import { computed, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useMutation } from '@tanstack/vue-query';
+import axios from '@/axios.config';
 
-import { useAuthStore } from "@/stores/auth";
-import { useGameStore } from "@/stores/game";
+import { useAuthStore } from '@/stores/auth';
+import { useGameStore } from '@/stores/game';
 
-import { RollStep } from "@/enums/step";
-import type Bet from "@/interfaces/bet";
+import { RollStep } from '@/enums/step';
+import type Bet from '@/interfaces/bet';
 
-import { classFromColor } from "@/helpers/color";
+import { classFromColor } from '@/helpers/color';
 
-import BetCard from "@/components/game/bets/BetCard.vue";
+import BetCard from '@/components/game/bets/BetCard.vue';
 
 const props = defineProps<{
   color: string;
@@ -30,13 +30,13 @@ const isActive = computed(() => step.value === RollStep.BET);
 const hasBalance = computed(() => balance.value > 0);
 const canBet = computed(() => isActive.value && isReady.value && hasBalance.value);
 
-const colorBets = computed(() => bets.value[props.color].reverse());
+const colorBets = computed(() => [...bets.value[props.color]].reverse());
 
 const hovered = ref(false);
 
 const { mutate } = useMutation({
   mutationFn: (bet: Bet) =>
-    axios.post("/bets", bet, { headers: { "X-Socket-ID": window.Echo.socketId() } }),
+    axios.post('/bets', bet, { headers: { 'X-Socket-ID': window.Echo.socketId() } }),
   onMutate: () => {
     balance.value = 0;
   },
@@ -58,7 +58,7 @@ const handleMakeBet = () => {
       @mouseover="hovered = true"
       @mouseout="hovered = false"
       :disable="!canBet"
-      class="py-4 w-full font-semibold text-white text-2xl rounded shadow transition-transform duration-300 ease-in-out cursor-default"
+      class="py-3 w-full font-semibold text-white text-2xl rounded shadow transition-transform duration-300 ease-in-out cursor-default"
       :class="[classFromColor(color, canBet), { 'hover:scale-105 cursor-pointer': canBet }]"
     >
       x {{ value }}

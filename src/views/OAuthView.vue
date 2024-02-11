@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { nextTick, onMounted } from "vue";
-import router from "@/router";
+import { nextTick, onMounted } from 'vue';
+import router from '@/router';
 
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from '@/stores/auth';
 
 const props = defineProps<{
-  provider: string,
+  provider: string;
 }>();
 
 const { loginOAuthCallback } = useAuthStore();
@@ -18,7 +18,7 @@ onMounted(async () => {
 
     if (response.success) {
       nextTick(() => {
-        router.push("/");
+        router.push('/');
       });
     }
   }
@@ -27,18 +27,16 @@ onMounted(async () => {
 
 <template>
   <main class="px-4 flex justify-center items-start md:items-center">
-    <div
-      class="py-8 md:py-16 w-full flex flex-col lg:flex-row items-center justify-center gap-12 overflow-hidden"
-    >
+    <div class="py-8 md:py-16 w-full flex flex-col lg:flex-row items-center justify-center gap-12 overflow-hidden">
       <div>
         <h2
           v-motion-pop
           class="text-4xl xs:text-6xl sm:text-7xl md:text-8xl xl:text-9xl font-extrabold uppercase leading-normal"
         >
           Wait...
-          <span class="block px-2 w-min bg-green text-white shadow shadow-green-300">{{
-            props.provider
-          }}</span>
+          <span class="block px-2 w-min bg-green text-white shadow shadow-green-300">
+            {{ props.provider }}
+          </span>
         </h2>
       </div>
 
