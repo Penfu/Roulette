@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { classFromColor } from "@/helpers/color";
+import { classFromColor } from '@/helpers/color';
 
-import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
+import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
 
 defineProps<{
-  count: number,
-  color: string,
-  colorWin: string,
+  count: number;
+  color: string;
+  colorWin: string;
 }>();
 </script>
 

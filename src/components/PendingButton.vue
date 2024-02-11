@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SpinnerIcon from "@/components/icons/SpinnerIcon.vue";
+import SpinnerIcon from '@/components/icons/SpinnerIcon.vue';
 
 defineProps<{
   pending: boolean;

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
-import moment from "moment";
+import { defineAsyncComponent, ref } from 'vue';
+import moment from 'moment';
 
-import type Bet from "@/interfaces/bet";
-import { classFromColor } from "@/helpers/color";
+import type Bet from '@/interfaces/bet';
+import { classFromColor } from '@/helpers/color';
 
-import ChevronDownIcon from "@/components/icons/ChevronDownIcon.vue";
+import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
 
 defineProps<{
   bet: Bet;
 }>();
 
-const RollHistory = defineAsyncComponent(() => import("@/components/profile/bets/RollHistory.vue"));
+const RollHistory = defineAsyncComponent(() => import('@/components/profile/bets/RollHistory.vue'));
 
 const isOpen = ref(false);
 </script>
@@ -36,15 +36,15 @@ const isOpen = ref(false);
           'bg-red shadow-red': !bet.isWin,
         }"
       >
-        {{ bet.isWin ? "Win" : "Lose" }}
+        {{ bet.isWin ? 'Win' : 'Lose' }}
       </span>
 
       <!-- Bet date -->
       <span class="hidden sm:block md:hidden">
-        {{ moment(bet.createdAt).format("DD/MM/YYYY") }}
+        {{ moment(bet.createdAt).format('DD/MM/YYYY') }}
       </span>
       <span class="hidden md:block">
-        {{ moment(bet.createdAt).format("DD/MM/YYYY HH:mm:ss") }}
+        {{ moment(bet.createdAt).format('DD/MM/YYYY HH:mm:ss') }}
       </span>
 
       <button class="focus:outline-none">

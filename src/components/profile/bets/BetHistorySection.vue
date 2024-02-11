@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { useInfiniteQuery } from "@tanstack/vue-query";
-import axios from "@/axios.config";
+import { useInfiniteQuery } from '@tanstack/vue-query';
+import axios from '@/axios.config';
 
-import BetHistory from "@/components/profile/bets/BetHistory.vue";
-import PendingButton from "@/components/PendingButton.vue";
-import { computed } from "vue";
+import BetHistory from '@/components/profile/bets/BetHistory.vue';
+import PendingButton from '@/components/PendingButton.vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
   user: string;
 }>();
 
-const fetchBets = ({ pageParam = 0 }) =>
-  axios.get(`/users/${props.user}/bets`, { params: { cursor: pageParam } });
+const fetchBets = ({ pageParam = 0 }) => axios.get(`/users/${props.user}/bets`, { params: { cursor: pageParam } });
 
 const {
   data: bets,
@@ -20,7 +19,7 @@ const {
   isFetchingNextPage,
   isPending,
 } = useInfiniteQuery({
-  queryKey: ["bets", props],
+  queryKey: ['bets', props],
   queryFn: fetchBets,
   initialPageParam: undefined,
   getNextPageParam: (lastPage: any) => lastPage.data.nextCursor,

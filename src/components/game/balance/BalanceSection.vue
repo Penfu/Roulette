@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { storeToRefs } from "pinia";
-import { TransitionRoot } from "@headlessui/vue";
-import anime from "animejs";
+import { ref, watch } from 'vue';
+import { storeToRefs } from 'pinia';
+import { TransitionRoot } from '@headlessui/vue';
+import anime from 'animejs';
 
-import { useSettingsStore } from "@/stores/settings";
-import { useAuthStore } from "@/stores/auth";
-import { useGameStore } from "@/stores/game";
+import { useSettingsStore } from '@/stores/settings';
+import { useAuthStore } from '@/stores/auth';
+import { useGameStore } from '@/stores/game';
 
-import AmountButton from "@/components/game/balance/AmountButton.vue";
-import CrossIcon from "@/components/icons/CrossIcon.vue";
-import LoginToPlayDialog from "@/components/game/LoginToPlayDialog.vue";
+import AmountButton from '@/components/game/balance/AmountButton.vue';
+import CrossIcon from '@/components/icons/CrossIcon.vue';
+import LoginToPlayDialog from '@/components/game/LoginToPlayDialog.vue';
 
 const settings = useSettingsStore();
 const { amounts } = storeToRefs(settings);
@@ -31,9 +31,9 @@ watch(
       value: [oldBalance, newBalance],
       round: 1,
       duration: 500,
-      easing: "linear",
+      easing: 'linear',
     });
-  }
+  },
 );
 
 const isOpen = ref(false);

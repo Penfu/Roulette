@@ -13,7 +13,10 @@ defineProps<{
       class="btn p-0 w-10 h-10 flex items-center justify-center"
       :class="[
         { [hasError ? 'bg-red' : 'bg-green']: selected },
-        { [hasError ? 'bg-red-light hover:bg-red bg-opacity-80 shadow-red' : 'bg-gray-200 hover:bg-gray-300']: !selected },
+        {
+          [hasError ? 'bg-red-light hover:bg-red bg-opacity-80 shadow-red' : 'bg-gray-200 hover:bg-gray-300']:
+            !selected,
+        },
         { 'text-white dark:text-black': selected },
       ]"
     >

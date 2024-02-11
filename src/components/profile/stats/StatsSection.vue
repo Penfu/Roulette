@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue';
 
-import { useNumberHelper } from "@/helpers/number";
+import { useNumberHelper } from '@/helpers/number';
 
-import type Stats from "@/interfaces/stats";
+import type Stats from '@/interfaces/stats';
 
-import BetCard from "@/components/profile/stats/BetCard.vue";
-import BetCardSkeleton from "@/components/profile/stats/BetCardSkeleton.vue";
-import BetColorCard from "@/components/profile/stats/BetColorCard.vue";
-import BetColorCardSkeleton from "@/components/profile/stats/BetColorCardSkeleton.vue";
+import BetCard from '@/components/profile/stats/BetCard.vue';
+import BetCardSkeleton from '@/components/profile/stats/BetCardSkeleton.vue';
+import BetColorCard from '@/components/profile/stats/BetColorCard.vue';
+import BetColorCardSkeleton from '@/components/profile/stats/BetColorCardSkeleton.vue';
 
 const props = defineProps<{
   stats?: Stats;

@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { isEqual } from "lodash";
+import { ref, computed } from 'vue';
+import { isEqual } from 'lodash';
 
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore } from '@/stores/settings';
 
 const input = ref<HTMLInputElement | null>(null);
 
 const store = useSettingsStore();
 
 const selectedButtonIndex = ref(0);
-const selectedButton = computed(() =>
-  amountButtons.value.find((btn) => btn.index === selectedButtonIndex.value)
-);
+const selectedButton = computed(() => amountButtons.value.find((btn) => btn.index === selectedButtonIndex.value));
 
 const amountButtons = ref([
   { index: 0, value: store.amounts[0] },
@@ -19,23 +17,19 @@ const amountButtons = ref([
   { index: 2, value: store.amounts[2] },
   { index: 3, value: store.amounts[3] },
 ]);
-const sortedAmountButtons = computed(() => amountButtons.value.sort((a, b) => a.value - b.value));
+const sortedAmountButtons = computed(() => [...amountButtons.value].sort((a, b) => a.value - b.value));
 const amounts = computed(() => amountButtons.value.map((btn) => btn.value));
 
 const error = computed(() => {
   if (amountButtons.value.some((btn) => btn.value <= 0)) {
-    return "Amounts must be greater than 0";
+    return 'Amounts must be greater than 0';
   }
 
-  if (
-    amountButtons.value.some(
-      (btn) => amountButtons.value.filter((b) => b.value === btn.value).length > 1
-    )
-  ) {
-    return "Amounts must be unique";
+  if (amountButtons.value.some((btn) => amountButtons.value.filter((b) => b.value === btn.value).length > 1)) {
+    return 'Amounts must be unique';
   }
 
-  return "";
+  return '';
 });
 
 const handleSelectAmountButton = (index: number) => {
@@ -76,19 +70,10 @@ const handleSaveAmounts = () => {
           </button>
         </div>
 
-        <input
-          v-model="selectedButton!.value"
-          ref="input"
-          name="amount"
-          type="number"
-          min="1"
-          max="10000000000"
-        />
+        <input v-model="selectedButton!.value" ref="input" name="amount" type="number" min="1" max="10000000000" />
       </div>
 
-      <button @click="handleSaveAmounts" :disabled="!canSave" class="btn-primary w-full sm:w-auto">
-        Save amounts
-      </button>
+      <button @click="handleSaveAmounts" :disabled="!canSave" class="btn-primary w-full sm:w-auto">Save amounts</button>
 
       <p class="text-gray-700">
         The amount buttons are the buttons that you can click to bet a certain amount of coins.

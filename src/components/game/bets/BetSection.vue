@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { useGameStore } from "@/stores/game";
+import { useGameStore } from '@/stores/game';
 
-import { Color } from "@/enums/color";
-import { RollStep } from "@/enums/step";
+import { Color } from '@/enums/color';
+import { RollStep } from '@/enums/step';
 
-import BetsLayout from "@/components/game/bets/BetsLayout.vue";
+import BetsLayout from '@/components/game/bets/BetsLayout.vue';
 
 const game = useGameStore();
 const { step } = storeToRefs(game);

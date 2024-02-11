@@ -1,8 +1,8 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 
 export const useSettingsStore = defineStore(
-  "settings",
+  'settings',
   () => {
     const amounts = ref([1, 10, 100, 1000]);
 
@@ -15,5 +15,5 @@ export const useSettingsStore = defineStore(
       setAmounts,
     };
   },
-  { persist: true }
+  { persist: true },
 );
