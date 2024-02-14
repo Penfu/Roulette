@@ -22,7 +22,7 @@ const auth = useAuthStore();
       >
         <div class="px-1 py-1">
           <MenuItem v-slot="{ active, close }" as="div">
-            <span v-if="auth.loading" class="block mx-1 my-1 py-4 rounded bg-gray-300 animate-pulse" />
+            <span v-if="auth.user === null" class="block mx-1 my-1 py-4 rounded bg-gray-300 animate-pulse" />
             <RouterLink
               v-else
               :to="'/profile/' + auth.user.name"

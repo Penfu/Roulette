@@ -17,13 +17,15 @@ const store = useAvatarStore();
 const { isPending, mutate } = useMutation({
   mutationFn: () => axios.patch('/users/me/avatar', { avatar: store.selectedOptions }),
   onSuccess: () => {
-    auth.user.avatar = { ...store.selectedOptions };
+    if (auth.user) {
+      auth.user.avatar = { ...store.selectedOptions };
+    }
   },
 });
 
 const isDefault = computed(() => isEqual(store.selectedOptions, store.defaultOptions));
-const isFirstAndDefault = computed(() => !auth.user.avatar && isDefault.value);
-const hasChanged = computed(() => !isEqual(store.selectedOptions, auth.user.avatar));
+const isFirstAndDefault = computed(() => auth.user?.avatar === null && isDefault.value);
+const hasChanged = computed(() => !isEqual(store.selectedOptions, auth.user?.avatar));
 
 const canSubmit = computed(() => !isPending.value && !isFirstAndDefault.value && hasChanged.value);
 </script>

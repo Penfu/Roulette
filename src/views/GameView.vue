@@ -23,9 +23,9 @@ const { bets, history, timer, step, result } = storeToRefs(game);
 
 const message = ref('');
 
-const myBetOnRed = computed(() => bets.value.red.find((bet: Bet) => bet.user === user.value.name) as Bet);
-const myBetOnBlack = computed(() => bets.value.black.find((bet: Bet) => bet.user === user.value.name) as Bet);
-const myBetOnGreen = computed(() => bets.value.green.find((bet: Bet) => bet.user === user.value.name) as Bet);
+const myBetOnRed = computed(() => bets.value.red.find((bet: Bet) => bet.user === user.value?.name) as Bet);
+const myBetOnBlack = computed(() => bets.value.black.find((bet: Bet) => bet.user === user.value?.name) as Bet);
+const myBetOnGreen = computed(() => bets.value.green.find((bet: Bet) => bet.user === user.value?.name) as Bet);
 
 const hasBet = computed(() => myBetOnRed.value || myBetOnBlack.value || myBetOnGreen.value);
 
@@ -81,16 +81,18 @@ onMounted(async () => {
         history.value = e.history;
 
         // Give money if the player won
-        switch (result.value?.color) {
-          case Color.RED:
-            if (myBetOnRed.value) user.value.balance += myBetOnRed.value.amount * 2;
-            break;
-          case Color.BLACK:
-            if (myBetOnBlack.value) user.value.balance += myBetOnBlack.value.amount * 2;
-            break;
-          case Color.GREEN:
-            if (myBetOnGreen.value) user.value.balance += myBetOnGreen.value.amount * 14;
-            break;
+        if (user.value) {
+          switch (result.value?.color) {
+            case Color.RED:
+              if (myBetOnRed.value) user.value.balance += myBetOnRed.value.amount * 2;
+              break;
+            case Color.BLACK:
+              if (myBetOnBlack.value) user.value.balance += myBetOnBlack.value.amount * 2;
+              break;
+            case Color.GREEN:
+              if (myBetOnGreen.value) user.value.balance += myBetOnGreen.value.amount * 14;
+              break;
+          }
         }
         break;
     }
