@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMutation } from '@tanstack/vue-query';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 
 import { useAuthStore } from '@/stores/auth';
 import { useGameStore } from '@/stores/game';

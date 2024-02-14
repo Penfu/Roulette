@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useInfiniteQuery } from '@tanstack/vue-query';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 
 import BetHistory from '@/components/profile/bets/BetHistory.vue';
 import PendingButton from '@/components/PendingButton.vue';

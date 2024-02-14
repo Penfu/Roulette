@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useMutation } from '@tanstack/vue-query';
 import { isEqual } from 'lodash';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 
 import { useAuthStore } from '@/stores/auth';
 import { useAvatarStore } from '@/stores/avatar';
