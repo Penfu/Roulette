@@ -12,7 +12,7 @@ const auth = useAuthStore();
 <template>
   <div>
     <nav
-      class="h-14 px-4 flex flex-row justify-center items-center gap-4 text-gray-700 bg-gray xs:rounded-b-lg shadow shadow-gray-300"
+      class="h-16 px-4 flex flex-row justify-center items-center gap-4 text-gray-700 bg-gray xs:rounded-b-lg shadow shadow-gray-300"
     >
       <!-- Title -->
       <RouterLink to="/" class="flex justify-center items-center gap-x-2 text-lg">
