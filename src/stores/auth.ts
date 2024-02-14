@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 
 import type User from '@/interfaces/user';
 

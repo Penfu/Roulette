@@ -1,7 +1,7 @@
-import axios, { AxiosError, type AxiosResponse } from 'axios';
+import axiosLib, { AxiosError, type AxiosResponse } from 'axios';
 import camelCaseKeys from 'camelcase-keys';
 
-const axiosInstance = axios.create({
+const axios = axiosLib.create({
   baseURL: import.meta.env.VITE_APP_URL + '/api',
   withCredentials: true,
 });
@@ -10,10 +10,10 @@ interface CustomAxiosError {
   message?: string;
 }
 
-axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => {
-    response.data = camelCaseKeys(response.data, { deep: true });
-    return response;
+axios.interceptors.response.use(
+  (rep: AxiosResponse) => {
+    rep.data = camelCaseKeys(rep.data, { deep: true });
+    return rep;
   },
   (error: AxiosError<CustomAxiosError>) => {
     error.message = error.response?.data.message || error.message;
@@ -21,4 +21,4 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-export default axiosInstance;
+export default axios;
