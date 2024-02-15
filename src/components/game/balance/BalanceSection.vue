@@ -16,7 +16,7 @@ const settings = useSettingsStore();
 const { amounts } = storeToRefs(settings);
 
 const auth = useAuthStore();
-const { isAuth, loading } = storeToRefs(auth);
+const { user } = storeToRefs(auth);
 
 const game = useGameStore();
 const { balance } = storeToRefs(game);
@@ -47,13 +47,13 @@ const closeModal = () => {
 };
 
 const handleSelectAmount = () => {
-  if (!isAuth.value) {
+  if (!user.value) {
     openModal();
   }
 };
 
 const handleAllIn = () => {
-  if (!isAuth.value) {
+  if (!user.value) {
     openModal();
     return;
   }
@@ -62,7 +62,7 @@ const handleAllIn = () => {
 };
 
 const handleResetBalance = () => {
-  if (!isAuth.value) {
+  if (!user.value) {
     openModal();
     return;
   }
@@ -79,7 +79,6 @@ const handleResetBalance = () => {
         <AmountButton
           v-for="amount in amounts"
           :key="amount"
-          :enabled="!loading"
           :value="amount"
           :onSelect="handleSelectAmount"
         />
@@ -93,14 +92,12 @@ const handleResetBalance = () => {
         </span>
         <div class="flex space-x-2">
           <button
-            :disabled="loading"
             @click="handleAllIn"
             class="btn basis-1/2 bg-gray-200 hover:bg-gray-300 whitespace-nowrap rounded shadow shadow-gray-300"
           >
             All In
           </button>
           <button
-            :disabled="loading"
             @click="handleResetBalance"
             aria-label="Reset balance"
             class="btn basis-1/2 flex justify-center items-center bg-red hover:bg-red-dark text-white stroke-2 rounded border-red shadow shadow-red-300"

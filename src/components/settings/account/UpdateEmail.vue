@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useMutation } from '@tanstack/vue-query';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 
 import { useAuthStore } from '@/stores/auth';
 
@@ -9,7 +9,7 @@ import PendingButton from '@/components/PendingButton.vue';
 
 const auth = useAuthStore();
 
-const email = ref(auth.user.email);
+const email = ref(auth.user?.email);
 const password = ref('');
 
 const { isPending, isError, error, mutate } = useMutation({
@@ -22,7 +22,7 @@ const { isPending, isError, error, mutate } = useMutation({
   },
 });
 
-const canSubmit = computed(() => !isPending.value && email.value !== auth.user.email && password.value);
+const canSubmit = computed(() => !isPending.value && email.value !== auth.user?.email && password.value);
 </script>
 
 <template>

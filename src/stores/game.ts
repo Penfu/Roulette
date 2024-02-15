@@ -18,7 +18,7 @@ export const useGameStore = defineStore('game', () => {
   const history = ref<Roll[]>();
 
   const addBalance = (amount: number) => {
-    if (!auth.isAuth) {
+    if (auth.user === null) {
       return;
     }
 
@@ -31,10 +31,19 @@ export const useGameStore = defineStore('game', () => {
   };
 
   const allInBalance = () => {
-    addBalance(auth.user.balance);
+    if (auth.user === null) {
+      return;
+    }
+
+    balance.value += auth.user.balance;
+    auth.user.balance = 0;
   };
 
   const resetBalance = () => {
+    if (auth.user === null) {
+      return;
+    }
+
     auth.user.balance += balance.value;
     balance.value = 0;
   };

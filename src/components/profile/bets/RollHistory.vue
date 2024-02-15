@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useQuery } from '@tanstack/vue-query';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 
 import { Color } from '@/enums/color';
 import type Bet from '@/interfaces/bet';
