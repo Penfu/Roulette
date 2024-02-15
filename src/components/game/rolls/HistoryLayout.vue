@@ -14,7 +14,7 @@ const md = breakpoints.smaller('md');
 </script>
 
 <template>
-  <div class="p-2 flex space-x-2">
+  <div class="p-2 flex gap-2">
     <template v-if="history">
       <HistoryCard v-for="roll in history.slice(0, md ? 5 : 10)" :key="roll.id" :roll="roll" />
     </template>
@@ -23,7 +23,7 @@ const md = breakpoints.smaller('md');
       <span
         v-for="x in md ? 5 : 10"
         :key="x"
-        class="p-5 flex justify-center items-center text-center bg-skeleton rounded shadow animate-pulse"
+        class="w-10 sm:w-12 h-10 sm:h-12 flex justify-center items-center text-center bg-skeleton rounded shadow animate-pulse"
       />
     </template>
   </div>
