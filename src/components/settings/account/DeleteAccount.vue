@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { useMutation } from '@tanstack/vue-query';
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 
 import { useAuthStore } from '@/stores/auth';
 
@@ -25,7 +25,7 @@ const { isPending, isSuccess, isError, error, mutate } = useMutation({
   },
 });
 
-const canSubmit = computed(() => keyword.value === auth.user.name);
+const canSubmit = computed(() => keyword.value === auth.user?.name);
 const canCancel = computed(() => !isPending.value && !isSuccess.value);
 
 const openModal = () => {
@@ -95,7 +95,7 @@ const closeModal = () => {
                 <label for="keyword" class="font-semibold space-x-2">
                   <span>Enter your name</span>
                   <span class="px-2 py-1 text-green-dark bg-green-100 rounded-md select-all">
-                    {{ auth.user.name }}
+                    {{ auth.user!.name }}
                   </span>
                   <span>to continue:</span>
                 </label>

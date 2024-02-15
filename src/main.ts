@@ -28,8 +28,8 @@ window.Echo = new Echo({
 app.use(pinia);
 pinia.use(piniaPluginPersistedstate);
 
-app.use(router);
 app.use(VueQueryPlugin);
 app.use(MotionPlugin);
+app.use(router);
 
 app.mount('#app');

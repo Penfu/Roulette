@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useMutation } from '@tanstack/vue-query';
-import axios from '@/axios.config';
+import router from '@/router';
+import axios from '@/configs/axios';
 
 import { useAuthStore } from '@/stores/auth';
 
@@ -11,13 +12,14 @@ const auth = useAuthStore();
 const { isPending, mutate } = useMutation({
   mutationFn: () => axios.delete('/users/me/provider'),
   onSuccess: () => {
-    auth.logout();
+    auth.user = null;
+    router.push({ name: 'login' });
   },
 });
 </script>
 
 <template>
-  <section class="space-y-4">
+  <section v-if="auth.user" class="space-y-4">
     <h4>Provider</h4>
 
     <div v-if="auth.user.provider" class="space-y-6">

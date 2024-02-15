@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 import moment from 'moment';
 
 import type User from '@/interfaces/user';
@@ -37,7 +37,6 @@ const { data: user } = useQuery({
           <div class="py-4 flex flex-col">
             <div class="grow">
               <h3>{{ user.name }}</h3>
-              <h4 class="font-normal">{{ user.email }}</h4>
             </div>
             <span>Joined {{ moment(user.createdAt).fromNow() }}</span>
           </div>

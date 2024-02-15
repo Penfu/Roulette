@@ -8,5 +8,4 @@ export default interface User {
   avatar: avatarOptions;
   provider?: string;
   createdAt: Date;
-  updatedAt: Date;
 }

@@ -3,7 +3,6 @@ import { useGameStore } from '@/stores/game';
 
 const props = defineProps<{
   onSelect: () => void;
-  enabled: boolean;
   value: number;
 }>();
 
@@ -18,7 +17,6 @@ const handleAddAmountToBalance = (amount: number) => {
 
 <template>
   <button
-    :disabled="!enabled"
     @click="handleAddAmountToBalance(value)"
     class="btn grow h-max bg-gray-200 hover:bg-gray-300 rounded shadow shadow-gray-300"
   >

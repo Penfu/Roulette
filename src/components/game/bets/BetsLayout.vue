@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useMutation } from '@tanstack/vue-query';
-import axios from '@/axios.config';
+import axios from '@/configs/axios';
 
 import { useAuthStore } from '@/stores/auth';
 import { useGameStore } from '@/stores/game';
@@ -20,15 +20,14 @@ const props = defineProps<{
 }>();
 
 const auth = useAuthStore();
-const { isAuth, loading } = storeToRefs(auth);
+const { user } = storeToRefs(auth);
 
 const game = useGameStore();
 const { step, balance, bets } = storeToRefs(game);
 
-const isReady = computed(() => isAuth.value && !loading.value);
 const isActive = computed(() => step.value === RollStep.BET);
 const hasBalance = computed(() => balance.value > 0);
-const canBet = computed(() => isActive.value && isReady.value && hasBalance.value);
+const canBet = computed(() => isActive.value && user.value !== null && hasBalance.value);
 
 const colorBets = computed(() => [...bets.value[props.color]].reverse());
 
@@ -47,7 +46,7 @@ const handleMakeBet = () => {
     return;
   }
 
-  mutate({ color: props.color, amount: balance.value, user: auth.user.name });
+  mutate({ color: props.color, amount: balance.value, user: user.value!.name });
 };
 </script>
 
