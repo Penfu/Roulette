@@ -65,7 +65,12 @@ const handleNextStep = () => {
 
 const handleRegister = async () => {
   isPending.value = true;
-  const response = await register(user.value.name, user.value.email, user.value.password);
+  const response = await register(
+    user.value.name,
+    user.value.email,
+    user.value.password,
+    user.value.passwordConfirmation,
+  );
 
   if (response.success) {
     nextTick(() => {

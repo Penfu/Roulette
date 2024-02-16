@@ -1,107 +1,100 @@
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import axios from '@/configs/axios';
 
 import type User from '@/interfaces/user';
 
-export const useAuthStore = defineStore('auth', () => {
-  const user = ref({} as User);
-  const token = ref(null as string | null);
+export const useAuthStore = defineStore(
+  'auth',
+  () => {
+    const user = ref<User | null>(null);
+    let isSessionVerified = false;
 
-  const isAuth = computed(() => token.value != null);
-  const loading = computed(() => isAuth.value && !user.value.id);
+    const loadUser = async () => {
+      isSessionVerified = true;
+      
+      const { data } = await axios.get('users/me');
+      user.value = data;
+    } 
 
-  const register = async (name: string, email: string, password: string) => {
-    try {
-      const response = await axios.post('/register', {
-        name,
-        email,
-        password,
-      });
-      logUser(response.data.user, response.data.token);
+    const verifySession = async () => {
+      if (user.value && !isSessionVerified) {
+        try {
+          await loadUser();
+        } catch {
+          user.value = null;
+        }
+      }
+    };
 
-      return { success: true };
-    } catch (error: any) {
-      const name = error.response.data.errors?.name || [];
-      const email = error.response.data.errors?.email || [];
-      const password = error.response.data.errors?.password || [];
+    const register = async (name: string, email: string, password: string, passwordConfirmation: string) => {
+      try {
+        await axios.post(import.meta.env.VITE_APP_URL + '/register', {
+          name,
+          email,
+          password,
+          'password_confirmation': passwordConfirmation
+        });
+        await loadUser();
 
-      return { success: false, errors: { name, email, password } };
-    }
-  };
+        return { success: true };
+      } catch (error: any) {
+        const name = error.response.data.errors?.name || [];
+        const email = error.response.data.errors?.email || [];
+        const password = error.response.data.errors?.password || [];
 
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await axios.post('/login', { email, password });
-      logUser(response.data.user, response.data.token);
+        return { success: false, errors: { name, email, password } };
+      }
+    };
 
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error };
-    }
-  };
+    const login = async (email: string, password: string) => {
+      try {
+        await axios.post(import.meta.env.VITE_APP_URL + '/login', { email, password });
+        await loadUser();
 
-  const loginFromToken = async () => {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token.value;
-    const response = await axios.get('/users/me');
+        return { success: true };
+      } catch (error) {
+        return { success: false, error: error };
+      }
+    };
 
-    user.value = response.data;
-  };
+    const loginOAuth = async (provider: string) => {
+      const { data } = await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/redirect`);
 
-  const loginOAuth = async (provider: string) => {
-    const response = await axios.get(`/authorize/${provider}/redirect`);
+      if (data.redirect) {
+        location.href = data.redirect;
+      }
+    };
 
-    if (response.data.redirect) {
-      location.href = response.data.redirect;
-      return;
-    }
-  };
+    const loginOAuthCallback = async (provider: string, code: string) => {
+      try {
+        await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/callback`, {
+          params: { code },
+        });
+        await loadUser();
 
-  const loginOAuthCallback = async (provider: string, code: string) => {
-    try {
-      const response = await axios.get(`/authorize/${provider}/callback`, {
-        params: { code },
-      });
-      logUser(response.data.user, response.data.token);
+        return { success: true, message: 'success' };
+      } catch (error) {
+        return { success: false, message: 'error' };
+      }
+    };
 
-      return { success: true, message: 'success' };
-    } catch (error) {
-      return { success: false, message: 'error' };
-    }
-  };
+    const logout = async () => {
+      await axios.post(import.meta.env.VITE_APP_URL + '/logout');
+      user.value = null;
 
-  const logout = () => {
-    user.value = {} as User;
-    token.value = null;
+      location.reload();
+    };
 
-    localStorage.removeItem('token');
-    delete axios.defaults.headers.common['Authorization'];
-
-    location.reload();
-  };
-
-  const logUser = (newUser: User, newToken: string) => {
-    user.value = newUser;
-    token.value = newToken;
-
-    localStorage.setItem('token', newToken);
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token.value;
-  };
-
-  // Auto login
-  if (localStorage.getItem('token')) {
-    token.value = localStorage.getItem('token');
-    loginFromToken();
-  }
-
-  return {
-    user,
-    isAuth,
-    loading,
-    register,
-    login,
-    loginOAuth,
-    loginOAuthCallback,
-    logout,
-  };
-});
+    return {
+      user,
+      verifySession,
+      register,
+      login,
+      loginOAuth,
+      loginOAuthCallback,
+      logout,
+    };
+  },
+  { persist: true },
+);

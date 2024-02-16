@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/auth';
 import { HomeIcon, TrophyIcon, BanknotesIcon } from '@heroicons/vue/24/outline';
 
 import DarkModeSwitch from '@/components/layout/DarkModeSwitch.vue';
-import DropdownMenu from '@/components/layout/DropdownMenu.vue';
+import UserDropdownMenu from '@/components/layout/UserDropdownMenu.vue';
 
 const auth = useAuthStore();
 </script>
@@ -36,17 +36,14 @@ const auth = useAuthStore();
       <!-- User Info / Actions -->
       <div class="flex items-center gap-2 md:gap-4">
         <!-- Balance -->
-        <span v-show="auth.isAuth" class="hidden sm:flex p-2 justify-center items-center gap-2">
+        <span v-show="auth.user" class="hidden sm:flex p-2 justify-center items-center gap-2">
           <BanknotesIcon class="h-6 w-6 text-green" />
-          <span class="text-lg">{{ auth.user.balance }}</span>
+          <span class="text-lg">{{ auth.user?.balance }}</span>
         </span>
 
         <DarkModeSwitch />
-
-        <!-- User Profile Dropdown -->
-        <DropdownMenu v-if="auth.isAuth" />
-
-        <!-- Login btn -->
+        
+        <UserDropdownMenu v-if="auth.user" />
         <RouterLink v-else to="/login" class="btn text-base bg-gray-200 hover:bg-gray-300">Login</RouterLink>
       </div>
     </nav>
