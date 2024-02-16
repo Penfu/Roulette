@@ -11,13 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuth = computed(() => token.value != null);
   const loading = computed(() => isAuth.value && !user.value.id);
 
-  const csrfToken = async () => {
-    await axios.get(import.meta.env.VITE_APP_URL + '/sanctum/csrf-cookie');
-  };
-
   const register = async (name: string, email: string, password: string) => {
-    await csrfToken();
-
     try {
       const response = await axios.post('/register', {
         name,
@@ -37,8 +31,6 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const login = async (email: string, password: string) => {
-    await csrfToken();
-
     try {
       const response = await axios.post('/login', { email, password });
       logUser(response.data.user, response.data.token);
