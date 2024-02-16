@@ -94,7 +94,7 @@ watch(
         <div v-if="step === RollStep.DISPLAY_RESULT && result" class="flex items-center justify-center space-x-4">
           <span>Result</span>
           <span
-            class="h-12 w-12 xl:h-20 xl:w-20 flex items-center justify-center text-white rounded-lg shadow"
+            class="h-12 w-12 lg:w-16 lg:h-16 flex items-center justify-center text-white rounded-lg shadow"
             :class="classFromColor(result.color)"
           >
             {{ result.value }}

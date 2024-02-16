@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 defineProps<{
   stats: string | number;
   label: string;
