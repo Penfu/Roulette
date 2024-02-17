@@ -71,6 +71,18 @@ const router = createRouter({
       beforeEnter: guest,
       component: lazyLoad('OAuthView'),
     },
+    {
+      path: '/terms',
+      name: 'terms',
+      meta: { title: 'Terms' },
+      component: lazyLoad('TermsView'),
+    },
+    {
+      path: '/privacy',
+      name: 'privacy',
+      meta: { title: 'Privacy' },
+      component: lazyLoad('PrivacyView'),
+    },
   ],
 });
 
