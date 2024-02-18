@@ -44,12 +44,16 @@ const auth = useAuthStore();
 
         <DarkModeSwitch />
 
-        <UserDropdownMenu v-if="auth.user" />
-        <RouterLink v-else to="/login">
-          <PendingButton type="button" :pending="auth.isPending" class="btn text-base font-normal bg-gray-200 hover:bg-gray-300">
+        <RouterLink v-if="auth.isPending || !auth.user" to="/login">
+          <PendingButton
+            type="button"
+            :pending="auth.isPending"
+            class="btn text-base font-normal bg-gray-200 hover:bg-gray-300"
+          >
             Login
           </PendingButton>
         </RouterLink>
+        <UserDropdownMenu v-else />
       </div>
     </nav>
   </div>

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import axios from '@/configs/axios';
 
 import type User from '@/interfaces/user';
+import router from '@/router';
 
 export const useAuthStore = defineStore(
   'auth',
@@ -86,21 +87,19 @@ export const useAuthStore = defineStore(
     };
 
     const loginOAuth = async (provider: 'github' | 'google') => {
-      try {
-        isPending.value = true;
+      isPending.value = true;
 
-        const { data } = await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/redirect`);
+      const { data } = await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/redirect`);
 
-        if (data.redirect) {
-          location.href = data.redirect;
-        }
-      } catch (error) {
-        isPending.value = false;
+      if (data.redirect) {
+        location.href = data.redirect;
       }
     };
 
     const loginOAuthCallback = async (provider: 'github' | 'google', code: string) => {
       try {
+        isPending.value = true;
+  
         await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/callback`, {
           params: { code },
         });
@@ -119,11 +118,14 @@ export const useAuthStore = defineStore(
     const logout = async () => {
       isPending.value = true;
 
-      user.value = null;
       await axios.post(import.meta.env.VITE_APP_URL + '/logout');
-
+      
+      user.value = null;
       isPending.value = false;
-      location.reload();
+
+      if (router.currentRoute.value.meta.auth) {
+        router.push({ name: 'login' });
+      }
     };
 
     return {
@@ -140,5 +142,5 @@ export const useAuthStore = defineStore(
       user,
     };
   },
-  { persist: { paths: ['user'] } }
+  { persist: { paths: ['user'] } },
 );

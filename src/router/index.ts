@@ -1,18 +1,9 @@
-import { createRouter, createWebHistory, type RouteLocation } from 'vue-router';
+import { capitalize } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
 const lazyLoad = (view: string) => {
   return () => import(`../views/${view}.vue`);
-};
-
-const auth = (to: RouteLocation, from: RouteLocation, next: any) => {
-  const auth = useAuthStore();
-  return auth.user ? next() : next({ name: 'login' });
-}
-
-const guest = (to: RouteLocation, from: RouteLocation, next: any) => {
-  const auth = useAuthStore();
-  return !auth.user ? next() : next({ name: 'home' });
 };
 
 const router = createRouter({
@@ -20,7 +11,7 @@ const router = createRouter({
   routes: [
     {
       path: '/:pathMatch(.*)*',
-      meta: { title: '404' },
+      name: '404',
       component: lazyLoad('NotFoundView'),
     },
     {
@@ -31,53 +22,60 @@ const router = createRouter({
     {
       path: '/leaderboard',
       name: 'leaderboard',
-      meta: { title: 'Leaderboard' },
       component: lazyLoad('LeaderboardView'),
     },
     {
       path: '/profile/:name',
       name: 'profile',
-      meta: { title: 'Profile' },
       props: true,
       component: lazyLoad('ProfileView'),
     },
     {
       path: '/settings/:tab(game)?',
       name: 'settings',
-      meta: { title: 'Settings' },
       props: true,
-      beforeEnter: auth,
+      meta: { auth: true },
       component: lazyLoad('SettingsView'),
     },
     {
       path: '/login',
       name: 'login',
-      meta: { title: 'Login' },
-      beforeEnter: guest,
+      meta: { guest: true },
       component: lazyLoad('LoginView'),
     },
     {
       path: '/register',
       name: 'register',
-      meta: { title: 'Register' },
-      beforeEnter: guest,
+      meta: { guest: true },
       component: lazyLoad('RegisterView'),
     },
     {
       path: '/authorize/:provider(github|google)/callback',
       name: 'oauth',
-      meta: { title: 'OAuth' },
+      meta: { guest: true },
       props: true,
-      beforeEnter: guest,
       component: lazyLoad('OAuthView'),
     },
   ],
 });
 
-router.beforeEach( async (to, from, next) => {
-  document.title = to.meta.title ? `Roll • ${to.meta.title}` : 'Roll';
+router.beforeEach(async (to, from, next) => {
+  const auth = useAuthStore();
 
-  await useAuthStore().verifySession();
+  // Guards
+  if (to.meta.guest && auth.user) {
+    return next({ name: 'home' });
+  }
+
+  if (to.meta.auth && !auth.user) {
+    return next({ name: 'login' });
+  }
+
+  // Title
+  document.title = to.name ? `Roll • ${capitalize(to.name.toString())}` : 'Roll';
+
+  // Verify session
+  await auth.verifySession();
 
   next();
 });
