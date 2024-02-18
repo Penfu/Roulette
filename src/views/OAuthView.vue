@@ -5,7 +5,7 @@ import router from '@/router';
 import { useAuthStore } from '@/stores/auth';
 
 const props = defineProps<{
-  provider: string;
+  provider: 'github' | 'google';
 }>();
 
 const { loginOAuthCallback } = useAuthStore();

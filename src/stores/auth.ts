@@ -10,24 +10,29 @@ export const useAuthStore = defineStore(
     const user = ref<User | null>(null);
 
     const isPending = ref(false);
+    const isGithubPending = ref(false);
+    const isGooglePending = ref(false);
+
     const isSessionVerified = ref(false);
 
     const loadUser = async () => {
       isSessionVerified.value = true;
-      
-      const { data } = await axios.get('users/me');
-      user.value = data;
 
-      isPending.value = false;
-    } 
+      try {
+        const { data } = await axios.get('users/me');
+        user.value = data;
+      } catch {
+        user.value = null;
+      }
+    };
 
     const verifySession = async () => {
       if (user.value && !isSessionVerified.value) {
-        try {
-          await loadUser();
-        } catch {
-          user.value = null;
-        }
+        isPending.value = true;
+
+        await loadUser();
+
+        isPending.value = false;
       }
     };
 
@@ -39,7 +44,7 @@ export const useAuthStore = defineStore(
           name,
           email,
           password,
-          'password_confirmation': passwordConfirmation
+          password_confirmation: passwordConfirmation,
         });
         await loadUser();
 
@@ -50,6 +55,8 @@ export const useAuthStore = defineStore(
         const password = error.response.data.errors?.password || [];
 
         return { success: false, errors: { name, email, password } };
+      } finally {
+        isPending.value = false;
       }
     };
 
@@ -63,20 +70,36 @@ export const useAuthStore = defineStore(
         return { success: true };
       } catch (error) {
         return { success: false, error: error };
+      } finally {
+        isPending.value = false;
       }
     };
 
-    const loginOAuth = async (provider: string) => {
-      isPending.value = true;
+    const loginGithub = async () => {
+      isGithubPending.value = true;
+      await loginOAuth('github');
+    };
 
-      const { data } = await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/redirect`);
+    const loginGoogle = async () => {
+      isGooglePending.value = true;
+      await loginOAuth('google');
+    };
 
-      if (data.redirect) {
-        location.href = data.redirect;
+    const loginOAuth = async (provider: 'github' | 'google') => {
+      try {
+        isPending.value = true;
+
+        const { data } = await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/redirect`);
+
+        if (data.redirect) {
+          location.href = data.redirect;
+        }
+      } catch (error) {
+        isPending.value = false;
       }
     };
 
-    const loginOAuthCallback = async (provider: string, code: string) => {
+    const loginOAuthCallback = async (provider: 'github' | 'google', code: string) => {
       try {
         await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/callback`, {
           params: { code },
@@ -86,6 +109,10 @@ export const useAuthStore = defineStore(
         return { success: true, message: 'success' };
       } catch (error) {
         return { success: false, message: 'error' };
+      } finally {
+        isPending.value = false;
+        isGithubPending.value = false;
+        isGooglePending.value = false;
       }
     };
 
@@ -100,15 +127,18 @@ export const useAuthStore = defineStore(
     };
 
     return {
-      isPending,
-      user,
       verifySession,
+      isPending,
+      isGithubPending,
+      isGooglePending,
       register,
       login,
-      loginOAuth,
+      loginGithub,
+      loginGoogle,
       loginOAuthCallback,
       logout,
+      user,
     };
   },
-  { persist: true },
+  { persist: { paths: ['user'] } }
 );

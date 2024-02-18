@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import router from '@/router';
 
@@ -46,6 +46,10 @@ const canSubmit = computed(() => {
     user.value.password.length > 0 &&
     user.value.passwordConfirmation.length > 0
   );
+});
+
+onMounted(() => {
+  auth.isPending = false;
 });
 
 const handlePreviousStep = () => {

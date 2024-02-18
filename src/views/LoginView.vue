@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
+import { storeToRefs } from 'pinia';
 import router from '@/router';
 
 import { useAuthStore } from '@/stores/auth';
@@ -7,13 +8,30 @@ import { useAuthStore } from '@/stores/auth';
 import PendingButton from '@/components/PendingButton.vue';
 
 const auth = useAuthStore();
+const { login, loginGithub, loginGoogle } = auth;
+const { isPending, isGithubPending, isGooglePending } = storeToRefs(auth);
 
 const email = ref('');
 const password = ref('');
 const error = ref();
 
+onMounted(() => {
+  isPending.value = false;
+  isGithubPending.value = false;
+  isGooglePending.value = false;
+});
+
+const handleGithubLogin = async () => {
+  await loginGithub();
+};
+
+const handleGoogleLogin = async () => {
+  await loginGoogle();
+};
+
 const handleLogin = async () => {
-  const response = await auth.login(email.value, password.value);
+  error.value = null;
+  const response = await login(email.value, password.value);
 
   if (response.success) {
     nextTick(() => {
@@ -35,16 +53,30 @@ const handleLogin = async () => {
         <div class="h-full flex flex-col space-y-8">
           <!-- OAuth -->
           <div class="flex flex-col xs:flex-row gap-4">
-            <button @click="auth.loginOAuth('github')" class="btn w-full text-white bg-black hover:bg-black-dark">
+            <PendingButton
+              type="button"
+              @click="handleGithubLogin"
+              :pending="isGithubPending"
+              :disabled="isPending"
+              class="btn w-full text-white bg-black hover:bg-black-dark"
+            >
               Github
-            </button>
-            <button @click="auth.loginOAuth('google')" class="btn w-full bg-gray-200 hover:bg-gray-300">Google</button>
+            </PendingButton>
+            <PendingButton
+              type="button"
+              @click="handleGoogleLogin"
+              :pending="isGooglePending"
+              :disabled="isPending"
+              class="btn w-full bg-gray-200 hover:bg-gray-300"
+            >
+              Google
+            </PendingButton>
           </div>
 
           <div class="flex items-center justify-center">
-            <span class="w-full h-px bg-gray-300"></span>
+            <span class="w-full h-px bg-gray-300" />
             <span class="px-4 text-gray-700">or</span>
-            <span class="w-full h-px bg-gray-300"></span>
+            <span class="w-full h-px bg-gray-300" />
           </div>
 
           <!-- Standard auth -->
@@ -64,7 +96,14 @@ const handleLogin = async () => {
               </div>
             </div>
 
-            <PendingButton type="submit" :pending="auth.isPending" class="btn-primary w-full">Login</PendingButton>
+            <PendingButton
+              type="submit"
+              :pending="isPending && !isGithubPending && !isGooglePending"
+              :disabled="isPending"
+              class="btn-primary w-full"
+            >
+              Login
+            </PendingButton>
           </form>
         </div>
 
