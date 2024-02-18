@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth';
 
 import { HomeIcon, TrophyIcon, BanknotesIcon } from '@heroicons/vue/24/outline';
 
+import PendingButton from '@/components/PendingButton.vue';
 import DarkModeSwitch from '@/components/layout/DarkModeSwitch.vue';
 import UserDropdownMenu from '@/components/layout/UserDropdownMenu.vue';
 
@@ -42,9 +43,13 @@ const auth = useAuthStore();
         </span>
 
         <DarkModeSwitch />
-        
+
         <UserDropdownMenu v-if="auth.user" />
-        <RouterLink v-else to="/login" class="btn text-base bg-gray-200 hover:bg-gray-300">Login</RouterLink>
+        <RouterLink v-else to="/login">
+          <PendingButton type="button" :pending="auth.isPending" class="btn text-base font-normal bg-gray-200 hover:bg-gray-300">
+            Login
+          </PendingButton>
+        </RouterLink>
       </div>
     </nav>
   </div>

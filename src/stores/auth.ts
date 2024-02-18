@@ -8,17 +8,21 @@ export const useAuthStore = defineStore(
   'auth',
   () => {
     const user = ref<User | null>(null);
-    let isSessionVerified = false;
+
+    const isPending = ref(false);
+    const isSessionVerified = ref(false);
 
     const loadUser = async () => {
-      isSessionVerified = true;
+      isSessionVerified.value = true;
       
       const { data } = await axios.get('users/me');
       user.value = data;
+
+      isPending.value = false;
     } 
 
     const verifySession = async () => {
-      if (user.value && !isSessionVerified) {
+      if (user.value && !isSessionVerified.value) {
         try {
           await loadUser();
         } catch {
@@ -29,6 +33,8 @@ export const useAuthStore = defineStore(
 
     const register = async (name: string, email: string, password: string, passwordConfirmation: string) => {
       try {
+        isPending.value = true;
+
         await axios.post(import.meta.env.VITE_APP_URL + '/register', {
           name,
           email,
@@ -49,6 +55,8 @@ export const useAuthStore = defineStore(
 
     const login = async (email: string, password: string) => {
       try {
+        isPending.value = true;
+
         await axios.post(import.meta.env.VITE_APP_URL + '/login', { email, password });
         await loadUser();
 
@@ -59,6 +67,8 @@ export const useAuthStore = defineStore(
     };
 
     const loginOAuth = async (provider: string) => {
+      isPending.value = true;
+
       const { data } = await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/redirect`);
 
       if (data.redirect) {
@@ -80,13 +90,17 @@ export const useAuthStore = defineStore(
     };
 
     const logout = async () => {
-      await axios.post(import.meta.env.VITE_APP_URL + '/logout');
-      user.value = null;
+      isPending.value = true;
 
+      user.value = null;
+      await axios.post(import.meta.env.VITE_APP_URL + '/logout');
+
+      isPending.value = false;
       location.reload();
     };
 
     return {
+      isPending,
       user,
       verifySession,
       register,

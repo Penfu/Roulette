@@ -4,14 +4,16 @@ import router from '@/router';
 
 import { useAuthStore } from '@/stores/auth';
 
-const { login, loginOAuth } = useAuthStore();
+import PendingButton from '@/components/PendingButton.vue';
+
+const auth = useAuthStore();
 
 const email = ref('');
 const password = ref('');
 const error = ref();
 
 const handleLogin = async () => {
-  const response = await login(email.value, password.value);
+  const response = await auth.login(email.value, password.value);
 
   if (response.success) {
     nextTick(() => {
@@ -33,10 +35,10 @@ const handleLogin = async () => {
         <div class="h-full flex flex-col space-y-8">
           <!-- OAuth -->
           <div class="flex flex-col xs:flex-row gap-4">
-            <button @click="loginOAuth('github')" class="btn w-full text-white bg-black hover:bg-black-dark">
+            <button @click="auth.loginOAuth('github')" class="btn w-full text-white bg-black hover:bg-black-dark">
               Github
             </button>
-            <button @click="loginOAuth('google')" class="btn w-full bg-gray-200 hover:bg-gray-300">Google</button>
+            <button @click="auth.loginOAuth('google')" class="btn w-full bg-gray-200 hover:bg-gray-300">Google</button>
           </div>
 
           <div class="flex items-center justify-center">
@@ -62,7 +64,7 @@ const handleLogin = async () => {
               </div>
             </div>
 
-            <button type="submit" class="btn-primary w-full">Login</button>
+            <PendingButton type="submit" :pending="auth.isPending" class="btn-primary w-full">Login</PendingButton>
           </form>
         </div>
 

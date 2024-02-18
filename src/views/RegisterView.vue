@@ -11,7 +11,7 @@ import EmailField from '@/components/register/EmailField.vue';
 import PasswordField from '@/components/register/PasswordField.vue';
 import PendingButton from '@/components/PendingButton.vue';
 
-const { register } = useAuthStore();
+const auth = useAuthStore();
 
 const selectedTab = ref(0);
 
@@ -38,7 +38,6 @@ const errors = ref<Errors>({
   password: [],
 });
 
-const isPending = ref(false);
 const isLastStep = computed(() => selectedTab.value === 2);
 const canSubmit = computed(() => {
   return (
@@ -64,8 +63,7 @@ const handleNextStep = () => {
 };
 
 const handleRegister = async () => {
-  isPending.value = true;
-  const response = await register(
+  const response = await auth.register(
     user.value.name,
     user.value.email,
     user.value.password,
@@ -77,7 +75,6 @@ const handleRegister = async () => {
       router.push('/');
     });
   } else {
-    isPending.value = false;
     errors.value = response.errors as Errors;
   }
 };
@@ -139,7 +136,7 @@ const handleRegister = async () => {
             </button>
             <PendingButton
               type="button"
-              :pending="isPending"
+              :pending="auth.isPending"
               :disabled="isLastStep && !canSubmit"
               @click="handleNextStep()"
               class="btn-primary w-full transition-all duration-200 ease-in-out"
