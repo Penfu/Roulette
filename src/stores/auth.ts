@@ -1,9 +1,9 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import axios from '@/configs/axios';
+import router from '@/router';
 
 import type User from '@/interfaces/user';
-import router from '@/router';
 
 export const useAuthStore = defineStore(
   'auth',
@@ -46,6 +46,7 @@ export const useAuthStore = defineStore(
           email,
           password,
           password_confirmation: passwordConfirmation,
+          remember: true,
         });
         await loadUser();
 
@@ -65,7 +66,11 @@ export const useAuthStore = defineStore(
       try {
         isPending.value = true;
 
-        await axios.post(import.meta.env.VITE_APP_URL + '/login', { email, password });
+        await axios.post(import.meta.env.VITE_APP_URL + '/login', {
+          email,
+          password,
+          remember: true,
+        });
         await loadUser();
 
         return { success: true };
@@ -99,7 +104,7 @@ export const useAuthStore = defineStore(
     const loginOAuthCallback = async (provider: 'github' | 'google', code: string) => {
       try {
         isPending.value = true;
-  
+
         await axios.get(import.meta.env.VITE_APP_URL + `/authorize/${provider}/callback`, {
           params: { code },
         });
@@ -119,7 +124,7 @@ export const useAuthStore = defineStore(
       isPending.value = true;
 
       await axios.post(import.meta.env.VITE_APP_URL + '/logout');
-      
+
       user.value = null;
       isPending.value = false;
 
