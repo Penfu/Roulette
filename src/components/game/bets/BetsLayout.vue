@@ -23,11 +23,10 @@ const auth = useAuthStore();
 const { user } = storeToRefs(auth);
 
 const game = useGameStore();
-const { step, balance, bets } = storeToRefs(game);
+const { step, holding, bets } = storeToRefs(game);
 
 const isActive = computed(() => step.value === RollStep.BET);
-const hasBalance = computed(() => balance.value > 0);
-const canBet = computed(() => isActive.value && user.value !== null && hasBalance.value);
+const canBet = computed(() => isActive.value && user.value !== null && holding.value > 0);
 
 const colorBets = computed(() => [...bets.value[props.color]].reverse());
 
@@ -37,7 +36,7 @@ const { mutate } = useMutation({
   mutationFn: (bet: Bet) =>
     axios.post('/bets', bet, { headers: { 'X-Socket-ID': window.Echo.socketId() } }),
   onMutate: () => {
-    balance.value = 0;
+    holding.value = 0;
   },
 });
 
@@ -46,7 +45,7 @@ const handleMakeBet = () => {
     return;
   }
 
-  mutate({ color: props.color, amount: balance.value, user: user.value!.name });
+  mutate({ color: props.color, amount: holding.value, user: user.value!.name });
 };
 </script>
 

@@ -7,17 +7,17 @@ const props = defineProps<{
 }>();
 
 const game = useGameStore();
-const { addBalance } = game;
+const { addHolding } = game;
 
-const handleAddAmountToBalance = (amount: number) => {
+const handleAddHolding = (amount: number) => {
   props.onSelect();
-  addBalance(amount);
+  addHolding(amount);
 };
 </script>
 
 <template>
   <button
-    @click="handleAddAmountToBalance(value)"
+    @click="handleAddHolding(value)"
     class="btn grow h-max bg-gray-200 hover:bg-gray-300 rounded shadow shadow-gray-300"
   >
     {{ value }}

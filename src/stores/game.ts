@@ -12,49 +12,49 @@ export const useGameStore = defineStore('game', () => {
 
   const step = ref(RollStep.DEFAULT);
   const timer = ref(0);
-  const balance = ref(0);
+  const holding = ref(0);
   const result = ref<Roll>();
   const bets = ref({ red: [], black: [], green: [] } as Record<string, Bet[]>);
   const history = ref<Roll[]>();
 
-  const addBalance = (amount: number) => {
+  const addHolding = (amount: number) => {
     if (auth.user === null) {
       return;
     }
 
-    if (auth.user.balance < amount) {
+    if (amount > auth.user.balance) {
       return;
     }
 
     auth.user.balance -= amount;
-    balance.value += amount;
+    holding.value += amount;
   };
 
-  const allInBalance = () => {
+  const allInHolding = () => {
     if (auth.user === null) {
       return;
     }
 
-    balance.value += auth.user.balance;
+    holding.value += auth.user.balance;
     auth.user.balance = 0;
   };
 
-  const resetBalance = () => {
+  const resetHolding = () => {
     if (auth.user === null) {
       return;
     }
 
-    auth.user.balance += balance.value;
-    balance.value = 0;
+    auth.user.balance += holding.value;
+    holding.value = 0;
   };
 
   return {
     step,
     timer,
-    balance,
-    addBalance,
-    allInBalance,
-    resetBalance,
+    holding,
+    addHolding,
+    allInHolding,
+    resetHolding,
     bets,
     result,
     history,

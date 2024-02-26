@@ -12,7 +12,7 @@ import type Bet from '@/interfaces/bet';
 import RollResultBanner from '@/components/game/result/RollResultBanner.vue';
 
 import RouletteSection from '@/components/game/rolls/RouletteSection.vue';
-import BalanceSection from '@/components/game/balance/BalanceSection.vue';
+import HoldingSection from '@/components/game/holding/HoldingSection.vue';
 import BetSection from '@/components/game/bets/BetSection.vue';
 
 const auth = useAuthStore();
@@ -52,8 +52,6 @@ onMounted(async () => {
 
     switch (e.status) {
       case 'BET':
-        message.value = Math.round(e.timer / 1000) + ' seconds left';
-
         if (step.value === RollStep.BET) {
           return;
         }
@@ -66,7 +64,6 @@ onMounted(async () => {
         }
 
         step.value = RollStep.ROLL;
-        message.value = 'Rolling';
         break;
       case 'DISPLAY_RESULT':
         if (timer.value === 0) {
@@ -109,7 +106,7 @@ onMounted(async () => {
 
     <div class="grow flex flex-col space-y-8">
       <RouletteSection :message="message" />
-      <BalanceSection />
+      <HoldingSection />
       <BetSection />
     </div>
   </main>

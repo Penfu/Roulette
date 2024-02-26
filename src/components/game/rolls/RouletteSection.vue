@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import anime from 'animejs';
 
@@ -11,12 +11,10 @@ import { classFromColor } from '@/helpers/color';
 import HistoryLayout from '@/components/game/rolls/HistoryLayout.vue';
 import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
 
-defineProps<{
-  message: string;
-}>();
-
 const game = useGameStore();
 const { step, result } = storeToRefs(game);
+
+const countdown = computed(() => Math.round(game.timer / 1000) + ' seconds left');
 
 const wheel = ref(null);
 
@@ -89,7 +87,7 @@ watch(
 
     <div class="basis-1/3 flex flex-col justify-end space-y-4 lg:space-y-8 xl:space-y-0">
       <div class="h-14 flex grow justify-center items-center text-center text-2xl xl:text-4xl font-semibold uppercase">
-        <span v-show="step === RollStep.BET">{{ message }}</span>
+        <span v-show="step === RollStep.BET">{{ countdown }}</span>
         <span v-show="step === RollStep.ROLL">Rolling...</span>
         <div v-if="step === RollStep.DISPLAY_RESULT && result" class="flex items-center justify-center space-x-4">
           <span>Result</span>
